@@ -1,0 +1,14 @@
+[
+    {
+        "id": "4e43c441-5c6d-41f7-b6a0-5ab4e53b2bcc",
+        "first-name": "Amy",
+        "last-name" : "Smith", 
+        "username": "asmith",
+        "email": "asmith@gmail.com",
+        "graduation-year": "2027",
+        "id-usc": "M44412349",
+        "starred-questions": [],
+        "anwered-questions": [],
+        "achievements": []
+    }
+]
