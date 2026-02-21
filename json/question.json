@@ -18,6 +18,7 @@
         "solution-list": [
             {
                 "user": "0d8a7693-5a00-41df-818e-09ac969b6a75",
+                "description":"This is my description",
                 "thread": [
                     {
                         "user": "4e43c441-5c6d-41f7-b6a0-5ab4e53b2bcc",
@@ -56,11 +57,15 @@
         "question-language": ["Java"],
         "solution-list": [
             {
+                "user": "0d8a7693-5a00-41df-818e-09ac969b6a75",
+                "description":"This is my description",
                 "thread": [
                     {
+                        "user": "4e43c441-5c6d-41f7-b6a0-5ab4e53b2bcc",
                         "comment": "Main Comment",
                         "replies": [
                             {
+                                "user": "0d8a7693-5a00-41df-818e-09ac969b6a75",
                                 "comment": "Sub Comment"
                             }
                         ]
