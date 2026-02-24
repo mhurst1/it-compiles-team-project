@@ -1,0 +1,7 @@
+module com.interviews {
+    requires javafx.controls;
+    requires javafx.fxml;
+
+    opens com.interviews to javafx.fxml;
+    exports com.interviews;
+}
