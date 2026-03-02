@@ -103,6 +103,97 @@ public class User {
 
     }
 
+    public String getLastName(){
+        return lastName;
+    }
+
+    public void setLastName(String firstName){
+        this.lastName = lastName;
+    }
+
+    public String getFirstName(){
+        return firstName;
+    }
+
+    public void setFirstName(String firstName){
+        this.firstName = firstName;
+    }
+
+    public String getUsername(){
+        return username;
+    }
+
+    public void setUsername(String username){
+        this.username = username;
+    }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public String getEmail(){
+        return email;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+    public String getIdUSC(){
+        return idUSC;
+    }
+
+    public void setIdUSC(String idUSC){
+        this.idUSC = idUSC;
+    }
+
+    public int getGraudationYear(){
+        return graduationYear;
+    }
+
+    public void setGraudationYear(int graduationYear){
+        this.graduationYear = graduationYear;
+    }
+    
+    public UUID getId(){
+        return id;
+    }
+
+    public void setId(UUID id){
+        this.id = id;
+    }
+
+    public void setStatus(Status status){
+        this.status = status;
+    }
+
+    public ArrayList<Question> getStarredQuestions(){
+        return starredQuestions;
+    }
+
+    public void setStarredQuestions(ArrayList<Question> starredQuestions){
+        this.starredQuestions = starredQuestions;
+    }
+
+    public ArrayList<Question> getAnsweredQuestions(){
+        return answeredQuestions;
+    }
+
+    public void setAnsweredQuestions(ArrayList<Question> answeredQuestions){
+        this.answeredQuestions = answeredQuestions;
+    }
+
+    public ArrayList<Achievement> getAchievements(){
+        return answeredQuestions;
+    }
+
+    public void setAchievements(ArrayList<Achievement> achievements){
+        this.achievements = achievements;
+    }
 
 
 }
