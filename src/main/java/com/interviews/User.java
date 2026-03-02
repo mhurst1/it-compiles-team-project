@@ -49,4 +49,60 @@ public class User {
         this.idUSC = idUSC;
 
     }
+
+    public boolean isMatch(String username, String password){
+
+
+    }
+
+    public UserSolution addsolution(User user, String description, 
+        ArrayList<Comment> thread){
+
+    }
+
+    public void removeSolution(User user, String description,
+         ArrayList<Comment> thread){
+
+
+         }
+
+    public UserSolution getSolution(){
+
+    }
+
+    public void starQuestion(){
+
+
+    }
+
+    public ArrayList<Question> getStarredQuestionList(){
+
+
+    }
+
+    public Question getQuestion(){
+
+
+    }
+
+    public Comment addComment(User user, String comment){
+
+
+    }
+
+    public void removeComment(User user, String comment){
+
+
+    }
+
+    public Status getStatus(){
+        return this.status;
+    }
+
+    public boolean setStatus(boolean Status){
+
+    }
+
+
+
 }
