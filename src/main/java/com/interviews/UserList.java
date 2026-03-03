@@ -38,6 +38,7 @@ public class UserList {
 
     }
 
+    // You Cant Use this. if the feild doesn't exist within the class
     public void editUser(String firstName, String lastName, String username, 
         String password, String email, int graduationYear, String idUSC){
         this.firstName = firstName;
