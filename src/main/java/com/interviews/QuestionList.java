@@ -43,13 +43,11 @@ public class QuestionList {
         questions.getHints();
         questions.getDifficulty();
         questions.getQuestionLanguage();
-        questions.getAuthor();
-        questions.getCreationDate();
-        questions.getLastModifiedDate();
+        questions.getUser();
         questions.getId();
     }
 
     public void save() {
-        
+
     }
 }
