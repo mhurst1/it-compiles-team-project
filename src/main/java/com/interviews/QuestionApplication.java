@@ -43,7 +43,10 @@ public class QuestionApplication {
     }
 
     public void login(String username, String password){
-
+        User user = userList.getUser(username, password);
+        if(user != null) {
+            currentUser = user;
+        }
 
     }
 
