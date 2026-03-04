@@ -13,14 +13,14 @@ public class Question {
     private User user;
     private String description;
     private ArrayList<Section> qustionContent;
-    private ArrayList<String> hints; // Check if the ArrayList value should be a string
+    private ArrayList<String> hints;
     private UUID id;
     private Difficulty difficulty;
     private Language questionLang;
     private ArrayList<String> solutionList; // Check if the ArrayList value should be a string
 
-    private ArrayList<String> givenSolutionIMG; // Check if the ArrayList value should be a string
-    private ArrayList<String> givenSolutionTXT; // Check if the ArrayList value should be a string
+    private ArrayList<String> givenSolutionIMG;
+    private ArrayList<String> givenSolutionTXT;
 
     public Question(String title, User user, String description, Difficulty difficulty, 
                         Language questionLang, ArrayList<String> hints, ArrayList<Section> questionContent){
@@ -77,6 +77,18 @@ public class Question {
     public int selectSolution(){  // ????
 
     }
+    public ArrayList<String> getHints(){
+        return hints;
+    }
+
+    public ArrayList<Section> getQuestionContent(){
+        return qustionContent;
+    }
+
+    public UUID getQuestionId(){ // Not UUID
+
+    }
+
     public void setHint(ArrayList<String> hints){
         this.hints = hints;
     }
@@ -86,7 +98,18 @@ public class Question {
     }
 
     public boolean contains(String keyword){
+        if (keyword == null){
+            return false;
+        }
 
+        for (Section s : qustionContent){
+            if(){
+                return true;
+                
+            }
+        }
+
+        return false; // If Not Fount 
     }
 
     public void searchQuestions(String titleSearch){
