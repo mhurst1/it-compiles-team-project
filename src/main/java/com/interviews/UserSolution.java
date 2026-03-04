@@ -48,7 +48,7 @@ public class UserSolution {
 
         int totalVote = upVotes - downVotes;
         if(totalVote < 0){
-            return 0; // Does not allow to have a negative amount of votes
+            return 0; // Does not allow to have a negative amount of votes (Lowest is 0)
         }
 
         return totalVote;
