@@ -8,37 +8,47 @@ public class UserList {
     private ArrayList<User> users;
 
     public UserList(){
+        users = DataLoader.getUsers();
+    }
+
+    public static UserList getInstance(){
+        if(userList == null){
+            userList = new UserList();
+        }
+        return userList;
 
     }
 
-    public UserList getInstance(){
-
-
+    public ArrayList<User> getUsers() {
+        return users;
     }
 
     public User getUser(String username, String password){
-        if(User.isMatch(username,password)){
-            return this.User;
+        for(User user : users){
+            if(user.isMatch(username,password)){
+                return user;
+            }
         }
         return null; 
-
     }
 
     public User getUser(String username){
-         
+         for(User user : users){
+            if(user.getUsername().equals(username)){
+                return user;
+            }
+         }
+         return null;
     }
 
     public User getPass(){
 
-
     }
 
     public void deleteUser(){
-
-
+        users.remove(user);
     }
 
-    // You Cant Use this. if the feild doesn't exist within the class
     public void editUser(String firstName, String lastName, String username, 
         String password, String email, int graduationYear, String idUSC){
         if(users.contains(user)){
@@ -55,9 +65,5 @@ public class UserList {
     public void save(){
         DataWriter.saveUsers();
     }
-
-
-
-
     
 }
