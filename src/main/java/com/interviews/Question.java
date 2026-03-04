@@ -66,6 +66,13 @@ public class Question {
         this.user = user;
     }
 
+    public UUID getId(){
+        return id;
+    }
+    public void setId(UUID id){
+        this.id = id;
+    }
+
     public Language getQuestionLanguage(){
         return questionLang;
     }
@@ -109,7 +116,7 @@ public class Question {
             }
         }
 
-        return false; // If Not Fount 
+        return false; // If Not Found
     }
 
     public void searchQuestions(String titleSearch){

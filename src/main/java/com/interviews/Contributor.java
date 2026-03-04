@@ -6,37 +6,38 @@ public class Contributor extends User{
 
     private ArrayList<Question> postedQuestions;
 
+    public Contributor(String firstName, String lastName, String username, 
+                       String password, String email, int graduationYear, String idUSC){
+        super(firstName, lastName, username, password, email, graduationYear, idUSC);
 
-    //should we have another constructor like the user class where it brings more in
-    public Contributor(){
-        super(null, null, null, null, null, 0, null);
+        this.postedQuestions = new ArrayList<>(); // Should I be initializing this?? 
     }
 
     public Question addQuestion(String title, User user, String description,
                         ArrayList<Section> quesitonContent, ArrayList<String> hints, 
                         Difficulty difficulty, Language questionLanguage){
 
-
+            Question question = new Question(title, user, description, difficulty, questionLanguage, hints, quesitonContent);
+            postedQuestions.add(question); // Adds question to the posted questions list
+            return question;
     }
 
     public Question editQuestion(int id, String title, User user, 
         String description, ArrayList<Section> questionContent){
 
-            this.id = id;
-            this.title = title;
-            this.user = user;
-            this.difficulty = difficulty;
-            this.questionLanguage = questionLanguage;
+        
+    }
+
+
+    private Question searchQuestionByUser(){ // We might want to add this as a private method to use within remove and edit 
 
     }
 
+
+    // We will stick to an ArrayList for now with this and if we want to implement a hashmap later we can do that
     public void removeQuestion(int id){
 
-        //I know we are doing question list array list but should we have a hashamp or something
 
     }
-
-
-
     
 }
