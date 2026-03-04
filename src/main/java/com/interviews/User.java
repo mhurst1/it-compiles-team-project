@@ -23,7 +23,7 @@ public class User {
     // String idUSC
     public User(UUID id, String firstName, String lastName, String username, String password,  
                     String email, ArrayList<Question> starredQuestions, ArrayList<Question> answeredQuestions, 
-                    ArrayList<Achievement> achievements, Status userStatus){
+                    ArrayList<Achievement> achievements, Status status, int graduationYear, String idUSC){
 
         this.id = id;
         this.firstName = firstName;
@@ -34,7 +34,9 @@ public class User {
         this.starredQuestions = starredQuestions;
         this.answeredQuestions = answeredQuestions;
         this.achievements = achievements;
-        this.userStatus = userStatus;
+        this.status = status;
+        this.graduationYear = graduationYear;
+        this.idUSC = idUSC;
     }
 
     public User(String firstName, String lastName, String username, 
@@ -51,47 +53,49 @@ public class User {
     }
 
     public boolean isMatch(String username, String password){
-
-
+        return(this.username.equals(username)&&this.password.equals(password));
     }
 
     public UserSolution addsolution(User user, String description, 
         ArrayList<Comment> thread){
+            UserSolution solution = new UserSolution(user, description);
+            solution.addSolution(user, description, thread);
+            return solution;
 
     }
 
     public void removeSolution(User user, String description,
          ArrayList<Comment> thread){
-
-
+            UserSolution solution = getSolution();
+            if(solution != null){
+                solution.removeSolution(user, description, thread);
+            }
          }
 
     public UserSolution getSolution(){
-
+        return solution;
     }
 
     public void starQuestion(){
-
-
+        if(!starredQuestions.contains(question)){
+            starredQuestions.add(question);
+        }
     }
 
     public ArrayList<Question> getStarredQuestionList(){
-
-
+        return starredQuestions;
     }
 
     public Question getQuestion(){
-
-
+        return this.question;
     }
 
     public Comment addComment(User user, String comment){
-
-
+        Comment newComment = new Comment(user, comment, new ArrayList<>());
+        return newComment;
     }
 
     public void removeComment(User user, String comment){
-
 
     }
 
@@ -100,7 +104,7 @@ public class User {
     }
 
     public boolean setStatus(boolean Status){
-
+        this.status = status;
     }
 
     public String getLastName(){
