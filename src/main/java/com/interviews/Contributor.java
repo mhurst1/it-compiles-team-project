@@ -13,13 +13,14 @@ public class Contributor extends User{
     }
 
     public Question addQuestion(String title, User user, String description,
-         ArrayList<Template> quesitonContent, ArrayList<String> hints, 
-         Difficulty difficulty, Language questionLanguage){
+                        ArrayList<Section> quesitonContent, ArrayList<String> hints, 
+                        Difficulty difficulty, Language questionLanguage){
+
 
     }
 
     public Question editQuestion(int id, String title, User user, 
-        String description, ArrayList<Template>){
+        String description, ArrayList<Section> questionContent){
 
             this.id = id;
             this.title = title;
