@@ -55,21 +55,18 @@ public class User {
     public UserSolution addsolution(User user, String description, 
         ArrayList<Comment> thread){
             UserSolution solution = new UserSolution(user, description);
-            solution.addSolution(user, description, thread); // This will call the method addSolution from the userSolution
+            solution.addSolution(user, description, thread);
             return solution;
+
     }
 
     public void removeSolution(User user, String description,
          ArrayList<Comment> thread){
             UserSolution solution = getSolution();
             if(solution != null){
-                solution.removeSolution(user, description, thread); // This will call the method addSolution from the userSolution
+                solution.removeSolution(user, description, thread);
             }
          }
-
-    public UserSolution getSolution(){
-        return solution;
-    }
 
     public void starQuestion(){
         if(!starredQuestions.contains(question)){
@@ -81,16 +78,12 @@ public class User {
         return starredQuestions;
     }
 
-    public Question getQuestion(){
-        return this.question;
-    }
-
     public Comment addComment(User user, String comment){
         Comment newComment = new Comment(user, comment, new ArrayList<>());
         return newComment;
     }
 
-    public void removeComment(User user, String comment){
+    public void removeComment(String comment){
 
     }
 
@@ -150,7 +143,7 @@ public class User {
         this.idUSC = idUSC;
     }
 
-    public int getGraduationYear(){
+    public int getGraudationYear(){
         return graduationYear;
     }
 
@@ -193,6 +186,5 @@ public class User {
     public void setAchievements(ArrayList<Achievement> achievements){
         this.achievements = achievements;
     }
-
 
 }
