@@ -17,10 +17,6 @@ public class User {
     private ArrayList<Question> answeredQuestions;
     private ArrayList<Achievement> achievements;
 
-
-    // Since this is the overall Constructor check if we should add these 
-    // int graduationYear 
-    // String idUSC
     public User(UUID id, String firstName, String lastName, String username, String password,  
                     String email, ArrayList<Question> starredQuestions, ArrayList<Question> answeredQuestions, 
                     ArrayList<Achievement> achievements, Status status, int graduationYear, String idUSC){
@@ -59,16 +55,15 @@ public class User {
     public UserSolution addsolution(User user, String description, 
         ArrayList<Comment> thread){
             UserSolution solution = new UserSolution(user, description);
-            solution.addSolution(user, description, thread);
+            solution.addSolution(user, description, thread); // This will call the method addSolution from the userSolution
             return solution;
-
     }
 
     public void removeSolution(User user, String description,
          ArrayList<Comment> thread){
             UserSolution solution = getSolution();
             if(solution != null){
-                solution.removeSolution(user, description, thread);
+                solution.removeSolution(user, description, thread); // This will call the method addSolution from the userSolution
             }
          }
 

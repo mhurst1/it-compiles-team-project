@@ -45,11 +45,11 @@ public class UserList {
 
     }
 
-    public void deleteUser(){
+    public void deleteUser(User user){
         users.remove(user);
     }
 
-    public void editUser(String firstName, String lastName, String username, 
+    public void editUser(User user, String firstName, String lastName, String username, 
         String password, String email, int graduationYear, String idUSC){
         if(users.contains(user)){
             user.setFirstName(firstName);

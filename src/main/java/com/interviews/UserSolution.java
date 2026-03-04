@@ -12,7 +12,7 @@ public class UserSolution {
     private ArrayList<Comment> thread;
     private UUID solutionID;
     public boolean userVote;
-    public int totalVote;
+    public int totalVote; // I think this can be replaced with upVotes and downVotes
 
 
     public UserSolution(User user, String description, UUID solutionID, ArrayList<Comment> thread, int totalVote){
@@ -44,9 +44,14 @@ public class UserSolution {
         
     }
 
-    public int calculateVotes(){
+    public int calculateVotes(User user, int upVotes, int downVotes){
 
-        return 0; // PlaceHolder
+        int totalVote = upVotes - downVotes;
+        if(totalVote < 0){
+            return 0; // Does not allow to have a negative amount of votes
+        }
+
+        return totalVote;
     }
     public void setUserVote(boolean userVote){
 
