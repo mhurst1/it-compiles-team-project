@@ -155,7 +155,7 @@ public class User {
         this.idUSC = idUSC;
     }
 
-    public int getGraudationYear(){
+    public int getGraduationYear(){
         return graduationYear;
     }
 
