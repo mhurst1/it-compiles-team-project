@@ -84,7 +84,12 @@ public class User {
     }
 
     public void removeComment(String comment){
-
+        for(Comment c: user.getComments()){
+            if(c.getComment().equals(comment)){
+                user.getComments().remove(c);
+                break;
+            }
+        }
     }
 
     public Status getStatus(){
