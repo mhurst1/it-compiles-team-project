@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 /**
  * 
- * MH
+ * MH and SE
  */
 public class Comment {
     private User user;
@@ -17,14 +17,19 @@ public class Comment {
     }
 
     public void addComment(User user, String comment){
-        
+        this.user = user;
+        this.comment = comment;
     }
 
     public void addComment(User user, String comment, ArrayList<Comment> replies){
-
+        this.user = user;
+        this.comment = comment;
+        this.replies = replies;
     }
 
     public void deleteComment(){
-
+        this.user = null;
+        this.comment = null;
+        this.replies = null;
     }
 }

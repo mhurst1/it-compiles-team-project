@@ -41,9 +41,11 @@ public class UserList {
          return null;
     }
 
+    /*
     public User getPass(){
 
     }
+    */
 
     public void deleteUser(User user){
         users.remove(user);
@@ -63,7 +65,8 @@ public class UserList {
     }
 
     public void save(){
-        DataWriter.saveUsers();
+        DataWriter writer = new DataWriter();
+        writer.saveUsers();
     }
     
 }
