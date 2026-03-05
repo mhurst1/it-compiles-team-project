@@ -22,12 +22,11 @@ public class QuestionApplication {
     }
 
     public User currentUser(){
-        return currentUser;
+        this.currentUser = user;
     }
 
     public User getCurrentUser(){
-
-
+        return currentUser;
     }
 
     public Question currentQuestion(){
@@ -40,6 +39,11 @@ public class QuestionApplication {
 
     public User createAccount(String firstName, String lastName, String username, 
         String password, String email, int graduationYear, String idUSC){
+
+            User user = new User(firstName, lastName, username, password, email, 
+                graduationYear, idUSC);
+            return user;
+
     }
 
     public void login(String username, String password){
@@ -55,18 +59,27 @@ public class QuestionApplication {
 
     }
 
-    public boolean addQuestion(String title, User user, String description,
-         ArrayList<Section> questionContent, ArrayList<String> hints, 
-         Difficulty difficulty, Language questionLanguage){
+    public boolean addQuestion(String title, User user, String description, Difficulty difficulty,
+         Language questionLanguage, ArrayList<String> hints, ArrayList<Section> questionContent){
 
-
+            Question question = new Question(title, user, description, questionContent, hints, difficulty, questionLanguage);
+            return question;
     }
 
     public Question editQuestion(Question question, String title, User user, 
         String description, ArrayList<Section> questionContent, ArrayList<String> hints, 
         Difficulty difficulty, Language questionLanguage){
 
-
+            if(questionList.contains(question)){
+                question.setTitle(title);
+                question.setUser(user);
+                question.setDescription(description);
+                question.setQuestionContent(questionContent);
+                question.getHints(hints);
+                question.getDifficulty(difficulty);
+                question.getQuestionLanguage(questionLanguage);
+            }
+            
     }
 
     public ArrayList<Question> findQuestion(String keyword){
@@ -91,7 +104,6 @@ public class QuestionApplication {
     }
 
     public ArrayList<Question> getAnsweredQuestions(){
-
 
     }
 

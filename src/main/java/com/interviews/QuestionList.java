@@ -48,6 +48,9 @@ public class QuestionList {
     }
 
     public void save() {
+
+        DataWriter writer = new DataWriter();
+        writer.saveQuestions();
         
     }
 }
