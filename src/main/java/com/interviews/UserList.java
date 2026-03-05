@@ -63,7 +63,8 @@ public class UserList {
     }
 
     public void save(){
-        DataWriter.saveUsers();
+        DataWriter writer = new DataWriter();
+        writer.saveUsers();
     }
     
 }
