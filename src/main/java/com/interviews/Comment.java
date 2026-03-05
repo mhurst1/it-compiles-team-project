@@ -7,12 +7,12 @@ import java.util.ArrayList;
  */
 public class Comment {
     private User user;
-    private String comment;
+    private ArrayList<Section> comments;
     private ArrayList<Comment> replies;
 
-    public Comment(User user, String comment, ArrayList<Comment> replies){
+    public Comment(User user, ArrayList<Section> comments, ArrayList<Comment> replies){
         this.user = user;
-        this.comment = comment;
+        this.comments = comments;
         this.replies = replies;
     }
 
