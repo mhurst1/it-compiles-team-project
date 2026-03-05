@@ -3,6 +3,7 @@ package com.model;
 import java.util.Scanner;
 
 import com.interviews.QuestionApplication;
+import com.interviews.User;
 
 public class Driver {
     private QuestionApplication questionApplication;
@@ -29,18 +30,19 @@ public class Driver {
         System.out.println("asmith is now logged in");
     }
 
-   public void scenario2() {
-    System.out.println();
 
-    questionApplication.login("wronguser", "wrongpass");
+    public void scenario2() {
+        System.out.println();
 
-    if (questionApplication.getCurrentUser() == null) {
-        System.out.println("Sorry we couldn't login.");
-        return;
+        questionApplication.login("wronguser", "wrongpass");
+
+        if (questionApplication.getCurrentUser() == null) {
+            System.out.println("Sorry we couldn't login.");
+            return;
+        }
+
+        System.out.println("User is now logged in");
     }
-
-    System.out.println("User is now logged in");
-}
 
     public static void main(String[] args) {
         Driver driver = new Driver();

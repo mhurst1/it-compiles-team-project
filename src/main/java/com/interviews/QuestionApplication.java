@@ -1,6 +1,7 @@
 package com.interviews;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class QuestionApplication {
     private QuestionList questionList;
@@ -22,6 +23,11 @@ public class QuestionApplication {
 
     public User currentUser(){
         return currentUser;
+    }
+
+    public User getCurrentUser(){
+
+
     }
 
     public Question currentQuestion(){
