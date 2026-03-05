@@ -33,7 +33,7 @@ public class Question {
     }
 
     public Question(UUID id){
-
+        this.id = id;
     }
     public String getTitle(){
         return title;
@@ -84,6 +84,7 @@ public class Question {
     public int selectSolution(){  // ????
 
     }
+
     public ArrayList<String> getHints(){
         return hints;
     }
@@ -93,7 +94,7 @@ public class Question {
     }
 
     public UUID getQuestionId(){ // Not UUID
-
+        return id;
     }
 
     public void setHint(ArrayList<String> hints){
@@ -109,18 +110,20 @@ public class Question {
             return false;
         }
 
-        for (Section s : qustionContent){
-            if(){
+        for (Section s : questionContent){
+            if(s.contains(keyword)){
                 return true;
-                
             }
         }
-
         return false; // If Not Found
     }
 
     public void searchQuestions(String titleSearch){
-
+        if (titleSearch == null){
+            return;
+        } else if (this.title.toLowerCase().contains(titleSearch.toLowerCase())){
+            System.out.println(this.title);
+        }
     }
 
 }
