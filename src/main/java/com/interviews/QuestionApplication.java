@@ -17,29 +17,23 @@ public class QuestionApplication {
     }
 
     public QuestionList getInstance(){
-
-
+        return questionList.getInstance();
     }
 
     public User currentUser(){
-
-
+        return currentUser;
     }
 
     public Question currentQuestion(){
-
-
+        return currentQuestion;
     }
 
     public UserSolution currentUserSolution(){
-
-
+        return currentUserSolution();
     }
 
-    public User createAccount(String firstName, string lastName, String username, 
+    public User createAccount(String firstName, String lastName, String username, 
         String password, String email, int graduationYear, String idUSC){
-
-
     }
 
     public void login(String username, String password){

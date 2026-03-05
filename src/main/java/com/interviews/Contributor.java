@@ -28,12 +28,6 @@ public class Contributor extends User{
         
     }
 
-
-    private Question searchQuestionByUser(){ // We might want to add this as a private method to use within remove and edit 
-
-    }
-
-
     // We will stick to an ArrayList for now with this and if we want to implement a hashmap later we can do that
     public void removeQuestion(int id){
 
