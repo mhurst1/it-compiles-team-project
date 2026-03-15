@@ -96,15 +96,20 @@ public class User {
         return this.status;
     }
 
-    public boolean setStatus(boolean Status){
-        this.status = status;
+    //basically true if the user has the ability to create a Question
+    public boolean setStatus(boolean status){
+        this.userStatus = status;
+        if(this.userStatus == Status.CONTRIBUTOR || this.userStatus == Status.ADMIN){
+            return true;
+        }
+        return false;
     }
 
     public String getLastName(){
         return lastName;
     }
 
-    public void setLastName(String firstName){
+    public void setLastName(String lastName){
         this.lastName = lastName;
     }
 

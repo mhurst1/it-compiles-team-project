@@ -9,11 +9,15 @@ public class Admin extends Contributor {
     }
 
     public void addContributor(UUID id){
-        
+        User user = UserList.getInstance().getUserByID(id);
+        if(user!=null)
+            user.setStatus(Status.CONTRIBUTOR);
     }
 
     public void removeContributor(UUID id){
-        
+        User user = UserList.getInstance().getUserByID(id);
+        if(user!=null)
+            user.setStatus(Status.USER);
     }
 
 

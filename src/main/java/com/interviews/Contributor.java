@@ -22,16 +22,28 @@ public class Contributor extends User{
             return question;
     }
 
-    public Question editQuestion(int id, String title, User user, 
-        String description, ArrayList<Section> questionContent){
+    public Question editQuestion(UUID id, String title, User user, String description, 
+        ArrayList<Section> questionContent, ArrayList<String> hints, 
+        Difficulty difficulty, Language questionLanguage){
 
-        
+            if(question.getID().equals(id)){
+                question.setTitle(title);
+                question.setDescription(description);
+                question.setUser(user);
+                question.setLanguage(questionLanguage);
+                question.setDifficulty(difficulty);
+                question.setHint(hints);
+            }
     }
 
-    // We will stick to an ArrayList for now with this and if we want to implement a hashmap later we can do that
-    public void removeQuestion(int id){
-
-
+    public void removeQuestion(UUID id){
+        for(Question question : questions){
+            if(question.getId.equals(id)){
+                postedQuestions.remove(question);
+                QuestionList.getInstance().deleteQuestion(question);
+                return;
+            }
+        }
     }
     
 }
