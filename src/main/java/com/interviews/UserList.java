@@ -25,6 +25,7 @@ public class UserList {
                 return user;
             }
         }
+        return null;
     }
 
     public ArrayList<User> getUsers() {
