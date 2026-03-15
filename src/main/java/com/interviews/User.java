@@ -3,6 +3,12 @@ package com.interviews;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import main.java.com.interviews.Achievement;
+
+/**
+ * User class that creates a user profile (like an account), storing 
+ * crucial information about the user
+ */
 public class User {
     private String firstName;
     private String lastName;
@@ -48,10 +54,25 @@ public class User {
 
     }
 
+    /**
+     * Method to see if the given username and password match 
+     * @param username the users public username 
+     * @param password the users password
+     * @return a boolean eturns true if the username 
+     * and password match the current users information
+     */
     public boolean isMatch(String username, String password){
         return(this.username.equals(username)&&this.password.equals(password));
     }
 
+    /**
+     * Method so the user can add a solution
+     * @param user the current user
+     * @param description what the solution description says
+     * @param thread any comments attached to the solution
+     * @return returns the new solution just created by the user with all of the 
+     * information just supplied
+     */
     public UserSolution addsolution(User user, String description, 
         ArrayList<Comment> thread){
             UserSolution solution = new UserSolution(user, description);
