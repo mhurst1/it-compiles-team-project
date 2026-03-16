@@ -3,7 +3,6 @@ package com.interviews;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import main.java.com.interviews.Achievement;
 
 /**
  * User class that creates a user profile (like an account), storing 
@@ -282,8 +281,8 @@ public class User {
     }
 
     // This needs to call a the MAKE ID where it will create a new UUID
-    public void setId(UUID id){
-        this.id = id;
+    public void setId(){
+        this.id = UUID.randomUUID();
     }
 
     /**
