@@ -65,8 +65,8 @@ public class QuestionApplication {
     public boolean addQuestion(String title, User user, String description, Difficulty difficulty,
             Language questionLanguage, ArrayList<String> hints, ArrayList<Section> questionContent) {
 
-         Question question = new Question(title, user, description, questionContent, hints, difficulty,
-                questionLanguage);
+         Question question = new Question(title, user, description, difficulty, questionLanguage, hints,
+                questionContent);
         return true;
     }
 
@@ -75,14 +75,14 @@ public class QuestionApplication {
                              ArrayList<String> hints, Difficulty difficulty,
                              Language questionLanguage) {
 
-    if (questionList != null && questionList.contains(question)) {
+    if (questionList.getQuestions().contains(question)) {
         question.setTitle(title);
         question.setUser(user);
         question.setDescription(description);
         question.setQuestionContent(questionContent);
-        question.setHints(hints);
+        question.setHint(hints);
         question.setDifficulty(difficulty);
-        question.setQuestionLanguage(questionLanguage);
+        question.setLanguage(questionLanguage);
         return question;
     }
 

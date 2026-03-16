@@ -110,6 +110,9 @@ public class Question {
     public ArrayList<Section> getQuestionContent(){
         return questionContent;
     }
+    public void setQuestionContent(ArrayList<Section> questionContent){
+        this.questionContent = questionContent;
+    }
 
     public UUID getQuestionId(){ // Not UUID
         return id;
