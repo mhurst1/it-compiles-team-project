@@ -9,7 +9,7 @@ public class QuestionApplication {
     private User currentUser;
     Question currentQuestion;
 
-    public QuestionApplication(){
+    public QuestionApplication() {
         this.currentQuestion = currentQuestion;
         this.currentUser = currentUser;
         questionList = new QuestionList();
@@ -17,132 +17,125 @@ public class QuestionApplication {
 
     }
 
-    public QuestionList getInstance(){
+    public QuestionList getInstance() {
         return questionList.getInstance();
     }
 
-    public User currentUser(){
+    public User currentUser() {
         this.currentUser = user;
     }
 
-    public User getCurrentUser(){
+    public User getCurrentUser() {
         return currentUser;
     }
 
-    public Question currentQuestion(){
+    public Question currentQuestion() {
         return currentQuestion;
     }
 
-    public UserSolution currentUserSolution(){
+    public UserSolution currentUserSolution() {
         return currentUserSolution();
     }
 
-    public User createAccount(String firstName, String lastName, String username, 
-        String password, String email, int graduationYear, String idUSC){
+    public User createAccount(String firstName, String lastName, String username,
+            String password, String email, int graduationYear, String idUSC) {
 
-            User user = new User(firstName, lastName, username, password, email, 
+        User user = new User(firstName, lastName, username, password, email,
                 graduationYear, idUSC);
-            return user;
+        return user;
 
     }
 
-    public void login(String username, String password){
+    public void login(String username, String password) {
         User user = userList.getUser(username, password);
-        if(user != null) {
+        if (user != null) {
             currentUser = user;
         }
 
     }
 
-    public ArrayList<Question> getQuestions(){
-
+    public ArrayList<Question> getQuestions() {
 
     }
 
     public boolean addQuestion(String title, User user, String description, Difficulty difficulty,
-         Language questionLanguage, ArrayList<String> hints, ArrayList<Section> questionContent){
+            Language questionLanguage, ArrayList<String> hints, ArrayList<Section> questionContent) {
 
-            Question question = new Question(title, user, description, questionContent, hints, difficulty, questionLanguage);
-            return question;
+        Question question = new Question(title, user, description, questionContent, hints, difficulty,
+                questionLanguage);
+        return question;
     }
 
-    public Question editQuestion(Question question, String title, User user, 
-        String description, ArrayList<Section> questionContent, ArrayList<String> hints, 
-        Difficulty difficulty, Language questionLanguage){
+    public Question editQuestion(Question question, String title, User user,
+            String description, ArrayList<Section> questionContent, ArrayList<String> hints,
+            Difficulty difficulty, Language questionLanguage) {
 
-            if(questionList.contains(question)){
-                question.setTitle(title);
-                question.setUser(user);
-                question.setDescription(description);
-                question.setQuestionContent(questionContent);
-                question.getHints(hints);
-                question.getDifficulty(difficulty);
-                question.getQuestionLanguage(questionLanguage);
-            }
-            
-    }
-
-    public ArrayList<Question> findQuestion(String keyword){
-
+        if (questionList.contains(question)) {
+            question.setTitle(title);
+            question.setUser(user);
+            question.setDescription(description);
+            question.setQuestionContent(questionContent);
+            question.getHints(hints);
+            question.getDifficulty(difficulty);
+            question.getQuestionLanguage(questionLanguage);
+        }
 
     }
 
-    public void deleteQuestion(Question question, int id){
-
-
-    }
-
-    public void addUserSolution(User user, String description, UUID solutionID, 
-        ArrayList<Comment> thread, int totalVote){
-
+    public ArrayList<Question> findQuestion(String keyword) {
 
     }
 
-    public UserSolution findSolution(){
-
-
-    }
-
-    public ArrayList<Question> getAnsweredQuestions(){
+    public void deleteQuestion(Question question, int id) {
 
     }
 
-    public void removeUserSolution(UserSolution userSolution){
-
-
-    }
-
-    public void addComment(Question question, User user, String comment){
-
+    public void addUserSolution(User user, String description, UUID solutionID,
+            ArrayList<Comment> thread, int totalVote) {
 
     }
 
-    public void addComment(UserSolution userSolution, User user, String comment){
-
-
-    }
-
-    public void deleteCommnet(Comment comment, int id){
-
+    public UserSolution findSolution() {
 
     }
 
-    public void starQuestion(Question question, UUID id){
-
+    public ArrayList<Question> getAnsweredQuestions() {
 
     }
 
-    public void editUser(User user, UUID id){
+    public void removeUserSolution(UserSolution userSolution) {
 
+    }
+
+    public void addComment(Question question, User user, String comment) {
+
+    }
+
+    public void addComment(UserSolution userSolution, User user, String comment) {
+
+    }
+
+    public void deleteCommnet(Comment comment, int id) {
+
+    }
+
+    public void starQuestion(Question question, UUID id) {
+
+    }
+
+    public void editUser(User user, UUID id) {
 
     }
 
     public void logout(){
 
+        if (currentUser == null) {
+            System.out.println("No user is currently logged in.");
+            return;
+        }
+        
+        currentUser = null;
         
     }
-    
-
-
 
 }

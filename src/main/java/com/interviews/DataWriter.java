@@ -108,7 +108,7 @@ public class DataWriter {
         for (int i = 0; i < a.size(); i++) {
             Achievement x = a.get(i);
             b.append("{\"leaderboard-place\":").append(x.getLeaderboardPlace())
-                    .append(",\"user-level\":").append(x.getUserLevel())
+                    .append(",\"user-level\":").append(x.getLevel())
                     .append(",\"all-vote-points\":").append(x.getAllVotePoints())
                     .append(",\"streak\":").append(x.getStreak()).append("}");
             if (i < a.size() - 1)
