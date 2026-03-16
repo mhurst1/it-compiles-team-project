@@ -45,6 +45,7 @@ public class QuestionApplication {
 
         User user = new User(firstName, lastName, username, password, email,
                 graduationYear, idUSC);
+
         return user;
 
     }

@@ -19,15 +19,17 @@ public class QuestionList {
 
     /**
      * Used as a default to retrun questions
+     * 
      * @return
      */
-    public ArrayList<Question> getQuestions(){
+    public ArrayList<Question> getQuestions() {
         return questions;
     }
 
     /**
      * ??? I am assuming this is used to search for a question
      * If it is we need to change the name
+     * 
      * @param keyword
      * @return
      */
@@ -41,9 +43,9 @@ public class QuestionList {
         return result;
     }
 
-    public void addQuestion(String title, User user, String description, Difficulty difficulty, 
-                        Language questionLang, ArrayList<String> hints, ArrayList<Section> questionContent) {
-        Question question = new Question(title, user, description, difficulty, questionLang, hints, questionContent);
+    public void addQuestion(String title, User user, String description, Difficulty difficulty,
+            Language questionLang, ArrayList<String> hints, ArrayList<Section> questionContent) {
+        Question question = new Question(title, user, description, questionContent, hints, difficulty, questionLang);
         questions.add(question);
     }
 
@@ -66,6 +68,6 @@ public class QuestionList {
 
         DataWriter writer = new DataWriter();
         writer.saveQuestions();
-        
+
     }
 }

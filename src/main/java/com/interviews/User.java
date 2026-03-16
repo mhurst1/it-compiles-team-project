@@ -269,7 +269,7 @@ public class User {
      * method to set the current graduation year to the parameter
      * @param graduationYear the year the user inputs they are graduating 
      */
-    public void setGraudationYear(int graduationYear){
+    public void setGraduationYear(int graduationYear){
         this.graduationYear = graduationYear;
     }
     
