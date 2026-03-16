@@ -44,7 +44,9 @@ public class QuestionApplication {
             String password, String email, int graduationYear, String idUSC) {
 
         User user = new User(firstName, lastName, username, password, email,
-                graduationYear, idUSC);
+                graduationYear, idUSC);        
+        UserList.getInstance().getUsers().add(user);
+        UserList.getInstance().save();
 
         return user;
 

@@ -27,17 +27,17 @@ public class Question {
     // Because we are sectioning off comments but also using it for the questions as well
 
     
-    public Question(String title, User user, String description, Difficulty difficulty2,
-                Language lang,
+    public Question(String title, User user, String description, ArrayList<Section> questionContent2,
                 ArrayList<String> hints2,
-                ArrayList<Section> sections2){
+                Difficulty difficulty2,
+                Language questionLang2){
         this.title = title;
         this.user = user;
         this.description = description;
-        this.difficulty = hints2;
+        this.difficulty = difficulty2;
         this.questionLang = questionLang;
-        this.hints = lang;
-        this.questionContent = difficulty2;
+        this.hints = hints2;
+        this.questionContent = questionContent2;
     }
 
     public Question(UUID id){
