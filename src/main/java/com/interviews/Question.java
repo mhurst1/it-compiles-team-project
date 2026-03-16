@@ -27,20 +27,27 @@ public class Question {
     // Because we are sectioning off comments but also using it for the questions as well
 
     
-    public Question(String title, User user, String description, Difficulty difficulty, 
-                        Language questionLang, ArrayList<String> hints, ArrayList<Section> questionContent){
+    public Question(String title, User user, String description, ArrayList<Section> questionContent2,
+                ArrayList<String> hints2,
+                Difficulty difficulty2,
+                Language questionLang2){
         this.title = title;
         this.user = user;
         this.description = description;
-        this.difficulty = difficulty;
+        this.difficulty = difficulty2;
         this.questionLang = questionLang;
-        this.hints = hints;
-        this.questionContent = questionContent;
+        this.hints = hints2;
+        this.questionContent = questionContent2;
     }
 
     public Question(UUID id){
         this.id = id;
     }
+    public Question(String title2, User user2, String description2, Difficulty difficulty2, Language lang,
+            ArrayList<String> hints2, ArrayList<Section> sections2) {
+        //TODO Auto-generated constructor stub
+    }
+
     public String getTitle(){
         return title;
     }

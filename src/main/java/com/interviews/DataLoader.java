@@ -1,283 +1,290 @@
 package com.interviews;
-
+// DataLoader.java
+// Zero-external-packages DataLoader focused on getQuestions() and required helpers.
+// NOTE: This uses only java.* packages and simple parsing logic (not a full JSON parser).
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.*;
+import java.lang.reflect.Field;
+import java.util.UUID;
 
-public class DataLoader{
+public class DataLoader {
+    private final Path usersPath;
+    private final Path questionsPath;
 
-    // PATHS FOR BOTH THE QUESTION AND THE USER
-    private static final String USERS_PATH = "json/users.json";
-    private static final String QUESTIONS_PATH = "json/question.json";
+    public DataLoader(String usersJsonPath, String questionsJsonPath) {
+        this.usersPath = Path.of(usersJsonPath);
+        this.questionsPath = Path.of(questionsJsonPath);
+    }
 
+    // --------------------------
+    // Public API: getQuestions()
+    // --------------------------
     /**
-     * GET USERS SECTION DATA LOADER
-     * @return
+     * Read Questions.json, parse it with a tiny builtin parser, and return ArrayList<Question>.
+     * Uses reflection to populate Question fields by converting kebab-case JSON keys to camelCase.
+     *
+     * If the file is missing or parsing fails, returns an empty list.
      */
-    public static ArrayList<User> getUsers() {
+    public ArrayList<Question> getQuestions() {
         try {
-            String json = Files.readString(Path.of(USERS_PATH));
-            List<String> objs = splitTopLevelObjects(json);
-
-            ArrayList<User> users = new ArrayList<>();
-            for (String obj : objs) {
-                User u = parseUser(obj);
-                if (u != null) users.add(u);
+            if (!Files.exists(questionsPath)) {
+                System.err.println("Questions file not found: " + questionsPath);
+                return new ArrayList<>();
             }
-            return users;
 
+            String json = Files.readString(questionsPath);
+
+            // Step 1: split top-level array into per-object substrings
+            List<String> objStrs = splitTopLevelObjects(json);
+            ArrayList<Question> result = new ArrayList<>(objStrs.size());
+
+            // Step 2: parse each object string into a map and instantiate a Question
+            for (String obj : objStrs) {
+                Map<String, Object> kv = parseJsonObject(obj);
+                if (kv == null || kv.isEmpty()) continue;
+                Question q = instantiateQuestionFromMap(kv);
+                if (q != null) result.add(q);
+            }
+
+            // Optional: if you want to verify author user objects exist, you can load users:
+            // Map<UUID, User> users = loadUsersMap(); and then attach to questions if necessary.
+
+            return result;
         } catch (IOException e) {
-            System.err.println("Could not read " + USERS_PATH + ": " + e.getMessage());
+            System.err.println("I/O reading questions file: " + e.getMessage());
+            return new ArrayList<>();
+        } catch (Exception e) {
+            System.err.println("Unexpected error in getQuestions(): " + e.getMessage());
             return new ArrayList<>();
         }
     }
 
+    // --------------------------
+    // Minimal JSON helpers
+    // --------------------------
+
     /**
-     * GET QUESTIONS SECTION DATA LOADER
-     * @return
+     * Splits a top-level JSON array string into individual object substrings.
+     * E.g. "[ {..}, {..} ]" -> ["{..}", "{..}"]
+     *
+     * This scans char-by-char, counting braces to correctly extract objects even if they
+     * contain arrays or inner braces.
      */
-    public static ArrayList<Question> getQuestions() {
-        try {
-            ArrayList<User> users = getUsers();
-            Map<UUID, User> usersById = new HashMap<>();
-            for (User u : users) {
-                if (u != null && u.getId() != null) usersById.put(u.getId(), u);
-            }
-
-            String json = Files.readString(Path.of(QUESTIONS_PATH));
-            List<String> objs = splitTopLevelObjects(json);
-
-            ArrayList<Question> questions = new ArrayList<>();
-            for (String obj : objs) {
-                Question q = parseQuestion(obj, usersById);
-                if (q != null) questions.add(q);
-            }
-
-            return questions;
-
-        } catch (IOException e) {
-            System.err.println("Could not read " + QUESTIONS_PATH + ": " + e.getMessage());
-            return new ArrayList<>();
-        }
-    }
-
-    private static User parseUser(String obj) {
-        UUID id = asUUID(extractString(obj, "id"));
-        if (id == null) return null;
-
-        String first = extractString(obj, "first-name");
-        String last = extractString(obj, "last-name");
-        String username = extractString(obj, "username");
-        String email = extractString(obj, "email");
-        int gradYear = extractInt(obj, "graduation-year", 0);
-        String idUsc = extractString(obj, "id-usc");
-
-        // Set password to default for now. (Probably should include it within the json)
-        String password = "";
-        Status status = Status.USER;
-
-        ArrayList<Question> starred = new ArrayList<>();
-        ArrayList<Question> answered = new ArrayList<>();
-
-       // We are going to need getters and setters for the achievement class
-        ArrayList<Achievement> achievements = new ArrayList<>();
-        String achArr = extractArrayRaw(obj, "achievements"); // "[{...},{...}]"
-        if (achArr != null) {
-            List<String> achObjs = splitTopLevelObjects(achArr);
-            for (int i = 0; i < achObjs.size(); i++) achievements.add(new Achievement());
-        }
-
-        return new User(
-                id, first, last, username, password,
-                email, starred, answered, achievements,
-                status, gradYear, idUsc
-        );
-    }
-
-    private static Question parseQuestion(String obj, Map<UUID, User> usersById) {
-        UUID id = asUUID(extractString(obj, "id"));
-        String title = extractString(obj, "title");
-        String description = extractString(obj, "description");
-
-        // "user"
-        UUID userId = asUUID(extractString(obj, "user"));
-        User user = (userId == null) ? null : usersById.get(userId);
-
-        // difficulty
-        String diffStr = firstStringInStringArray(obj, "difficulty");
-        Difficulty difficulty = parseDifficulty(diffStr);
-
-        // question-language
-        String langStr = firstStringInStringArray(obj, "question-language");
-        Language lang = parseLanguage(langStr);
-
-        ArrayList<String> hints = parseStringArray(extractArrayRaw(obj, "hints"));
-
-        // question-content
-        ArrayList<Section> sections = new ArrayList<>();
-        String qcArr = extractArrayRaw(obj, "question-content");
-        if (qcArr != null) {
-            List<String> secObjs = splitTopLevelObjects(qcArr);
-            for (String secObj : secObjs) {
-                String secTitle = extractString(secObj, "section-title");
-                ArrayList<String> secContent = parseStringArray(extractArrayRaw(secObj, "section-content"));
-                String secText = extractString(secObj, "section-text");
-                sections.add(new Section(secTitle, secContent, secText));
-            }
-        }
-
-        Question q = new Question(title, user, description, difficulty, lang, hints, sections);
-        if (id != null) q.setId(id);
-
-        // solution-list 
-        // JSON NESTED OBJECTS
-
-        // I am ignoring "solution-list" for now because
-        // Question currently has ArrayList<String> solutionList
-        // JSON has nested objects/comments/replies (I cant figure out how to map it yet)
-
-        return q;
-    }
-
-
-    // Helpers 
-    private static List<String> splitTopLevelObjects(String json) {
+    private List<String> splitTopLevelObjects(String json) {
         List<String> objects = new ArrayList<>();
         if (json == null) return objects;
-        String s = json.trim();
-        if (s.isEmpty()) return objects;
 
+        int len = json.length();
         int i = 0;
-        int len = s.length();
 
-        if (s.charAt(0) != '[') {
-            if (s.startsWith("{") && s.endsWith("}")) objects.add(s);
+        // find first '['
+        while (i < len && Character.isWhitespace(json.charAt(i))) i++;
+        if (i >= len || json.charAt(i) != '[') {
+            // not an array — maybe a single object
+            String trimmed = json.trim();
+            if (trimmed.startsWith("{") && trimmed.endsWith("}")) objects.add(trimmed);
             return objects;
         }
+        i++; // skip '['
 
-        i++;
+        // scan for objects
         while (i < len) {
-            while (i < len && (Character.isWhitespace(s.charAt(i)) || s.charAt(i) == ',')) i++;
-            if (i >= len || s.charAt(i) == ']') break;
+            // skip whitespace and commas
+            while (i < len && (Character.isWhitespace(json.charAt(i)) || json.charAt(i) == ',')) i++;
+            if (i >= len) break;
+            if (json.charAt(i) == ']') break; // end of array
 
-            if (s.charAt(i) == '{') {
+            if (json.charAt(i) == '{') {
                 int start = i;
-                int depth = 0;
+                int braceDepth = 0;
                 boolean inString = false;
-
-                while (i < len) {
-                    char c = s.charAt(i);
-
-                    if (c == '"' && (i == 0 || s.charAt(i - 1) != '\\')) {
+                i--;
+                while (++i < len) {
+                    char c = json.charAt(i);
+                    if (c == '"' && json.charAt(i-1) != '\\') {
                         inString = !inString;
                     } else if (!inString) {
-                        if (c == '{') depth++;
+                        if (c == '{') braceDepth++;
                         else if (c == '}') {
-                            depth--;
-                            if (depth == 0) {
-                                objects.add(s.substring(start, i + 1));
-                                i++;
+                            braceDepth--;
+                            if (braceDepth == 0) {
+                                // include substring from start..i
+                                objects.add(json.substring(start, i + 1).trim());
                                 break;
                             }
                         }
                     }
-                    i++;
                 }
             } else {
+                // skip unknown token
                 i++;
             }
         }
-
         return objects;
     }
 
     /**
-     * Extracts a JSON string value for a key inside an object substring.
-     * 
-     * 
-     * Example: "title": "What is JSON?" -> returns What is JSON?
-     * Returns "" if missing.
+     * Parse a single JSON object string (starting with '{', ending with '}') into a map.
+     * Values can be:
+     *  - String => stored as String
+     *  - Number/boolean/null => stored as String (raw text)
+     *  - Array of strings ["a","b"] => stored as List<String>
+     *
+     * This is intentionally minimal — it handles strings with backslash escapes and simple string arrays.
      */
-    private static String extractString(String obj, String key) {
-        if (obj == null){
-            return "";
-        }
-        String pattern = "\"" + key + "\"";
-        int k = obj.indexOf(pattern);
-        if (k < 0){
-            return "";
-        }
+    private Map<String, Object> parseJsonObject(String objJson) {
+        Map<String, Object> map = new LinkedHashMap<>();
+        if (objJson == null) return map;
+        String s = objJson.trim();
+        if (!s.startsWith("{") || !s.endsWith("}")) return map;
 
-        int colon = obj.indexOf(':', k + pattern.length());
-        if (colon < 0){
-            return "";
-        }
+        int len = s.length();
+        int i = 1; // skip initial '{'
 
-        int i = colon + 1;
-        while (i < obj.length() && Character.isWhitespace(obj.charAt(i))){
-            i++;
-        }
+        while (i < len - 1) {
+            // skip whitespace and commas
+            while (i < len - 1 && (Character.isWhitespace(s.charAt(i)) || s.charAt(i) == ',')) i++;
+            if (i >= len - 1) break;
 
-        if (i >= obj.length() || obj.charAt(i) != '"') {
-            // if its not a string (or empty)
-            return "";
-        }
+            // read key string
+            if (s.charAt(i) != '"') {
+                // invalid key start; try to recover by skipping to next quote
+                int nextQ = s.indexOf('"', i);
+                if (nextQ < 0) break;
+                i = nextQ;
+            }
+            String key = readJsonString(s, i);
+            if (key == null) break;
+            // advance i past the closing quote
+            i += 1 + key.length(); // rough — adjust to actual char pos: find next unescaped quote from i+1
+            // safer: find the position of the quote we closed at
+            int keyEnd = findClosingQuote(s, i - 1);
+            if (keyEnd < 0) break;
+            i = keyEnd + 1;
 
-        i++; // after opening quote
+            // skip whitespace to colon
+            while (i < len && Character.isWhitespace(s.charAt(i))) i++;
+            if (i >= len || s.charAt(i) != ':') break;
+            i++; // skip ':'
+            while (i < len && Character.isWhitespace(s.charAt(i))) i++;
+            if (i >= len) break;
+
+            // read value
+            char c = s.charAt(i);
+            if (c == '"') {
+                // string value
+                String val = readJsonString(s, i);
+                if (val == null) val = "";
+                map.put(key, val);
+                int valEnd = findClosingQuote(s, i);
+                if (valEnd < 0) break;
+                i = valEnd + 1;
+            } else if (c == '[') {
+                // array — we only support array of strings for this minimal parser
+                int arrStart = i;
+                int arrEnd = findMatchingBracket(s, i, '[', ']');
+                if (arrEnd < 0) {
+                    // malformed array
+                    i++;
+                    continue;
+                }
+                String arrContent = s.substring(arrStart + 1, arrEnd).trim();
+                List<String> list = parseStringArray(arrContent);
+                map.put(key, list);
+                i = arrEnd + 1;
+            } else {
+                // number, boolean, or null — read until comma or closing brace
+                int j = i;
+                while (j < len && s.charAt(j) != ',' && s.charAt(j) != '}') j++;
+                String raw = s.substring(i, j).trim();
+                map.put(key, raw);
+                i = j;
+            }
+
+            // loop continues; comma/whitespace handled at top
+        }
+        return map;
+    }
+
+    /**
+     * Read a JSON string starting at index start which should point to the starting double-quote (").
+     * Returns the unescaped string value or null on error.
+     */
+    private String readJsonString(String s, int startQuoteIndex) {
+        if (s == null || startQuoteIndex < 0 || startQuoteIndex >= s.length() || s.charAt(startQuoteIndex) != '"') return null;
         StringBuilder sb = new StringBuilder();
-        boolean esc = false;
-        while (i < obj.length()) {
-            char c = obj.charAt(i++);
-            if (esc) {
+        int i = startQuoteIndex + 1;
+        boolean escaped = false;
+        while (i < s.length()) {
+            char c = s.charAt(i);
+            if (escaped) {
+                // handle common escapes; keep unhandled escapes as-is
                 if (c == '"' || c == '\\' || c == '/') sb.append(c);
+                else if (c == 'b') sb.append('\b');
+                else if (c == 'f') sb.append('\f');
                 else if (c == 'n') sb.append('\n');
                 else if (c == 'r') sb.append('\r');
                 else if (c == 't') sb.append('\t');
                 else sb.append(c);
-                esc = false;
+                escaped = false;
             } else {
-                if (c == '\\') esc = true;
-                else if (c == '"') break;
-                else sb.append(c);
+                if (c == '\\') {
+                    escaped = true;
+                } else if (c == '"') {
+                    return sb.toString();
+                } else {
+                    sb.append(c);
+                }
             }
+            i++;
         }
-        return sb.toString();
+        // if we reach here, no closing quote found
+        return null;
     }
 
     /**
-     * Extracts a raw JSON array substring for a key:  Example: "hints": [ ... ]
-     * Returns the substring including brackets
+     * Find index of the closing quote for a string starting at or before startIndex.
+     * This returns the index of the closing quote character, or -1 if none found.
      */
-    private static String extractArrayRaw(String obj, String key) {
-        if (obj == null) return null;
-        String pattern = "\"" + key + "\"";
-        int k = obj.indexOf(pattern);
-        if (k < 0) return null;
-
-        int colon = obj.indexOf(':', k + pattern.length());
-        if (colon < 0) return null;
-
-        int i = colon + 1;
-        while (i < obj.length() && Character.isWhitespace(obj.charAt(i))) i++;
-        if (i >= obj.length() || obj.charAt(i) != '[') return null;
-
-        int end = findMatchingBracket(obj, i, '[', ']');
-        if (end < 0) return null;
-
-        return obj.substring(i, end + 1);
+    private int findClosingQuote(String s, int startIndex) {
+        int i = startIndex;
+        if (i < 0) i = 0;
+        // ensure we are at a quote: if not, find previous quote
+        while (i < s.length() && s.charAt(i) != '"') i++;
+        if (i >= s.length()) return -1;
+        i++; // move to char after opening quote
+        boolean escaped = false;
+        while (i < s.length()) {
+            char c = s.charAt(i);
+            if (escaped) {
+                escaped = false;
+            } else {
+                if (c == '\\') escaped = true;
+                else if (c == '"') return i;
+            }
+            i++;
+        }
+        return -1;
     }
 
-    private static int findMatchingBracket(String s, int start, char open, char close) {
+    /**
+     * Find matching closing bracket for an opening bracket at index 'start'.
+     * Works for brackets like [ ... ] and accounts for nested brackets and strings.
+     */
+    private int findMatchingBracket(String s, int start, char open, char close) {
+        int len = s.length();
+        if (start < 0 || start >= len || s.charAt(start) != open) return -1;
         int depth = 0;
         boolean inString = false;
-        for (int i = start; i < s.length(); i++) {
+        for (int i = start; i < len; i++) {
             char c = s.charAt(i);
             if (c == '"' && (i == 0 || s.charAt(i - 1) != '\\')) {
                 inString = !inString;
             }
             if (inString) continue;
-
             if (c == open) depth++;
             else if (c == close) {
                 depth--;
@@ -287,198 +294,223 @@ public class DataLoader{
         return -1;
     }
 
-    private static int extractInt(String obj, String key, int fallback) {
-        if (obj == null) return fallback;
-        String pattern = "\"" + key + "\"";
-        int k = obj.indexOf(pattern);
-        if (k < 0) return fallback;
-
-        int colon = obj.indexOf(':', k + pattern.length());
-        if (colon < 0) return fallback;
-
-        int i = colon + 1;
-        while (i < obj.length() && Character.isWhitespace(obj.charAt(i))) i++;
-
-        int j = i;
-        while (j < obj.length() && (Character.isDigit(obj.charAt(j)) || obj.charAt(j) == '-')) j++;
-
-        if (j == i) return fallback;
-        try {
-            return Integer.parseInt(obj.substring(i, j));
-        } catch (Exception e) {
-            return fallback;
-        }
-    }
-
-    private static ArrayList<String> parseStringArray(String arrayRaw) {
-        ArrayList<String> out = new ArrayList<>();
-        if (arrayRaw == null) return out;
-
-        String s = arrayRaw.trim();
-        if (s.length() < 2 || s.charAt(0) != '[') return out;
-
-        int i = 1; // after '['
-        while (i < s.length()) {
-            while (i < s.length() && (Character.isWhitespace(s.charAt(i)) || s.charAt(i) == ',')) i++;
-            if (i >= s.length() || s.charAt(i) == ']') break;
-
-            if (s.charAt(i) == '"') {
-                i++; // after quote
-                StringBuilder sb = new StringBuilder();
-                boolean esc = false;
-                while (i < s.length()) {
-                    char c = s.charAt(i++);
-                    if (esc) {
-                        if (c == '"' || c == '\\' || c == '/') sb.append(c);
-                        else if (c == 'n') sb.append('\n');
-                        else if (c == 'r') sb.append('\r');
-                        else if (c == 't') sb.append('\t');
-                        else sb.append(c);
-                        esc = false;
-                    } else {
-                        if (c == '\\') esc = true;
-                        else if (c == '"') break;
-                        else sb.append(c);
-                    }
-                }
-                out.add(sb.toString());
+    /**
+     * Parse comma-separated string array content (no outer brackets) into List<String>.
+     * Expects items like:  "id1","id2"
+     */
+    private List<String> parseStringArray(String content) {
+        List<String> res = new ArrayList<>();
+        if (content == null || content.isEmpty()) return res;
+        int len = content.length();
+        int i = 0;
+        while (i < len) {
+            // skip whitespace and commas
+            while (i < len && (Character.isWhitespace(content.charAt(i)) || content.charAt(i) == ',')) i++;
+            if (i >= len) break;
+            if (content.charAt(i) == '"') {
+                String val = readJsonString(content, i);
+                if (val == null) break;
+                res.add(val);
+                int end = findClosingQuote(content, i);
+                if (end < 0) break;
+                i = end + 1;
             } else {
-                // non-string item: read until comma or ]
+                // non-string array element: read until comma
                 int j = i;
-                while (j < s.length() && s.charAt(j) != ',' && s.charAt(j) != ']') j++;
-                String raw = s.substring(i, j).trim();
-                if (!raw.isEmpty()) out.add(raw);
-                i = j;
+                while (j < len && content.charAt(j) != ',') j++;
+                String raw = content.substring(i, j).trim();
+                if (!raw.isEmpty()) res.add(raw);
+                i = j + 1;
             }
         }
-        return out;
+        return res;
     }
 
-    private static String firstStringInStringArray(String obj, String key) {
-        String rawArray = extractArrayRaw(obj, key);
-        ArrayList<String> list = parseStringArray(rawArray);
-        if (list.isEmpty()) {
-            return "";
-        }
+    // --------------------------
+    // Object creation helpers
+    // --------------------------
 
-        return list.get(0);
-    }
-
-    private static UUID asUUID(String s) {
-        if (s == null || s.isBlank()){
-            return null;
-        }
+    /**
+     * Instantiate a Question and set fields by mapping keys -> fields.
+     * Key mapping: "kebab-case" -> camelCase. Example: "author-id" -> "authorId".
+     * For values that look like UUIDs we convert to java.util.UUID if the corresponding field type is UUID.
+     *
+     * This uses reflection so it can work with group project's existing Question class without requiring a specific constructor.
+     */
+    private Question instantiateQuestionFromMap(Map<String, Object> kv) {
         try {
-            return UUID.fromString(s.trim());
-        } catch (Exception e) {
-            return null;
-        }
-    }
+            Class<?> qClass = Question.class; // assumes Question is in same package or imported
+            Object qObj = qClass.getDeclaredConstructor().newInstance();
 
-    private static Difficulty parseDifficulty(String s) {
-        if (s == null){
-            return null;
-        }
-        s = s.trim().toUpperCase();
-        if (s.equals("EASY")){
-            return Difficulty.EASY;
-        } 
-        if (s.equals("MEDIUM")){
-            return Difficulty.MEDIUM;
-        } 
+            for (Map.Entry<String, Object> e : kv.entrySet()) {
+                String jsonKey = e.getKey();
+                Object value = e.getValue();
+                String fieldName = jsonKeyToFieldName(jsonKey);
 
-        // I added hard here just incase we wanted to change what it says to the user.
-        // So ither way it will still be classified as Difficult within the enumeration
-        if (s.equals("DIFFICULT") || s.equals("HARD")){ 
-            return Difficulty.DIFFICULT;
-        } 
-        return null;
-    }
+                try {
+                    Field f = getFieldRecursive(qClass, fieldName);
+                    if (f == null) continue;
+                    f.setAccessible(true);
 
-    // Because in the language tab these all have similar names, we need to differentiate them.
-    private static Language parseLanguage(String s) {
-        if (s == null){
-            return null;
-        }
+                    Class<?> fieldType = f.getType();
 
-        s = s.trim().toUpperCase();
-        try {
-            return Language.valueOf(s);
-        } catch (Exception e) {
-            if (s.equals("JAVA")){
-                return Language.JAVA;
+                    // handle common types: String, UUID, List<String>, primitives
+                    if (fieldType == String.class) {
+                        f.set(qObj, value == null ? null : value.toString());
+                    } else if (fieldType == UUID.class) {
+                        UUID uid = parsePossibleUUID(value);
+                        f.set(qObj, uid);
+                    } else if (List.class.isAssignableFrom(fieldType)) {
+                        // We assume field is List<String>. If it's typed differently, caller must adapt.
+                        if (value instanceof List) {
+                            f.set(qObj, value);
+                        } else if (value != null) {
+                            // single scalar -> wrap into list
+                            List<Object> one = new ArrayList<>();
+                            one.add(value);
+                            f.set(qObj, one);
+                        }
+                    } else if (fieldType == int.class || fieldType == Integer.class) {
+                        if (value != null) {
+                            try {
+                                int iv = Integer.parseInt(value.toString());
+                                f.set(qObj, iv);
+                            } catch (NumberFormatException ex) {
+                                // ignore or leave default
+                            }
+                        }
+                    } else {
+                        // fallback: attempt to set string representation for unknown types
+                        // if the field expects a UUID but is declared as Object/String elsewhere, above handles UUID
+                        try {
+                            f.set(qObj, value);
+                        } catch (IllegalArgumentException iae) {
+                            // ignore incompatible assignment
+                        }
+                    }
+                } catch (Exception inner) {
+                    // tolerate missing fields / incompatible types — log and continue
+                    System.err.println("Warning: couldn't set field for key '" + jsonKey + "': " + inner.getMessage());
+                }
             }
-            if (s.equals("JAVASCRIPT") || s.equals("JAVA_SCRIPT")){
-                return Language.JAVASCRIPT;
-            } return Language.JAVASCRIPT;
+
+            return (Question) qObj;
+        } catch (Exception ex) {
+            System.err.println("Failed to instantiate Question: " + ex.getMessage());
+            return null;
         }
     }
 
     /**
-     * THIS IS THE TESTER FOR THE DATALOADER
-     * 
-     * GPT Loaded TESTER based on the code written above
-     * 
-     * It should only have 2 users loaded and 2 questions loaded from when we made the jsons
+     * Find field on class or its superclasses by name; returns null if not found.
      */
-    public static void main(String[] args) {
-
-        // My Tester To See if it loaded from the JSON
-        ArrayList<User> users = getUsers();
-        System.out.println("Users loaded: " + users.size());
-
-        ArrayList<Question> qs = getQuestions();
-        System.out.println("Questions loaded: " + qs.size() + "\n");
-
-
-        // GPTS TESTER
-        System.out.println("========= USERS =========");
-        for(User user : users){
-            System.out.println("ID: " + user.getId());
-            System.out.println("First Name: " + user.getFirstName());
-            System.out.println("Last Name: " + user.getLastName());
-            System.out.println("Username: " + user.getUsername());
-            System.out.println("Email: " + user.getEmail());
-            System.out.println("Graduation Year: " + user.getGraduationYear());
-            System.out.println("USC ID: " + user.getIdUSC());
-            System.out.println("Achievements: " + user.getAchievements().size()); // Error In Testing
-            System.out.println();
+    private Field getFieldRecursive(Class<?> cls, String fieldName) {
+        Class<?> cur = cls;
+        while (cur != null) {
+            try {
+                Field f = cur.getDeclaredField(fieldName);
+                return f;
+            } catch (NoSuchFieldException nsf) {
+                cur = cur.getSuperclass();
+            }
         }
+        return null;
+    }
 
+    private UUID parsePossibleUUID(Object value) {
+        if (value == null) return null;
+        String s = value.toString();
+        try {
+            return UUID.fromString(s);
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
+    }
 
-        System.out.println("========= QUESTIONS =========");
+    /**
+     * Convert kebab-case JSON key to camelCase Java field name.
+     * Example: "first-name" -> "firstName", "author-id" -> "authorId"
+     */
+    private String jsonKeyToFieldName(String key) {
+        if (key == null) return null;
+        String[] parts = key.split("-");
+        if (parts.length == 1) return parts[0];
+        StringBuilder sb = new StringBuilder(parts[0]);
+        for (int i = 1; i < parts.length; i++) {
+            String p = parts[i];
+            if (p.length() == 0) continue;
+            sb.append(Character.toUpperCase(p.charAt(0)));
+            if (p.length() > 1) sb.append(p.substring(1));
+        }
+        return sb.toString();
+    }
 
-        ArrayList<Question> questions = getQuestions();
-
-        for(Question q : questions){
-
-            System.out.println("Question ID: " + q.getId());
-            System.out.println("Title: " + q.getTitle());
-            System.out.println("Description: " + q.getDescription());
-            System.out.println("Difficulty: " + q.getDifficulty());
-            System.out.println("Language: " + q.getLanguage());
-
-            if(q.getUser() != null){
-                System.out.println("Posted By: " + q.getUser().getUsername());
+    // --------------------------
+    // Users loader (same minimal parser)
+    // --------------------------
+    /**
+     * Loads Users.json and returns Map<UUID, User>. Uses the same parser as above.
+     * Useful for resolving authors if you want to attach full User objects to Questions.
+     *
+     * Assumes there is a User class in your project with fields matching camelCase names
+     * (id, firstName, lastName, username, email, graduationYear, idUsc, starredQuestions, etc).
+     */
+    private Map<UUID, User> loadUsersMap() {
+        try {
+            if (!Files.exists(usersPath)) {
+                System.err.println("Users file not found: " + usersPath);
+                return Collections.emptyMap();
             }
-
-            System.out.println("Hints:");
-            for(String hint : q.getHints()){
-                System.out.println("- " + hint);
-            }
-
-            System.out.println("Sections:");
-            for(Section s : q.getSections()){
-                System.out.println("Section Title: " + s.getSectionTitle());
-                System.out.println("Section Text: " + s.getSectionText());
-
-                for(String line : s.getSectionContent()){
-                    System.out.println("  " + line);
+            String json = Files.readString(usersPath);
+            List<String> objStrs = splitTopLevelObjects(json);
+            Map<UUID, User> map = new HashMap<>();
+            for (String o : objStrs) {
+                Map<String, Object> kv = parseJsonObject(o);
+                if (kv == null || kv.isEmpty()) continue;
+                // instantiate User via reflection similarly to questions
+                try {
+                    Class<?> uClass = User.class;
+                    Object uObj = uClass.getDeclaredConstructor().newInstance();
+                    for (Map.Entry<String, Object> en : kv.entrySet()) {
+                        String fieldName = jsonKeyToFieldName(en.getKey());
+                        Field f = getFieldRecursive(uClass, fieldName);
+                        if (f == null) continue;
+                        f.setAccessible(true);
+                        if (f.getType() == UUID.class) {
+                            f.set(uObj, parsePossibleUUID(en.getValue()));
+                        } else if (f.getType() == int.class || f.getType() == Integer.class) {
+                            try { f.set(uObj, Integer.parseInt(en.getValue().toString())); } catch (Exception ex) {}
+                        } else if (List.class.isAssignableFrom(f.getType())) {
+                            f.set(uObj, en.getValue());
+                        } else {
+                            f.set(uObj, en.getValue() == null ? null : en.getValue().toString());
+                        }
+                    }
+                    // add to map by id if present
+                    Field idField = getFieldRecursive(uClass, "id");
+                    if (idField != null) {
+                        idField.setAccessible(true);
+                        Object idVal = idField.get(uObj);
+                        if (idVal instanceof UUID) map.put((UUID) idVal, (User) uObj);
+                    }
+                } catch (Exception ex) {
+                    System.err.println("Failed to instantiate User: " + ex.getMessage());
                 }
             }
-
-            System.out.println();
-            System.out.println("----------------------------");
+            return map;
+        } catch (IOException e) {
+            System.err.println("I/O reading users file: " + e.getMessage());
+            return Collections.emptyMap();
         }
+    }
+
+    // --------------------------
+    // Quick self-test main
+    // --------------------------
+    public static void main(String[] args) {
+        DataLoader d = new DataLoader("data/Users.json", "data/Questions.json");
+        ArrayList<Question> qs = d.getQuestions();
+        System.out.println("Loaded questions: " + qs.size());
+        if (!qs.isEmpty()) System.out.println(qs.get(0).toString());
     }
 }

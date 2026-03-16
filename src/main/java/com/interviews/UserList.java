@@ -1,6 +1,7 @@
 package com.interviews;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class UserList {
 
@@ -21,7 +22,7 @@ public class UserList {
 
     public User getUserByID(UUID id){
         for(User user : users){
-            if(user.getID().equals(id)){
+            if(user.getId().equals(id)){
                 return user;
             }
         }
