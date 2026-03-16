@@ -335,7 +335,7 @@ public class User {
      * @return ArrayList<Achievement> an array list of the users achievements 
      */
     public ArrayList<Achievement> getAchievements(){
-        return answeredQuestions;
+        return achievements;
     }
 
     /**

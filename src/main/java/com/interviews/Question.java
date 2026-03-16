@@ -31,6 +31,7 @@ public class Question {
     public Question(String title, User user, String description, Difficulty difficulty, 
                         Language questionLang, ArrayList<String> hints, ArrayList<Section> questionContent){
         this.title = title;
+        this.user = user;
         this.description = description;
         this.difficulty = difficulty;
         this.questionLang = questionLang;
@@ -89,7 +90,7 @@ public class Question {
 
 
     public ArrayList<Section> getSections() {
-        return sections;
+        return qustionContent;
     }
 
     public int selectSolution(){  // ????
