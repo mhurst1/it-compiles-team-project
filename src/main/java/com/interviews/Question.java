@@ -12,18 +12,17 @@ public class Question {
     private String title;
     private User user;
     private String description;
-    private ArrayList<Section> qustionContent;
+    private ArrayList<Section> questionContent;
     private ArrayList<String> hints;
     private UUID id;
     private Difficulty difficulty;
     private Language questionLang;
-    private ArrayList<String> solutionList; // Check if the ArrayList value should be a string
+    private ArrayList<UserSolution> solutionList; // Check if the ArrayList value should be a string
 
     private ArrayList<String> givenSolutionIMG;
     private ArrayList<String> givenSolutionTXT;
+
     private ArrayList<Section> sections; // Added Section for the question
-
-
     // Question Should have a section correct??
     // Because we are sectioning off comments but also using it for the questions as well
 
@@ -36,7 +35,7 @@ public class Question {
         this.difficulty = difficulty;
         this.questionLang = questionLang;
         this.hints = hints;
-        this.qustionContent = questionContent;
+        this.questionContent = questionContent;
     }
 
     public Question(UUID id){
@@ -90,7 +89,7 @@ public class Question {
 
 
     public ArrayList<Section> getSections() {
-        return qustionContent;
+        return questionContent;
     }
 
     public int selectSolution(){  // ????
@@ -102,7 +101,7 @@ public class Question {
     }
 
     public ArrayList<Section> getQuestionContent(){
-        return qustionContent;
+        return questionContent;
     }
 
     public UUID getQuestionId(){ // Not UUID
@@ -112,6 +111,19 @@ public class Question {
     public void setHint(ArrayList<String> hints){
         this.hints = hints;
     }
+
+    // CHECK IF IT SHOULD HAVE TYPE USERSOLUTION
+    public ArrayList<UserSolution> getSolutionList(){
+        return solutionList;
+    }
+
+    public ArrayList<String> getGivenSolutionImg(){
+        return givenSolutionIMG;
+    }
+    public ArrayList<String> getGivenSolutionText(){
+        return givenSolutionTXT;
+    }
+
 
     public String toString(){
         return " "; // Edit this

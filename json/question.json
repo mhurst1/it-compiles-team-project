@@ -28,7 +28,8 @@
                         "replies": [
                             {
                                 "user": "0d8a7693-5a00-41df-818e-09ac969b6a75",
-                                "comment": "JSON is more lightweight, easier to read, and uses less markup compared to XML. It also maps directly to objects in JavaScript and Java libraries like Gson or Jackson."
+                                "comment": "JSON is more lightweight, easier to read, and uses less markup compared to XML. It also maps directly to objects in JavaScript and Java libraries like Gson or Jackson.",
+                                "replies": []
                             }
                         ]
                     }
@@ -70,7 +71,8 @@
                         "replies": [
                             {
                                 "user": "0d8a7693-5a00-41df-818e-09ac969b6a75",
-                                "comment": "It improves scalability and maintainability. For example, you can write code that works with a parent type (like Animal), and later introduce new subclasses (Dog, Cat, Bird) without modifying existing logic."
+                                "comment": "It improves scalability and maintainability. For example, you can write code that works with a parent type (like Animal), and later introduce new subclasses (Dog, Cat, Bird) without modifying existing logic.",
+                                "replies": []
                             }
                         ]
                     }

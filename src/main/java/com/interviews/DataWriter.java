@@ -6,12 +6,16 @@ import java.util.List;
 
 public class DataWriter {
 
+    // PATHS FOR BOTH THE QUESTION AND THE USER
+    private static final String USERS_PATH = "json/users.json";
+    private static final String QUESTIONS_PATH = "json/question.json";
+
     public boolean saveUsers() {
         try {
             List<User> users = UserList.getInstance().getUsers();
-            new File("data").mkdirs();
+            new File("json").mkdirs();
 
-            try (PrintWriter w = new PrintWriter("data/users.json")) {
+            try (PrintWriter w = new PrintWriter(USERS_PATH)) {
                 w.println("[");
 
                 for (int i = 0; i < users.size(); i++) {
@@ -19,12 +23,12 @@ public class DataWriter {
 
                     w.print("  {"
                             + "\"id\":\"" + u.getId() + "\","
-                            + "\"first-name\":\"" + u.getFirstName() + "\","
-                            + "\"last-name\":\"" + u.getLastName() + "\","
-                            + "\"username\":\"" + u.getUsername() + "\","
-                            + "\"email\":\"" + u.getEmail() + "\","
+                            + "\"first-name\":\"" + escape(u.getFirstName()) + "\","
+                            + "\"last-name\":\"" + escape(u.getLastName()) + "\","
+                            + "\"username\":\"" + escape(u.getUsername()) + "\","
+                            + "\"email\":\"" + escape(u.getEmail()) + "\","
                             + "\"graduation-year\":" + u.getGraduationYear() + ","
-                            + "\"id-usc\":\"" + u.getIdUSC() + "\","
+                            + "\"id-usc\":\"" + escape(u.getIdUSC()) + "\","
                             + "\"starred-questions\":" + listIds(u.getStarredQuestionList()) + ","
                             + "\"answered-questions\":" + listIds(u.getAnsweredQuestions()) + ","
                             + "\"achievements\":" + achList(u.getAchievements())
@@ -46,9 +50,9 @@ public class DataWriter {
     public boolean saveQuestions() {
         try {
             List<Question> questions = QuestionList.getInstance().getQuestions();
-            new File("data").mkdirs();
+            new File("json").mkdirs();
 
-            try (PrintWriter w = new PrintWriter("data/questions.json")) {
+            try (PrintWriter w = new PrintWriter(QUESTIONS_PATH)) {
                 w.println("[");
 
                 for (int i = 0; i < questions.size(); i++) {
@@ -56,13 +60,13 @@ public class DataWriter {
 
                     w.print("  {"
                             + "\"id\":\"" + q.getId() + "\","
-                            + "\"title\":\"" + q.getTitle() + "\","
+                            + "\"title\":\"" + escape(q.getTitle()) + "\","
                             + "\"user\":\"" + (q.getUser() == null ? "" : q.getUser().getId()) + "\","
-                            + "\"description\":\"" + q.getDescription() + "\","
+                            + "\"description\":\"" + escape(q.getDescription()) + "\","
                             + "\"question-content\":" + sectionList(q.getQuestionContent()) + ","
                             + "\"hints\":" + stringList(q.getHints()) + ","
                             + "\"difficulty\":" + enumToArray(q.getDifficulty()) + ","
-                            + "\"question-language\":" + enumToArray(q.getQuestionLanguage()) + ","
+                            + "\"question-language\":" + enumToArray(q.getLanguage()) + ","
                             + "\"solution-list\":" + solutionList(q.getSolutionList()) + ","
                             + "\"given-solution-img\":" + stringList(q.getGivenSolutionImg()) + ","
                             + "\"given-solution-text\":" + stringList(q.getGivenSolutionText())
@@ -87,6 +91,7 @@ public class DataWriter {
     static String listIds(List<Question> list) {
         if (list == null || list.isEmpty())
             return "[]";
+
         StringBuilder b = new StringBuilder("[");
 
         for (int i = 0; i < list.size(); i++) {
@@ -103,14 +108,16 @@ public class DataWriter {
     static String achList(List<Achievement> a) {
         if (a == null || a.isEmpty())
             return "[]";
+
         StringBuilder b = new StringBuilder("[");
 
         for (int i = 0; i < a.size(); i++) {
             Achievement x = a.get(i);
             b.append("{\"leaderboard-place\":").append(x.getLeaderboardPlace())
-                    .append(",\"user-level\":").append(x.getUserLevel())
-                    .append(",\"all-vote-points\":").append(x.getAllVotePoints())
-                    .append(",\"streak\":").append(x.getStreak()).append("}");
+             .append(",\"user-level\":").append(x.getUserLevel())
+             .append(",\"all-vote-points\":").append(x.getAllVotePoints())
+             .append(",\"streak\":").append(x.getStreak()).append("}");
+
             if (i < a.size() - 1)
                 b.append(", ");
         }
@@ -124,19 +131,22 @@ public class DataWriter {
     static String solutionList(List<UserSolution> s) {
         if (s == null || s.isEmpty())
             return "[]";
+
         StringBuilder b = new StringBuilder("[");
 
         for (int i = 0; i < s.size(); i++) {
             UserSolution us = s.get(i);
             String uid = us.getUser() == null ? "" : String.valueOf(us.getUser().getId());
             String desc = us.getDescription() == null ? "" : us.getDescription();
+
             b.append("{")
-                    .append("\"user\":\"").append(uid).append("\",")
-                    .append("\"description\":\"").append(desc).append("\",")
-                    .append("\"thread\":").append(commentList(us.getThread())).append(",")
-                    .append("\"user-vote\":").append(us.getUserVote()).append(",")
-                    .append("\"total-vote\":").append(us.getTotalVote())
-                    .append("}");
+             .append("\"user\":\"").append(escape(uid)).append("\",")
+             .append("\"description\":\"").append(escape(desc)).append("\",")
+             .append("\"thread\":").append(commentList(us.getThread())).append(",")
+             .append("\"user-vote\":").append(us.getUserVote()).append(",")
+             .append("\"total-vote\":").append(us.getTotalVote())
+             .append("}");
+
             if (i < s.size() - 1)
                 b.append(",");
         }
@@ -150,16 +160,18 @@ public class DataWriter {
     static String sectionList(List<Section> sections) {
         if (sections == null || sections.isEmpty())
             return "[]";
+
         StringBuilder b = new StringBuilder("[");
 
         for (int i = 0; i < sections.size(); i++) {
             Section s = sections.get(i);
+
             b.append("{")
-                    .append("\"section-title\":\"").append(s.getSectionTitle()).append("\",")
-                    .append("\"section-content\":").append(stringList(s.getSectionContent())).append(",")
-                    .append("\"section-text\":\"").append(s.getSectionText()).append("\",")
-                    .append("\"fileName\":\"").append(s.getFileName()).append("\"")
-                    .append("}");
+             .append("\"section-title\":\"").append(escape(s.getSectionTitle())).append("\",")
+             .append("\"section-content\":").append(stringList(s.getSectionContent())).append(",")
+             .append("\"section-text\":\"").append(escape(s.getSectionText())).append("\",")
+             .append("\"fileName\":\"").append(escape(s.getFileName())).append("\"")
+             .append("}");
 
             if (i < sections.size() - 1) {
                 b.append(",");
@@ -174,6 +186,7 @@ public class DataWriter {
     static String enumToArray(Enum<?> e) {
         if (e == null)
             return "[]";
+
         return "[\"" + e.name() + "\"]";
     }
 
@@ -181,11 +194,12 @@ public class DataWriter {
     static String stringList(List<String> list) {
         if (list == null || list.isEmpty())
             return "[]";
+
         StringBuilder b = new StringBuilder("[");
 
         for (int i = 0; i < list.size(); i++) {
             String s = list.get(i) == null ? "" : list.get(i);
-            b.append("\"").append(s).append("\"");
+            b.append("\"").append(escape(s)).append("\"");
             if (i < list.size() - 1) {
                 b.append(",");
             }
@@ -204,25 +218,26 @@ public class DataWriter {
 
         for (int i = 0; i < comments.size(); i++) {
             Comment c = comments.get(i);
-            String userId = (c.getUser() == null); {
-                    if (c.getUser() == null) {
-                        userId = "";
-                    } else {
-                        userId = String.valueOf(c.getUser().getId());
-                    
-                }
-            String commentText = (c.getComment() == null);
-                    if (c.getComment() == null) {
-                        commentText = "";
-                    } else {
-                        commentText = c.getComment();
-                    }
+
+            String userId;
+            if (c.getUser() == null) {
+                userId = "";
+            } else {
+                userId = String.valueOf(c.getUser().getId());
+            }
+
+            String commentText;
+            if (c.getComment() == null) {
+                commentText = "";
+            } else {
+                commentText = c.getComment();
+            }
 
             b.append("{")
-                    .append("\"user\":\"").append(userId).append("\",")
-                    .append("\"comment\":\"").append(commentText).append("\",")
-                    .append("\"replies\":").append(commentList(c.getReplies()))
-                    .append("}");
+             .append("\"user\":\"").append(escape(userId)).append("\",")
+             .append("\"comment\":\"").append(escape(commentText)).append("\",")
+             .append("\"replies\":").append(commentList(c.getReplies()))
+             .append("}");
 
             if (i < comments.size() - 1)
                 b.append(",");
@@ -232,6 +247,18 @@ public class DataWriter {
         return b.toString();
     }
 
-}
+    static String escape(String text) {
+        if (text == null) {
+            return "";
+        }
+
+        return text.replace("\\", "\\\\")
+                   .replace("\"", "\\\"")
+                   .replace("\n", "\\n")
+                   .replace("\r", "\\r")
+                   .replace("\t", "\\t");
+    }
+
+    // ADD A TESTER FOR THE DATA WRITER HERE
 
 }

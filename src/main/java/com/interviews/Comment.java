@@ -7,17 +7,12 @@ import java.util.ArrayList;
  */
 public class Comment {
     private User user;
-    private ArrayList<Section> comments;
+    private String comment;
     private ArrayList<Comment> replies;
 
-    public Comment(User user, ArrayList<Section> comments){
+    public Comment(User user, String comment){
         this.user = user;
-        if(comments != null){
-            this.comments = comments;
-        }
-        else{
-            this.comments = new ArrayList<>();
-        }
+        this.comment = comment;
         this.replies = new ArrayList<>();
     }
 
@@ -26,8 +21,8 @@ public class Comment {
     public User getUser(){
         return user;
     }
-    public ArrayList<Section> getComments(){
-        return comments;
+    public String getComment(){
+        return comment;
     }
 
     public ArrayList<Comment> getReplies(){
@@ -48,10 +43,28 @@ public class Comment {
         
     }
 
-    public void addReply(){
-
+    public void addReply(Comment reply){
+        if(reply != null){
+            replies.add(reply);
+        }
     }
-    public void removeReply(){
 
+    /**
+     * Removes Comment Based on the reply
+     * @param reply
+     */
+    public void removeReply(Comment reply){
+        replies.remove(reply);
     }
+
+    /**
+     * Removes Comment at Index Given
+     * @param index
+     */
+    public void removeReply(int index){
+        if (index >= 0 && index <replies.size()){
+            replies.remove(index);
+        }
+    }
+
 }

@@ -53,6 +53,18 @@ public class Achievement {
         return userLevel;
     }
 
+
+    // NEED TO BE MODIFIED FOR DATA WRITER
+    public int getLeaderboardPlace(){
+        return leaderboardPlace;
+    }
+    public int getUserLevel(){
+        return userLevel;
+    }
+    public int getAllVotePoints(){
+        return allVotePoints;
+    }
+
     // Call this once per day when user is active
     public int streakCounter() {
         LocalDate today = LocalDate.now();

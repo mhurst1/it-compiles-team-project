@@ -28,6 +28,25 @@ public class UserSolution {
         this.description = description;
     }
 
+    // GETTERS 
+    public User getUser(){
+        return user;
+    }
+    public String getDescription(){
+        return description;
+    }
+    public ArrayList<Comment> getThread(){
+        return thread;
+    }
+    public boolean getUserVote(){
+        return userVote;
+    }
+    public int getTotalVote(){
+        return totalVote;
+    }
+
+
+
     public void addSolution(){
 
     }

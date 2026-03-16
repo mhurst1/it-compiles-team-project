@@ -281,6 +281,7 @@ public class User {
         return id;
     }
 
+    // This needs to call a the MAKE ID where it will create a new UUID
     public void setId(UUID id){
         this.id = id;
     }
