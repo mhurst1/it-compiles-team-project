@@ -160,7 +160,7 @@ public class User {
         return id;
     }
 
-    public void setId(UUID id){
+    public void setId(UUID id){ // Use the MakeID function to create a UUID for each user
         this.id = id;
     }
 

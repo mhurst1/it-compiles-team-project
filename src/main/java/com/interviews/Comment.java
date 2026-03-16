@@ -10,26 +10,48 @@ public class Comment {
     private ArrayList<Section> comments;
     private ArrayList<Comment> replies;
 
-    public Comment(User user, ArrayList<Section> comments, ArrayList<Comment> replies){
+    public Comment(User user, ArrayList<Section> comments){
         this.user = user;
-        this.comments = comments;
-        this.replies = replies;
+        if(comments != null){
+            this.comments = comments;
+        }
+        else{
+            this.comments = new ArrayList<>();
+        }
+        this.replies = new ArrayList<>();
     }
 
-    public void addComment(User user, String comment){
-        this.user = user;
-        this.comment = comment;
+
+    // Getters
+    public User getUser(){
+        return user;
+    }
+    public ArrayList<Section> getComments(){
+        return comments;
+    }
+
+    public ArrayList<Comment> getReplies(){
+        return replies;
+    }
+
+
+    // Methods
+    public void addComment(User user, String commentText){
+        
     }
 
     public void addComment(User user, String comment, ArrayList<Comment> replies){
-        this.user = user;
-        this.comment = comment;
-        this.replies = replies;
+        
     }
 
     public void deleteComment(){
-        this.user = null;
-        this.comment = null;
-        this.replies = null;
+        
+    }
+
+    public void addReply(){
+
+    }
+    public void removeReply(){
+
     }
 }

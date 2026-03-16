@@ -21,7 +21,13 @@ public class Question {
 
     private ArrayList<String> givenSolutionIMG;
     private ArrayList<String> givenSolutionTXT;
+    private ArrayList<Section> sections; // Added Section for the question
 
+
+    // Question Should have a section correct??
+    // Because we are sectioning off comments but also using it for the questions as well
+
+    
     public Question(String title, User user, String description, Difficulty difficulty, 
                         Language questionLang, ArrayList<String> hints, ArrayList<Section> questionContent){
         this.title = title;
@@ -73,12 +79,17 @@ public class Question {
         this.id = id;
     }
 
-    public Language getQuestionLanguage(){
+    public Language getLanguage(){
         return questionLang;
     }
 
-    public void setQuestionLanguage(Language questionLang){
+    public void setLanguage(Language questionLang){
         this.questionLang = questionLang;
+    }
+
+
+    public ArrayList<Section> getSections() {
+        return sections;
     }
 
     public int selectSolution(){  // ????
