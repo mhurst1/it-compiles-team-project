@@ -19,6 +19,15 @@ public class UserList {
 
     }
 
+    public User getUserByID(UUID id){
+        for(User user : users){
+            if(user.getID().equals(id)){
+                return user;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<User> getUsers() {
         return users;
     }
