@@ -6,7 +6,7 @@ public class QuestionList {
     private static QuestionList questionList;
     private ArrayList<Question> questions;
 
-    private QuestionList() {
+    public QuestionList() {
         questions = new ArrayList<>();
     }
 

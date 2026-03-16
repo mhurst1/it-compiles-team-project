@@ -7,21 +7,24 @@ public class QuestionApplication {
     private QuestionList questionList;
     private UserList userList;
     private User currentUser;
-    Question currentQuestion;
+    private Question currentQuestion;
+    private UserSolution currentUserSolution;
+    
 
     public QuestionApplication() {
-        this.currentQuestion = currentQuestion;
-        this.currentUser = currentUser;
-        questionList = new QuestionList();
-        userList = new UserList();
+        this.currentQuestion = null;
+        this.currentUser = null;
+        this.currentUserSolution = null;
+        this.questionList = new QuestionList();
+        this.userList = new UserList();
 
     }
 
-    public QuestionList getInstance() {
-        return questionList.getInstance();
+    public QuestionList questionList() {
+        return questionList;
     }
 
-    public User currentUser() {
+    public void setCurrentUser(User user) {
         this.currentUser = user;
     }
 
@@ -55,35 +58,39 @@ public class QuestionApplication {
     }
 
     public ArrayList<Question> getQuestions() {
-
+        return new ArrayList<>();
     }
 
     public boolean addQuestion(String title, User user, String description, Difficulty difficulty,
             Language questionLanguage, ArrayList<String> hints, ArrayList<Section> questionContent) {
 
-        Question question = new Question(title, user, description, questionContent, hints, difficulty,
+         Question question = new Question(title, user, description, questionContent, hints, difficulty,
                 questionLanguage);
+        return true;
+    }
+
+   public Question editQuestion(Question question, String title, User user,
+                             String description, ArrayList<Section> questionContent,
+                             ArrayList<String> hints, Difficulty difficulty,
+                             Language questionLanguage) {
+
+    if (questionList != null && questionList.contains(question)) {
+        question.setTitle(title);
+        question.setUser(user);
+        question.setDescription(description);
+        question.setQuestionContent(questionContent);
+        question.setHints(hints);
+        question.setDifficulty(difficulty);
+        question.setQuestionLanguage(questionLanguage);
         return question;
     }
 
-    public Question editQuestion(Question question, String title, User user,
-            String description, ArrayList<Section> questionContent, ArrayList<String> hints,
-            Difficulty difficulty, Language questionLanguage) {
-
-        if (questionList.contains(question)) {
-            question.setTitle(title);
-            question.setUser(user);
-            question.setDescription(description);
-            question.setQuestionContent(questionContent);
-            question.getHints(hints);
-            question.getDifficulty(difficulty);
-            question.getQuestionLanguage(questionLanguage);
-        }
-
-    }
+    // not found or not editable
+    return null;
+}
 
     public ArrayList<Question> findQuestion(String keyword) {
-
+        return new ArrayList<>();
     }
 
     public void deleteQuestion(Question question, int id) {
@@ -96,11 +103,11 @@ public class QuestionApplication {
     }
 
     public UserSolution findSolution() {
-
+        return null;
     }
 
     public ArrayList<Question> getAnsweredQuestions() {
-
+        return new ArrayList<>();
     }
 
     public void removeUserSolution(UserSolution userSolution) {
