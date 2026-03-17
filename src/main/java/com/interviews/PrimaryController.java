@@ -3,6 +3,10 @@ package com.interviews;
 import java.io.IOException;
 import javafx.fxml.FXML;
 
+/**
+ * MH and SE
+ * This class serves as the primary controller for the JavaFX application. It contains methods that handle
+ */
 public class PrimaryController {
 
     @FXML
