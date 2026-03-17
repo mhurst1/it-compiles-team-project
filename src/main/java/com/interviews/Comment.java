@@ -16,6 +16,17 @@ public class Comment {
         this.replies = new ArrayList<>();
     }
 
+    public Comment(User user, String comment, ArrayList<Comment> replies){
+        this.user = user;
+        this.comment = comment;
+        if(replies == null){
+            this.replies = new ArrayList<>();
+        }
+        else{
+            this.replies = replies;
+        }
+    }
+
 
     /**
      * method to retrieve the current user
@@ -48,8 +59,8 @@ public class Comment {
      * @param commentText the text the user wants to comment
      */
     public void addComment(User user, String commentText){
-        comment = new Comment(user, commentText, new ArrayList<Comments>());
-        replies.add(comment);
+        Comment newComment = new Comment(user, commentText);
+        replies.add(newComment);
     }
 
     /**
@@ -58,9 +69,9 @@ public class Comment {
      * @param comment the current comment
      * @param replies the list of comments
      */
-    public void addComment(User user, String comment, ArrayList<Comment> replies){
-        comment = new Comment(user, commentText, replies);
-        this.replies.add(comment);
+    public void addComment(User user, String commentText, ArrayList<Comment> replies){
+        Comment newComment = new Comment(user, commentText, replies);
+        this.replies.add(newComment);
     }
 
     /**
