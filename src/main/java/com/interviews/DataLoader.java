@@ -14,6 +14,11 @@ public class DataLoader {
     private final Path usersPath;
     private final Path questionsPath;
 
+    /**
+     * Initializes the DataLoader with paths to the users and questions JSON files. These paths are stored as Path objects for later use when reading the files. The constructor does not perform any file I/O; it simply sets up the paths for future loading operations.
+     * @param usersJsonPath the file path to the users JSON file
+     * @param questionsJsonPath the file path to the questions JSON file
+     */
     public DataLoader(String usersJsonPath, String questionsJsonPath) {
         this.usersPath = Path.of(usersJsonPath);
         this.questionsPath = Path.of(questionsJsonPath);
