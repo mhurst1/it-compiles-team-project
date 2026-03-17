@@ -16,6 +16,10 @@ public class UserList {
     }
 
 
+    /**
+     * A method to return a specific instance of a user
+     * @return the UserList of users
+     */
     public static UserList getInstance(){
         if(userList == null){
             userList = new UserList();
