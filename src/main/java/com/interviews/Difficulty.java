@@ -1,8 +1,7 @@
 package com.interviews;
 
 /**
- * 
- * MH
+ * An enumeration of the difficulty level of the Question
  */
 public enum Difficulty {
     EASY,

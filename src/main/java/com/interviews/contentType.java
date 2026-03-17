@@ -1,8 +1,8 @@
 package com.interviews;
 
 /**
- * 
- * MH
+ * An enumeration that determines the type
+ * of content being displayed
  */
 public enum contentType {
     IMAGE,
