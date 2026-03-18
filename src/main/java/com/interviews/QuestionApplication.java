@@ -20,7 +20,7 @@ public class QuestionApplication {
 
     }
 
-    public QuestionList questionList() {
+    public QuestionList getQuestionList() {
         return questionList;
     }
 
@@ -32,53 +32,132 @@ public class QuestionApplication {
         return currentUser;
     }
 
-    public Question currentQuestion() {
+    public Question getCurrentQuestion() {
         return currentQuestion;
     }
 
-    public UserSolution currentUserSolution() {
-        return currentUserSolution();
+    public UserSolution getCurrentUserSolution() {
+        return currentUserSolution;
     }
 
+
+    /**
+     * Creates a new user account and adds it to the user list.
+     *
+     * This method checks that the username and email are unique before creating
+     * the account. If either already exists, an IllegalArgumentException is thrown.
+     * The new user is then added to the user list and saved.
+     *
+     * @param firstName the user's first name
+     * @param lastName the user's last name
+     * @param username the desired username (must be unique)
+     * @param password the user's password
+     * @param email the user's email address (must be unique)
+     * @param graduationYear the user's graduation year
+     * @param idUSC the user's USC ID
+     * @return the newly created User object
+     * @throws IllegalArgumentException if the username or email already exists
+    */
     public User createAccount(String firstName, String lastName, String username,
             String password, String email, int graduationYear, String idUSC) {
 
+        for (User existing : this.userList.getUsers()) {
+        if (existing.getUsername().equalsIgnoreCase(username)) {
+            // Username already used
+            throw new IllegalArgumentException("Username already exists: " + username);
+        }
+        if (existing.getEmail().equalsIgnoreCase(email)) {
+            // Email already used 
+            throw new IllegalArgumentException("Email already exists: " + email);
+        }
+        }
+        
         User user = new User(firstName, lastName, username, password, email,
                 graduationYear, idUSC);        
-        UserList.getInstance().getUsers().add(user);
-        UserList.getInstance().save();
-
+        this.userList.getUsers().add(user);
+        this.userList.save();
         return user;
 
     }
 
-    public void login(String username, String password) {
-        User user = userList.getUser(username, password);
-        if (user != null) {
-            currentUser = user;
+    /**
+     * Attempts to log in a user with the given username and password.
+     *
+     * This method searches through the user list and uses the User.isMatch(...)
+     * method to verify credentials. If a match is found, the current user is set.
+     *
+     * @param username the username of the account
+     * @param password the password of the account
+     * @return true if login is successful, false otherwise
+     */
+    public boolean login(String username, String password) {
+        if (username == null || password == null) {
+            return false;
         }
 
+        for (User u : this.userList.getUsers()) {
+        if (u.isMatch(username, password)) {
+            setCurrentUser(u);
+            return true;
+        }
+     }
+        return false;
     }
 
+
+    /**
+    * Returns the list of all questions in the application.
+    *
+    * @return an ArrayList containing all Question objects
+    */
     public ArrayList<Question> getQuestions() {
-        return new ArrayList<>();
+        return questionList.getQuestions();
     }
 
-    // ??? I feel like this should return a Question
-    public boolean addQuestion(String title, User user, String description, Difficulty difficulty,
-            Language questionLanguage, ArrayList<String> hints, ArrayList<Section> questionContent) {
 
-         Question question = new Question(title, user, description, difficulty, questionLanguage, hints,
-                questionContent);
+    /**
+    * Creates a new Question and adds it to the application's question list.
+    *
+    * @param title the title of the question
+    * @param user the user creating the question
+    * @param description the question description
+    * @param difficulty the difficulty level
+    * @param questionLanguage the programming language associated with the question
+    * @param hints a list of hints for the question
+    * @param questionContent the structured content of the question
+    * @return true if the question was successfully added
+    */
+    public boolean addQuestion(String title, User user, String description, Difficulty difficulty,
+        Language questionLanguage, ArrayList<String> hints, ArrayList<Section> questionContent) {
+
+        Question question = new Question(title, user, description, difficulty, questionLanguage, hints,
+            questionContent);
+        
+        this.questionList.getQuestions().add(question);
+        this.questionList.save();
+
         return true;
     }
 
+    /**
+    * Edits an existing Question if it exists in the question list.
+    *
+    * @param question the Question to edit
+    * @param title the new title
+    * @param user the user editing the question
+    * @param description the new description
+    * @param questionContent the updated content sections
+    * @param hints the updated list of hints
+    * @param difficulty the updated difficulty level
+    * @param questionLanguage the updated programming language
+    * @return the updated Question if found, or null if the question does not exist
+    */
    public Question editQuestion(Question question, String title, User user,
-                             String description, ArrayList<Section> questionContent,
-                             ArrayList<String> hints, Difficulty difficulty,
-                             Language questionLanguage) {
+        String description, ArrayList<Section> questionContent, ArrayList<String> hints, Difficulty difficulty, Language questionLanguage) {
+    
 
-    if (questionList.getQuestions().contains(question)) {
+    if (question !=null && questionList.getQuestions().contains(question)) {
+
         question.setTitle(title);
         question.setUser(user);
         question.setDescription(description);
@@ -86,60 +165,115 @@ public class QuestionApplication {
         question.setHint(hints);
         question.setDifficulty(difficulty);
         question.setLanguage(questionLanguage);
+
+        this.questionList.save();
         return question;
-    }
+     }
 
-    // not found or not editable
-    return null;
-}
-
-    public ArrayList<Question> findQuestion(String keyword) {
-        return new ArrayList<>();
-    }
-
-    //FINISH
-    public void deleteQuestion(Question question, int id) {
-        
-    }
-
-    public void addUserSolution(User user, String description, UUID solutionID,
-        ArrayList<Comment> replies, int totalVote) {
-
-            UserSolution newSolu = new UserSolution(user, description, solutionID, replies, totalVote);
-            currentQuestion.getSolutionList().add(newSolu);
-    }
-
-    public UserSolution findSolution() {
+        // not found or not editable
         return null;
     }
 
+
+
+    /**
+    * Searches for questions that contain the given keyword in their title or description.
+    *
+    * @param keyword the keyword to search for
+    * @return a list of matching Question objects (empty if none found)
+    */
+    public ArrayList<Question> findQuestion(String keyword) {
+        ArrayList<Question> matchingQuestions = new ArrayList<>();
+
+        if(keyword == null) {
+            return matchingQuestions; // Return empty list if keyword is null
+        }
+
+        String lowerKeyword = keyword.toLowerCase();
+        for (Question q : questionList.getQuestions()) {
+            if (q.getTitle().toLowerCase().contains(lowerKeyword) ||
+                q.getDescription().toLowerCase().contains(lowerKeyword)) {
+                matchingQuestions.add(q);
+            }
+        }
+        return matchingQuestions;
+    }
+
+    /**
+    * Removes a question from the application if it exists.
+    *
+    * @param question the Question to be deleted
+    */
+    public void deleteQuestion(Question question) {
+        if (question != null && questionList.getQuestions().contains(question)) {
+            this.questionList.getQuestions().remove(question);
+            this.questionList.save();
+        }
+    }
+
+    /**
+    * Creates a new UserSolution and sets it as the current user solution.
+    *
+    * @param user the user who created the solution
+    * @param description the solution description/content
+    * @param solutionID the unique identifier for the solution
+    * @param thread the list of comments associated with the solution
+    * @param totalVote the total vote count for the solution
+    */
+    public void addUserSolution(User user, String description, UUID solutionID,
+            ArrayList<Comment> thread, int totalVote) {
+        
+        UserSolution userSolution = new UserSolution(user, description, solutionID, thread, totalVote);
+        this.currentUserSolution = userSolution;
+
+    }
+
+    //?? What solutions are we finding? In answered questions? Or searching a particular user? Idk what we have this method for tbh.
+    public UserSolution findSolution() {
+        return null;
+
+    }
+
+    /**
+     * Returns the list of questions that the current user has answered.
+     *
+    * @return a list of answered questions, or an empty list if no user is logged in
+    */
     public ArrayList<Question> getAnsweredQuestions() {
-        return new ArrayList<>();
+        if (currentUser == null) {
+            return new ArrayList<>();
+        }
+        return currentUser.getAnsweredQuestions();
     }
 
-    public void removeUserSolution(UserSolution userSolution) {
-        currentQuestion.getSolutionList().remove(userSolution);
+    /**
+    * Remove a user solution from its question 
+    * @param question the question from which to remove the solution
+    * @param userSolution the solution to remove (may be null)
+    */
+    public void removeUserSolution(Question question, UserSolution userSolution) {
+        if (question == null && userSolution == null) 
+            return;
+        question.getSolutionList().remove(userSolution);
+        this.questionList.save();
     }
 
-    //Comment on a question?
     public void addComment(Question question, User user, String comment) {
 
     }
 
     public void addComment(UserSolution userSolution, User user, String comment) {
-        Comment newComment = new Comment(user, comment, new ArrayList<>());
-        userSolution.getReplies().add(newComment);
+
     }
 
-    public void deleteComment(Comment comment, int id) {
-        currentUserSolution.getReplies().deleteComment(comment);
+    public void deleteCommnet(Comment comment, int id) {
+
     }
 
     public void starQuestion(Question question, UUID id) {
-        currentUser.getStarredQuestions().add(question);
+
     }
 
-    //? what does this do 
     public void editUser(User user, UUID id) {
 
     }
