@@ -1,4 +1,4 @@
-package com.interviews;
+package main.java.com.interviews;
 
 import java.time.LocalDate;
 
