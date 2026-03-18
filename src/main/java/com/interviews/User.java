@@ -22,8 +22,6 @@ public class User {
     private ArrayList<Question> answeredQuestions;
     private ArrayList<Achievement> achievements;
 
-    // Temp fix for comments 
-    // Will Fix in constructor later
     private ArrayList<Comment> comments;
     private ArrayList<UserSolution> solutions;
 

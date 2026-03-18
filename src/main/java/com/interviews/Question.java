@@ -19,6 +19,8 @@ public class Question {
     private Language questionLang;
     private ArrayList<UserSolution> solutionList; // Check if the ArrayList value should be a string
 
+    private ArrayList<Comment> comments;
+
     private ArrayList<String> givenSolutionIMG;
     private ArrayList<String> givenSolutionTXT;
 
@@ -36,6 +38,9 @@ public class Question {
         this.questionLang = questionLang;
         this.hints = hints;
         this.questionContent = questionContent;
+
+        this.comments = new ArrayList<>();
+        this.solutionList = new ArrayList<>();
     }
 
     public Question(UUID id){
@@ -53,6 +58,9 @@ public class Question {
         this.questionLang = questionLang;
         this.hints = hints;
         this.questionContent = questionContent;
+
+        this.comments = new ArrayList<>();
+        this.solutionList = new ArrayList<>();
     }
 
     public String getTitle(){
@@ -132,6 +140,11 @@ public class Question {
     public void setHint(ArrayList<String> hints){
         this.hints = hints;
     }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
 
     // CHECK IF IT SHOULD HAVE TYPE USERSOLUTION
     public ArrayList<UserSolution> getSolutionList(){

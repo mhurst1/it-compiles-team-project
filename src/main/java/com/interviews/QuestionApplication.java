@@ -259,8 +259,12 @@ public class QuestionApplication {
     }
 
     //comment on a question?
-    public void addComment(String question, User user, String comment) {
-
+    public void addComment(Question question, User user, String comment) {
+        if (question == null || user == null || comment == null || comment.isBlank()) {
+            return;
+        }
+        Comment newComment = new Comment(user, comment, new ArrayList<>());
+        question.getComments().add(newComment);
     }
 
     /**
@@ -269,9 +273,9 @@ public class QuestionApplication {
      * @param user the user commenting 
      * @param comment the comment the user wants to publish
      */
-    public void addComment(String userSolution, User user, String comment) {
+    public void addComment(UserSolution userSolution, User user, String comment) {
         Comment newComment = new Comment(user, comment, new ArrayList<>());
-        string.getReplies().add(newComment);
+        userSolution.getReplies().add(newComment);
     }
 
     /**
@@ -280,7 +284,7 @@ public class QuestionApplication {
      * @param id the id of the comment
      */
     public void deleteComment(Comment comment, int id) {
-        currentUserSolution.getReplies().deleteComment(comment);
+        currentUserSolution.getReplies().remove(comment);
     }
 
     /**
