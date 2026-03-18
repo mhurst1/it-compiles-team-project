@@ -47,11 +47,11 @@ public class UserSolution {
 
 
 
-    public void addSolution(){
+    public void addSolution(User user, String description, ArrayList<Comment> thread){
 
     }
 
-    public void removeSolution(){
+    public void removeSolution(User user, String description, ArrayList<Comment> thread){
 
     }
 
