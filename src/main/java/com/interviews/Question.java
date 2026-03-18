@@ -146,9 +146,11 @@ public class Question {
     }
 
 
-    // CHECK IF IT SHOULD HAVE TYPE USERSOLUTION
     public ArrayList<UserSolution> getSolutionList(){
         return solutionList;
+    }
+    public void setSolutionList(ArrayList<UserSolution> solutionList){
+        this.solutionList = solutionList;
     }
 
     public ArrayList<String> getGivenSolutionImg(){

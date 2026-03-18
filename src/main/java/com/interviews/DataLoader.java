@@ -128,14 +128,39 @@ public class DataLoader{
         }
 
         Question q = new Question(title, user, description, difficulty, lang, hints, sections);
-        if (id != null) q.setId(id);
+        if (id != null){
+            q.setId(id);
+        }
 
-        // solution-list 
-        // JSON NESTED OBJECTS
+        ArrayList<UserSolution> solutions = new ArrayList<>();
+        String solArr = extractArrayRaw(obj, "solution-list");
 
-        // I am ignoring "solution-list" for now because
-        // Question currently has ArrayList<String> solutionList
-        // JSON has nested objects/comments/replies (I cant figure out how to map it yet)
+        if (solArr != null) {
+            List<String> solObjs = splitTopLevelObjects(solArr);
+
+            for (String solObj : solObjs) {
+                UUID solutionId = asUUID(extractString(solObj, "id"));
+                String solutionDescription = extractString(solObj, "description");
+                int totalVote = extractInt(solObj, "total-vote", 0);
+
+                UUID solutionUserId = asUUID(extractString(solObj, "user"));
+                User solutionUser = (solutionUserId == null) ? null : usersById.get(solutionUserId);
+
+                ArrayList<Comment> replies = parseComments(extractArrayRaw(solObj, "replies"), usersById);
+
+                UserSolution solution = new UserSolution(
+                    solutionUser,
+                    solutionDescription,
+                    solutionId,
+                    replies,
+                    totalVote
+                );
+
+                solutions.add(solution);
+            }
+        }
+
+        q.setSolutionList(solutions);
 
         return q;
     }
@@ -414,6 +439,33 @@ public class DataLoader{
         }
     }
 
+    private static ArrayList<Comment> parseComments(String commentsRaw, Map<UUID, User> usersById) {
+    ArrayList<Comment> comments = new ArrayList<>();
+
+    if (commentsRaw == null) {
+        return comments;
+    }
+
+    List<String> commentObjs = splitTopLevelObjects(commentsRaw);
+
+    for (String commentObj : commentObjs) {
+        UUID commentUserId = asUUID(extractString(commentObj, "user"));
+        User commentUser = (commentUserId == null) ? null : usersById.get(commentUserId);
+
+        String commentText = extractString(commentObj, "comment");
+
+        ArrayList<Comment> nestedReplies = parseComments(
+            extractArrayRaw(commentObj, "replies"),
+            usersById
+        );
+
+        Comment comment = new Comment(commentUser, commentText, nestedReplies);
+        comments.add(comment);
+    }
+
+    return comments;
+    }
+
     /**
      * THIS IS THE TESTER FOR THE DATALOADER
      * 
@@ -425,11 +477,8 @@ public class DataLoader{
 
         // My Tester To See if it loaded from the JSON
         ArrayList<User> users = getUsers();
-        System.out.println("Users loaded: " + users.size());
-
         ArrayList<Question> qs = getQuestions();
-        System.out.println("Questions loaded: " + qs.size() + "\n");
-
+        System.out.println("Users loaded: " + users.size() + " Questions loaded: " + qs.size() + "\n");
 
         // GPTS TESTER
         System.out.println("========= USERS =========");
@@ -476,9 +525,58 @@ public class DataLoader{
                     System.out.println("  " + line);
                 }
             }
+            System.out.println("Solutions:");
+            if (q.getSolutionList() != null && !q.getSolutionList().isEmpty()) {
+                for (UserSolution solution : q.getSolutionList()) {
+                    System.out.println("  Solution ID: " + solution.getSoulutionId());
+                    System.out.println("  Description: " + solution.getDescription());
+                    System.out.println("  Total Votes: " + solution.getTotalVote());
+                    System.out.println("  User Vote: " + solution.getUserVote());
+
+                    if (solution.getUser() != null) {
+                        System.out.println("  Posted By: " + solution.getUser().getUsername());
+                    }
+
+                    System.out.println("  Replies:");
+                    if (solution.getReplies() != null && !solution.getReplies().isEmpty()) {
+                        for (Comment comment : solution.getReplies()) {
+                            printComment(comment, "    ");
+                        }
+                    } 
+                    else {
+                        System.out.println("    No replies");
+                    }
+
+                    System.out.println();
+                }
+            } 
+            else {
+                System.out.println("  No solutions");
+            }
 
             System.out.println();
             System.out.println("----------------------------");
+        }
+    }
+
+    private static void printComment(Comment comment, String indent) {
+        if (comment == null) {
+            return;
+        }
+
+        String username = "unknown";
+        if (comment.getUser() != null) {
+            username = comment.getUser().getUsername();
+        }
+
+        System.out.println(indent + "Comment By: " + username);
+        System.out.println(indent + "Comment: " + comment.getComment());
+
+        if (comment.getReplies() != null && !comment.getReplies().isEmpty()) {
+            System.out.println(indent + "Replies:");
+            for (Comment reply : comment.getReplies()) {
+                printComment(reply, indent + "    ");
+            }
         }
     }
 }
