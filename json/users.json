@@ -1,41 +1,4 @@
 [
-    {
-        "id": "4e43c441-5c6d-41f7-b6a0-5ab4e53b2bcc",
-        "first-name": "Amy",
-        "last-name" : "Smith", 
-        "username": "asmith",
-        "email": "asmith@gmail.com",
-        "graduation-year": 2027,
-        "id-usc": "M44412349",
-        "starred-questions": ["a75f95f2-f72b-4852-9d4f-d1a002ceeb8c", "0540e6d7-54dd-4751-a06f-45075f91ffcd"],
-        "answered-questions": ["a75f95f2-f72b-4852-9d4f-d1a002ceeb8c"],
-        "achievements": [
-            {
-            "leaderboard-place": 2,
-            "user-level": 12,
-            "all-vote-points": 65,
-            "streak": 10
-            }
-        ]
-    },
-
-    {
-        "id": "0d8a7693-5a00-41df-818e-09ac969b6a75",
-        "first-name": "Jack",
-        "last-name" : "Brown", 
-        "username": "jbrown1",
-        "email": "jbrown@gmail.com",
-        "graduation-year": 2026,
-        "id-usc": "M42417654",
-        "starred-questions": ["a75f95f2-f72b-4852-9d4f-d1a002ceeb8c", "0540e6d7-54dd-4751-a06f-45075f91ffcd"],
-        "answered-questions": ["0540e6d7-54dd-4751-a06f-45075f91ffcd"],
-        "achievements": [
-            {
-            "leaderboard-place": 6,
-            "user-level": 8,
-            "all-vote-points": 41,
-            "streak": 5
-            }
-        ]
-    }
+  {"id":"4e43c441-5c6d-41f7-b6a0-5ab4e53b2bcc","first-name":"Amy","last-name":"Smith","username":"asmith","password":"","email":"asmith@gmail.com","graduation-year":2027,"id-usc":"M44412349","starred-questions":[],"answered-questions":[],"achievements":[{"leaderboard-place":0,"user-level":1,"all-vote-points":0,"streak":0}]},
+  {"id":"0d8a7693-5a00-41df-818e-09ac969b6a75","first-name":"Jack","last-name":"Brown","username":"jbrown1","password":"","email":"jbrown@gmail.com","graduation-year":2026,"id-usc":"M42417654","starred-questions":[],"answered-questions":[],"achievements":[{"leaderboard-place":0,"user-level":1,"all-vote-points":0,"streak":0}]}
 ]

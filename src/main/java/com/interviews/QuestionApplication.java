@@ -224,7 +224,7 @@ public class QuestionApplication {
             ArrayList<Comment> replies, int totalVote) {
         
         UserSolution newSolu = new UserSolution(user, description, solutionID, replies, totalVote);
-        currentQuestion.getSolutinoList().add(newSolu);
+        currentQuestion.getSolutionList().add(newSolu);
 
     }
 
@@ -259,7 +259,7 @@ public class QuestionApplication {
     }
 
     //comment on a question?
-    public void addComment(Question question, User user, String comment) {
+    public void addComment(String question, User user, String comment) {
 
     }
 
@@ -269,9 +269,9 @@ public class QuestionApplication {
      * @param user the user commenting 
      * @param comment the comment the user wants to publish
      */
-    public void addComment(UserSolution userSolution, User user, String comment) {
+    public void addComment(String userSolution, User user, String comment) {
         Comment newComment = new Comment(user, comment, new ArrayList<>());
-        userSolution.getReplies().add(newComment);
+        string.getReplies().add(newComment);
     }
 
     /**
@@ -309,6 +309,16 @@ public class QuestionApplication {
         
         currentUser = null;
         
+    }
+
+    public void addSolution(String string, Object object, Object object2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addSolution'");
+    }
+
+    public void addComment(String question, Object user, Object comment) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addComment'");
     }
 
 }

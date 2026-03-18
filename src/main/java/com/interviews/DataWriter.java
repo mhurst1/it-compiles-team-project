@@ -26,6 +26,7 @@ public class DataWriter {
                             + "\"first-name\":\"" + escape(u.getFirstName()) + "\","
                             + "\"last-name\":\"" + escape(u.getLastName()) + "\","
                             + "\"username\":\"" + escape(u.getUsername()) + "\","
+                            + "\"password\":\"" + escape(u.getPassword()) + "\","
                             + "\"email\":\"" + escape(u.getEmail()) + "\","
                             + "\"graduation-year\":" + u.getGraduationYear() + ","
                             + "\"id-usc\":\"" + escape(u.getIdUSC()) + "\","
@@ -142,7 +143,7 @@ public class DataWriter {
             b.append("{")
              .append("\"user\":\"").append(escape(uid)).append("\",")
              .append("\"description\":\"").append(escape(desc)).append("\",")
-             .append("\"thread\":").append(commentList(us.getThread())).append(",")
+             .append("\"thread\":").append(commentList(us.getReplies())).append(",")
              .append("\"user-vote\":").append(us.getUserVote()).append(",")
              .append("\"total-vote\":").append(us.getTotalVote())
              .append("}");
