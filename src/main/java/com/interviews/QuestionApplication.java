@@ -64,7 +64,7 @@ public class QuestionApplication {
         return new ArrayList<>();
     }
 
-    // ???
+    // ??? I feel like this should return a Question
     public boolean addQuestion(String title, User user, String description, Difficulty difficulty,
             Language questionLanguage, ArrayList<String> hints, ArrayList<Section> questionContent) {
 
@@ -122,8 +122,10 @@ public class QuestionApplication {
 
     }
 
+    //are we using thread or comment
     public void addComment(UserSolution userSolution, User user, String comment) {
-
+        Comment newComment = new Comment(user, comment);
+        userSolution.getThread().add(newComment);
     }
 
     public void deleteCommnet(Comment comment, int id) {
