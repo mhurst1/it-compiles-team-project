@@ -77,12 +77,12 @@ public class User {
      * Method so the user can add a solution
      * @param user the current user
      * @param description what the solution description says
-     * @param thread any comments attached to the solution
+     * @param replies any comments attached to the solution
      * @return returns the new solution just created by the user with all of the 
      * information just supplied
      */
     public UserSolution addsolution(User user, String description, 
-        ArrayList<Comment> thread){
+        ArrayList<Comment> replies){
             UserSolution solution = new UserSolution(user, description);
             solutions.add(solution);
             return solution;
@@ -93,10 +93,10 @@ public class User {
      * A method that removes a posted solution by the current user
      * @param user the current user
      * @param description the description string that makes up the solution
-     * @param thread the comments attached to the solution
+     * @param replies the comments attached to the solution
      */
     public void removeSolution(User user, String description,
-         ArrayList<Comment> thread){
+         ArrayList<Comment> replies){
            for(int i = 0; i < solutions.size(); i++){
             UserSolution solution = solutions.get(i);
             if(solution.getUser().equals(user) && solution.getDescription().equals(description)){

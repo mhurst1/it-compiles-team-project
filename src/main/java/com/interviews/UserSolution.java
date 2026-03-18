@@ -53,9 +53,12 @@ public class UserSolution {
     }
 
     // ?? Are we just using thread as a mean to return replies
-    public ArrayList<Comment> getThread(){
+    //yes and we already have this method above
+    /*
+    public ArrayList<Comment> getReplies(){
         return replies;
     }
+    */
 
     // Setters 
     public void setUserVote(boolean userVote){
@@ -64,11 +67,11 @@ public class UserSolution {
 
     /* I DONT THINK WE NEED THESE MH
 
-    public void addSolution(User user, String description, ArrayList<Comment> thread){
+    public void addSolution(User user, String description, ArrayList<Comment> replies){
 
     }
 
-    public void removeSolution(User user, String description, ArrayList<Comment> thread){
+    public void removeSolution(User user, String description, ArrayList<Comment> replies){
 
     }
 
