@@ -54,7 +54,11 @@ public class QuestionList {
     }
 
     /**
-     * Adds a new question to the list of questions. This method takes various parameters that define the properties of the question, such as title, user, description, difficulty, language, hints, and question content. It creates a new Question object using these parameters and adds it to the questions list. This allows users to contribute new questions to the application.
+     * Adds a new question to the list of questions. This method takes various parameters 
+     * that define the properties of the question, such as title, user, description, 
+     * difficulty, language, hints, and question content. It creates a new Question object using 
+     * these parameters and adds it to the questions list. This allows users to contribute new 
+     * questions to the application.
       * @param title the title of the question
       * @param user the user who created the question
       * @param description the description of the question
@@ -70,7 +74,11 @@ public class QuestionList {
     }
 
     /**
-     * Removes a question from the list of questions. This method takes a Question object as a parameter and removes it from the questions list. It also calls the deleteQuestion method to ensure that the question is properly removed from any persistent storage or related data structures. This allows users to delete questions that they have created or that are no longer relevant.
+     * Removes a question from the list of questions. This method takes a 
+     * Question object as a parameter and removes it from the questions list. 
+     * It also calls the deleteQuestion method to ensure that the question is 
+     * properly removed from any persistent storage or related data structures. 
+     * This allows users to delete questions that they have created or that are no longer relevant.
       * @param question the Question object to be removed from the list
      */
     public void deleteQuestion(Question question) {
@@ -78,7 +86,12 @@ public class QuestionList {
     }
 
     /**
-     * Retrieves the details of a question. This method takes a Question object as a parameter and accesses its various properties such as title, description, content, hints, difficulty, language, user, and ID. This method can be used to display the details of a question to the user or to perform operations that require access to the question's properties. It does not return any value but allows access to the question's information through its getter methods.
+     * Retrieves the details of a question. This method takes a Question object 
+     * as a parameter and accesses its various properties such as title, description, 
+     * content, hints, difficulty, language, user, and ID. This method can be used to 
+     * display the details of a question to the user or to perform operations that 
+     * require access to the question's properties. It does not return any value but 
+     * allows access to the question's information through its getter methods.
       * @param questions the Question object whose details are to be retrieved
      */
     public void getQuestion(Question questions) {

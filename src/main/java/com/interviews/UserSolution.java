@@ -9,17 +9,17 @@ import java.util.UUID;
 public class UserSolution {
     private User user;
     private String description;
-    private ArrayList<Comment> thread;
+    private ArrayList<Comment> replies;
     private UUID solutionID;
     public boolean userVote;
     public int totalVote; // I think this can be replaced with upVotes and downVotes
 
 
-    public UserSolution(User user, String description, UUID solutionID, ArrayList<Comment> thread, int totalVote){
+    public UserSolution(User user, String description, UUID solutionID, ArrayList<Comment> replies, int totalVote){
         this.user = user;
         this.description = description;
         this.solutionID = solutionID;
-        this.thread = thread;
+        this.replies = replies;
         this.totalVote = totalVote;
     }
 
@@ -35,8 +35,8 @@ public class UserSolution {
     public String getDescription(){
         return description;
     }
-    public ArrayList<Comment> getThread(){
-        return thread;
+    public ArrayList<Comment> getReplies(){
+        return replies;
     }
     public boolean getUserVote(){
         return userVote;
@@ -58,9 +58,8 @@ public class UserSolution {
     public void getInstance(){ // IS IT VOID OR WHAT??
 
     }
-    public Comment accessComment(){
+    public Comment accessComment(Comment comment, user){
 
-        
     }
 
     public int calculateVotes(User user, int upVotes, int downVotes){
@@ -75,5 +74,6 @@ public class UserSolution {
     public void setUserVote(boolean userVote){
 
     }
+
 
 }
