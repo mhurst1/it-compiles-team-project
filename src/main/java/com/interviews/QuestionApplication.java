@@ -124,11 +124,11 @@ public class QuestionApplication {
 
     //are we using thread or comment
     public void addComment(UserSolution userSolution, User user, String comment) {
-        Comment newComment = new Comment(user, comment);
+        Comment newComment = new Comment(user, comment, new ArrayList<>());
         userSolution.getThread().add(newComment);
     }
 
-    public void deleteCommnet(Comment comment, int id) {
+    public void deleteComment(Comment comment, int id) {
 
     }
 
