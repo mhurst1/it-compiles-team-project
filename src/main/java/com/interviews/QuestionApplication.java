@@ -132,7 +132,7 @@ public class QuestionApplication {
     }
 
     public void deleteComment(Comment comment, int id) {
-        currentUserSolution.getReplies().deleteComment(comment);
+        currentUserSolution.getReplies().remove(comment);
     }
 
     public void starQuestion(Question question, UUID id) {

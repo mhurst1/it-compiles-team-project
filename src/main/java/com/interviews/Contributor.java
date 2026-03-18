@@ -50,17 +50,20 @@ public class Contributor extends User{
      * @return the newly updated question
      */
     public Question editQuestion(UUID id, String title, User user, String description, 
-        ArrayList<Section> questionContent, ArrayList<String> hints, 
+        ArrayList<Section> quesionContent, ArrayList<String> hints, 
         Difficulty difficulty, Language questionLanguage){
 
-            if(question.getID().equals(id)){
-                question.setTitle(title);
-                question.setDescription(description);
-                question.setUser(user);
-                question.setLanguage(questionLanguage);
-                question.setDifficulty(difficulty);
-                question.setHint(hints);
+            for(Question question : postedQuestions){
+                if(question.getId().equals(id)){
+                    question.setTitle(title);
+                    question.setDescription(description);
+                    question.setUser(user);
+                    question.setLanguage(questionLanguage);
+                    question.setDifficulty(difficulty);
+                    question.setHint(hints);
+                }
             }
+        return null;
     }
 
     /**
@@ -68,8 +71,9 @@ public class Contributor extends User{
      * @param id the unique id of the current question
      */
     public void removeQuestion(UUID id){
-        for(Question question : questions){
-            if(question.getId.equals(id)){
+        for(int i = 0; i < postedQuestions.size(); i++){
+            Question question = postedQuestions.get(i);
+            if(question.getId().equals(id)){
                 postedQuestions.remove(question);
                 QuestionList.getInstance().deleteQuestion(question);
                 return;
