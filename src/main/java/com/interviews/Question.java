@@ -99,9 +99,11 @@ public class Question {
         return questionContent;
     }
 
+    /* 
     public int selectSolution(){  // ????
 
     }
+    */
 
     public ArrayList<String> getHints(){
         return hints;
