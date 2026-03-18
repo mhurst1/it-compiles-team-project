@@ -22,6 +22,11 @@ public class User {
     private ArrayList<Question> answeredQuestions;
     private ArrayList<Achievement> achievements;
 
+    // Temp fix for comments 
+    // Will Fix in constructor later
+    private ArrayList<Comment> comments;
+    private ArrayList<UserSolution> solutions;
+
     public User(UUID id, String firstName, String lastName, String username, String password,  
                     String email, ArrayList<Question> starredQuestions, ArrayList<Question> answeredQuestions, 
                     ArrayList<Achievement> achievements, Status status, int graduationYear, String idUSC){
@@ -38,6 +43,10 @@ public class User {
         this.status = status;
         this.graduationYear = graduationYear;
         this.idUSC = idUSC;
+
+        this.comments = new ArrayList<>();
+        this.solutions = new ArrayList<>();
+
     }
 
     public User(String firstName, String lastName, String username, 
@@ -75,7 +84,7 @@ public class User {
     public UserSolution addsolution(User user, String description, 
         ArrayList<Comment> thread){
             UserSolution solution = new UserSolution(user, description);
-            solution.addSolution(user, description, thread);
+            solutions.add(solution);
             return solution;
 
     }
@@ -88,17 +97,23 @@ public class User {
      */
     public void removeSolution(User user, String description,
          ArrayList<Comment> thread){
-            UserSolution solution = getSolution();
-            if(solution != null){
-                solution.removeSolution(user, description, thread);
-            }
+           for(int i = 0; i < solutions.size(); i++){
+            UserSolution solution = solutions.get(i);
+            if(solution.getUser().equals(user) && solution.getDescription().equals(description)){
+                solutions.remove(i);
+            } 
+           }
          }
     
     /**
      * method that adds the selected question to the users stored list of questions
      * called starredQuestions
      */
-    public void starQuestion(){
+    public void starQuestion(Question question){
+        if(starredQuestions == null){
+            starredQuestions = new ArrayList<>();
+        }
+
         if(!starredQuestions.contains(question)){
             starredQuestions.add(question);
         }
@@ -128,9 +143,9 @@ public class User {
      * @param comment the comment the user wants to delete
      */
     public void removeComment(String comment){
-        for(Comment com: user.getComments()){
+        for(Comment com: comments){
             if(com.getComment().equals(comment)){
-                user.getComments().remove(com);
+                comments.remove(com);
                 break;
             }
         }
@@ -142,20 +157,6 @@ public class User {
      */
     public Status getStatus(){
         return this.status;
-    }
-    
-    /**
-     * A method that sets the status of the current user
-     * @param status is the status you want to be or update to
-     * @return true if the user can has the ability to post a question
-     * (if they are a contributor or admin) or false if they are just a user
-     */
-    public boolean setStatus(boolean status){
-        this.userStatus = status;
-        if(this.userStatus == Status.CONTRIBUTOR || this.userStatus == Status.ADMIN){
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -291,6 +292,22 @@ public class User {
      */
     public void setStatus(Status status){
         this.status = status;
+    }
+
+    /**
+     * method to see of the user has access to modify questions
+     * @return true if the user can modify questions and false if they cant
+     */
+    public boolean canModifyQuestions(){
+        return status == Status.CONTRIBUTOR || status == Status.ADMIN;
+    }
+
+    /**
+     * method to see if the user has admin permissons
+     * @return true if they are admin and false if they are not
+     */
+    public boolean canModifyContributors(){
+        return status == Status.ADMIN;
     }
 
     /**

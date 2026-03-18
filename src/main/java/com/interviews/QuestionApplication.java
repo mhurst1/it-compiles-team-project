@@ -266,8 +266,8 @@ public class QuestionApplication {
 
     }
 
-    public void deleteCommnet(Comment comment, int id) {
-
+    public void deleteComment(Comment comment, int id) {
+        currentUserSolution.getReplies().remove(comment);
     }
 
     public void starQuestion(Question question, UUID id) {
