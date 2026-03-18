@@ -217,14 +217,14 @@ public class QuestionApplication {
     * @param user the user who created the solution
     * @param description the solution description/content
     * @param solutionID the unique identifier for the solution
-    * @param thread the list of comments associated with the solution
+    * @param replies the list of comments associated with the solution
     * @param totalVote the total vote count for the solution
     */
     public void addUserSolution(User user, String description, UUID solutionID,
-            ArrayList<Comment> thread, int totalVote) {
+            ArrayList<Comment> replies, int totalVote) {
         
-        UserSolution userSolution = new UserSolution(user, description, solutionID, thread, totalVote);
-        this.currentUserSolution = userSolution;
+        UserSolution newSolu = new UserSolution(user, description, solutionID, replies, totalVote);
+        currentQuestion.getSolutinoList().add(newSolu);
 
     }
 
@@ -254,24 +254,26 @@ public class QuestionApplication {
     public void removeUserSolution(Question question, UserSolution userSolution) {
         if (question == null && userSolution == null) 
             return;
-        question.getSolutionList().remove(userSolution);
+        currentQuestion.getSolutionList().remove(userSolution);
         this.questionList.save();
     }
 
+    //comment on a question?
     public void addComment(Question question, User user, String comment) {
 
     }
 
     public void addComment(UserSolution userSolution, User user, String comment) {
-
+        Comment newComment = new Comment(user, comment, new ArrayList<>());
+        userSolution.getReplies().add(newComment);
     }
 
     public void deleteComment(Comment comment, int id) {
-        currentUserSolution.getReplies().remove(comment);
+        currentUserSolution.getReplies().deleteComment(comment);
     }
 
     public void starQuestion(Question question, UUID id) {
-
+        currentUser.getStarredQuestions().add(question);
     }
 
     public void editUser(User user, UUID id) {
