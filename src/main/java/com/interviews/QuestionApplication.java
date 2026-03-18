@@ -97,13 +97,16 @@ public class QuestionApplication {
         return new ArrayList<>();
     }
 
+    //FINISH
     public void deleteQuestion(Question question, int id) {
-
+        
     }
 
     public void addUserSolution(User user, String description, UUID solutionID,
-            ArrayList<Comment> thread, int totalVote) {
+        ArrayList<Comment> replies, int totalVote) {
 
+            UserSolution newSolu = new UserSolution(user, description, solutionID, replies, totalVote);
+            currentQuestion.getSolutionList().add(newSolu);
     }
 
     public UserSolution findSolution() {
@@ -115,27 +118,28 @@ public class QuestionApplication {
     }
 
     public void removeUserSolution(UserSolution userSolution) {
-
+        currentQuestion.getSolutionList().remove(userSolution);
     }
 
+    //Comment on a question?
     public void addComment(Question question, User user, String comment) {
 
     }
 
-    //are we using thread or comment
     public void addComment(UserSolution userSolution, User user, String comment) {
         Comment newComment = new Comment(user, comment, new ArrayList<>());
-        userSolution.getThread().add(newComment);
+        userSolution.getReplies().add(newComment);
     }
 
     public void deleteComment(Comment comment, int id) {
-
+        currentUserSolution.getReplies().deleteComment(comment);
     }
 
     public void starQuestion(Question question, UUID id) {
-
+        currentUser.getStarredQuestions().add(question);
     }
 
+    //? what does this do 
     public void editUser(User user, UUID id) {
 
     }
