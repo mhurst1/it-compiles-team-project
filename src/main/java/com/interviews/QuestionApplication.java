@@ -263,23 +263,43 @@ public class QuestionApplication {
 
     }
 
+    /**
+     * Method to create and add a comment 
+     * @param userSolution the solution the user wants to comment on
+     * @param user the user commenting 
+     * @param comment the comment the user wants to publish
+     */
     public void addComment(UserSolution userSolution, User user, String comment) {
         Comment newComment = new Comment(user, comment, new ArrayList<>());
         userSolution.getReplies().add(newComment);
     }
 
+    /**
+     * A method that deletes a comment from the list of replies
+     * @param comment the comment the user wants to delete
+     * @param id the id of the comment
+     */
     public void deleteComment(Comment comment, int id) {
         currentUserSolution.getReplies().deleteComment(comment);
     }
 
+    /**
+     * Method to add a question to the users personal list of starred questions
+     * @param question the question the user wants to star
+     * @param id the id of the user
+     */
     public void starQuestion(Question question, UUID id) {
         currentUser.getStarredQuestions().add(question);
     }
 
+    //* what do we want this to do  */
     public void editUser(User user, UUID id) {
 
     }
 
+    /**
+     * a method that logs the user out of their account
+     */
     public void logout(){
 
         if (currentUser == null) {
