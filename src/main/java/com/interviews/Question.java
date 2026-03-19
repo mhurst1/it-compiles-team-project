@@ -24,11 +24,6 @@ public class Question {
 
     private ArrayList<String> givenSolutionIMG;
     private ArrayList<String> givenSolutionTXT;
-
-    private ArrayList<Section> sections; // Added Section for the question
-    // Question Should have a section correct??
-    // Because we are sectioning off comments but also using it for the questions as well
-
     
     public Question(String title, User user, String description, ArrayList<Section> questionContent,
                 ArrayList<String> hints, Difficulty difficulty, Language questionLang){
@@ -134,7 +129,7 @@ public class Question {
         this.questionContent = questionContent;
     }
 
-    public UUID getQuestionId(){ // Not UUID
+    public UUID getQuestionId(){
         return id;
     }
 
