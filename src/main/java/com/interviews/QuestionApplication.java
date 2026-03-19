@@ -3,6 +3,9 @@ package com.interviews;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * A class that acts as a facade for the User 
+*/
 public class QuestionApplication {
     private QuestionList questionList;
     private UserList userList;
