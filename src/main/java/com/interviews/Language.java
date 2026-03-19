@@ -1,8 +1,7 @@
 package com.interviews;
 
 /**
- * C++ and C# threw errors when being added to the possible language options
- * MH
+ * An enumeration for the different languages the problems could be shown in
  */
 public enum Language {
     JAVA,
