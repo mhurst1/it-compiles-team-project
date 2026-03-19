@@ -39,20 +39,20 @@ public class Driver {
     public void scenario1() {
         System.out.println();
 
-        questionApplication.login("asmith", "");
+        questionApplication.login("mhurst1", "");
 
         if (questionApplication.getCurrentUser() == null) {
             System.out.println("Sorry we couldn't login.");
             return;
         }
 
-        System.out.println("asmith is now logged in");
+        System.out.println("mhurst1 is now logged in");
 
         questionApplication.logout();
 
         // check
         if (questionApplication.getCurrentUser() == null) {
-            System.out.println("asmith is now logged out");
+            System.out.println("mhurst1 is now logged out");
         }
 
     }
