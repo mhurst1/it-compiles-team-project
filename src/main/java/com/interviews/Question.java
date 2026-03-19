@@ -5,7 +5,8 @@ import java.util.UUID;
 
 /**
  * 
- * MH
+ * A class that creates a Question like a technical question that 
+ * users can browse and add solutions to
  */
 public class Question {
     
@@ -176,6 +177,11 @@ public class Question {
     }
         */
 
+    /**
+     * a method that searches through the saved questions 
+     * for the given question
+     * @param titleSearch the title of the question
+     */
     public void searchQuestions(String titleSearch){
         if (titleSearch == null){
             return;

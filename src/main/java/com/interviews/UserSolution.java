@@ -3,8 +3,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * 
- * MH
+ * A class of a Solution that can be posted to a Question
+ * Solution contains descriptions and has replies tied to it
  */
 public class UserSolution {
     private User user;
@@ -84,6 +84,14 @@ public class UserSolution {
         return comment;
     }
 
+    /**
+     * a method to calculate the number of votes on a solution
+     * @param user current user 
+     * @param upVotes the number of up votes (likes)
+     * @param downVotes the number of down votes (dislikes)
+     * @return and integer of the sum of the "positive" and 
+     * "negative" votes
+     */
     public int calculateVotes(User user, int upVotes, int downVotes){
 
         int totalVote = upVotes - downVotes;
