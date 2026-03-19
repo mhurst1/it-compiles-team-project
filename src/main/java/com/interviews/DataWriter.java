@@ -2,7 +2,9 @@ package com.interviews;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DataWriter {
 
@@ -259,4 +261,194 @@ public class DataWriter {
                    .replace("\r", "\\r")
                    .replace("\t", "\\t");
     }
+
+
+
+
+    /**
+     * THIS IS THE TESTER FOR THE DATAWRITER
+     * 
+     * GPT Loaded TESTER based on the code written above
+     * 
+     */
+public static void main(String[] args) {
+
+    System.out.println("========= FINAL DATA WRITER TESTER =========");
+
+    UserList userList = UserList.getInstance();
+    QuestionList questionList = QuestionList.getInstance();
+
+    // OPTIONAL: Uncomment if you want FULL overwrite
+    // userList.getUsers().clear();
+    // questionList.getQuestions().clear();
+
+    // -----------------------------
+    // USERS
+    // -----------------------------
+    User user1 = new User(
+            UUID.randomUUID(),
+            "Liam",
+            "Anderson",
+            "landerson",
+            "secure123",
+            "liam.anderson@email.com",
+            new ArrayList<>(),
+            new ArrayList<>(),
+            new ArrayList<>(),
+            Status.USER,
+            2025,
+            "M11112222"
+    );
+
+    User user2 = new User(
+            UUID.randomUUID(),
+            "Emma",
+            "Thompson",
+            "ethompson",
+            "pass999",
+            "emma.thompson@email.com",
+            new ArrayList<>(),
+            new ArrayList<>(),
+            new ArrayList<>(),
+            Status.CONTRIBUTOR,
+            2026,
+            "M33334444"
+    );
+
+    userList.getUsers().add(user1);
+    userList.getUsers().add(user2);
+
+    // -----------------------------
+    // QUESTION 1: ArrayList
+    // -----------------------------
+    ArrayList<String> hints1 = new ArrayList<>();
+    hints1.add("Think about dynamic arrays");
+    hints1.add("Resizable structure");
+    hints1.add("Part of Java Collections");
+
+    ArrayList<String> content1 = new ArrayList<>();
+    content1.add("ArrayList is a resizable array.");
+    content1.add("It allows adding and removing elements.");
+    content1.add("It is part of java.util package.");
+
+    ArrayList<Section> sections1 = new ArrayList<>();
+    sections1.add(new Section(
+            "Overview",
+            content1,
+            "ArrayList grows automatically when needed."
+    ));
+
+    Question q1 = new Question(
+            "What is an ArrayList?",
+            user1,
+            "Explain how ArrayList works in Java.",
+            Difficulty.EASY,
+            Language.JAVA,
+            hints1,
+            sections1
+    );
+
+    // Comments (thread)
+    Comment r1 = new Comment(user1, "Because arrays are fixed size.");
+    ArrayList<Comment> replies1 = new ArrayList<>();
+    replies1.add(r1);
+
+    Comment c1 = new Comment(user2, "Why not just use arrays?", replies1);
+
+    ArrayList<Comment> thread1 = new ArrayList<>();
+    thread1.add(c1);
+
+    UserSolution sol1 = new UserSolution(
+            user2,
+            "ArrayList allows dynamic resizing unlike normal arrays.",
+            UUID.randomUUID(),
+            thread1,
+            30
+    );
+
+    q1.getSolutionList().add(sol1);
+
+    // -----------------------------
+    // QUESTION 2: Recursion
+    // -----------------------------
+    ArrayList<String> hints2 = new ArrayList<>();
+    hints2.add("A function calling itself");
+    hints2.add("Base case is important");
+    hints2.add("Think of factorial");
+
+    ArrayList<String> content2 = new ArrayList<>();
+    content2.add("Recursion is when a method calls itself.");
+    content2.add("It requires a base case to stop.");
+    content2.add("Used in problems like factorial or tree traversal.");
+
+    ArrayList<Section> sections2 = new ArrayList<>();
+    sections2.add(new Section(
+            "Concept",
+            content2,
+            "Recursion breaks problems into smaller pieces."
+    ));
+
+    Question q2 = new Question(
+            "What is Recursion?",
+            user2,
+            "Explain recursion with an example.",
+            Difficulty.MEDIUM,
+            Language.JAVA,
+            hints2,
+            sections2
+    );
+
+    // Comments (thread)
+    Comment r2 = new Comment(user2, "Yes, factorial is a great example.");
+    ArrayList<Comment> replies2 = new ArrayList<>();
+    replies2.add(r2);
+
+    Comment c2 = new Comment(user1, "Is recursion efficient?", replies2);
+
+    ArrayList<Comment> thread2 = new ArrayList<>();
+    thread2.add(c2);
+
+    UserSolution sol2 = new UserSolution(
+            user1,
+            "Recursion solves problems by calling the same function with smaller inputs.",
+            UUID.randomUUID(),
+            thread2,
+            45
+    );
+
+    q2.getSolutionList().add(sol2);
+
+    // -----------------------------
+    // ADD QUESTIONS
+    // -----------------------------
+    questionList.getQuestions().add(q1);
+    questionList.getQuestions().add(q2);
+
+    // -----------------------------
+    // SAVE
+    // -----------------------------
+    DataWriter writer = new DataWriter();
+
+    boolean usersSaved = writer.saveUsers();
+    boolean questionsSaved = writer.saveQuestions();
+
+    System.out.println("Users saved: " + usersSaved);
+    System.out.println("Questions saved: " + questionsSaved);
+
+    // -----------------------------
+    // VERIFY
+    // -----------------------------
+    System.out.println("\n========= VERIFY =========");
+
+    ArrayList<User> users = DataLoader.getUsers();
+    ArrayList<Question> questions = DataLoader.getQuestions();
+
+    System.out.println("Users loaded: " + users.size());
+    System.out.println("Questions loaded: " + questions.size());
+
+    for (Question q : questions) {
+        System.out.println("\n" + q.getTitle());
+        System.out.println("Solutions: " + q.getSolutionList().size());
+    }
+}
 }

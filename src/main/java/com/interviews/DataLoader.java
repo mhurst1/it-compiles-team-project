@@ -146,7 +146,7 @@ public class DataLoader{
                 UUID solutionUserId = asUUID(extractString(solObj, "user"));
                 User solutionUser = (solutionUserId == null) ? null : usersById.get(solutionUserId);
 
-                ArrayList<Comment> replies = parseComments(extractArrayRaw(solObj, "replies"), usersById);
+                ArrayList<Comment> replies = parseComments(extractArrayRaw(solObj, "thread"), usersById);
 
                 UserSolution solution = new UserSolution(
                     solutionUser,
@@ -471,7 +471,6 @@ public class DataLoader{
      * 
      * GPT Loaded TESTER based on the code written above
      * 
-     * It should only have 2 users loaded and 2 questions loaded from when we made the jsons
      */
     public static void main(String[] args) {
 

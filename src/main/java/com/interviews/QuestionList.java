@@ -13,7 +13,7 @@ public class QuestionList {
      * Initializes the QuestionList with an empty list of questions. This constructor is private to enforce the singleton pattern, ensuring that only one instance of QuestionList exists throughout the application. The getInstance() method is used to access the single instance of QuestionList, and it will create the instance if it does not already exist.
      */
     public QuestionList() {
-        questions = new ArrayList<>();
+        questions = DataLoader.getQuestions();
     }
 
     /**
