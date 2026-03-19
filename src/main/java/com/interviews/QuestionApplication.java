@@ -105,6 +105,7 @@ public class QuestionApplication {
         }
      }
         return false;
+
     }
 
 
@@ -314,6 +315,10 @@ public class QuestionApplication {
             return;
         }
         
+        DataWriter writer = new DataWriter();
+        writer.saveUsers();
+        writer.saveQuestions();
+
         currentUser = null;
         
     }
