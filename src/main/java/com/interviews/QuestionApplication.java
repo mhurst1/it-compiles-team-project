@@ -315,7 +315,7 @@ public class QuestionApplication {
             System.out.println("No user is currently logged in.");
             return;
         }
-        
+
         DataWriter writer = new DataWriter();
         writer.saveUsers();
         writer.saveQuestions();
