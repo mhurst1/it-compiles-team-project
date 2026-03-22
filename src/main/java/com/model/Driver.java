@@ -107,9 +107,7 @@ public class Driver {
             System.out.println("newuser is now logged out");
         }
     }
-
     
-
 
     public static void main(String[] args) {
         Driver driver = new Driver();
