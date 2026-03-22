@@ -6,7 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-
+/**
+ * Writes user and question data to JSON files.
+ * 
+ * This class converts Java objects (User, Question, etc.) into JSON format
+ * and saves them to disk. It handles nested structures such as:
+ * 
+ * Achievements
+ * Sections
+ * Solutions
+ * Comments and replies
+ * 
+ * The class also includes helper methods to properly format lists and escape
+ * strings for JSON compatibility.
+ * 
+ * A tester is included in the main method to verify writing and reloading.
+ */
 public class DataWriter {
 
     /** Base directory containing the JSON data files. */
@@ -18,6 +33,15 @@ public class DataWriter {
     /** Path to the questions JSON file. */
     private static final String QUESTIONS_PATH = DATA_DIR + "/question.json";
 
+    /**
+     * Saves all users from the UserList singleton into the users JSON file.
+     * 
+     * Each user is written as a JSON object including:
+     * id, name, username, password, email, graduation year, USC ID,
+     * starred questions, answered questions, and achievements.
+     * 
+     * @return true if users were successfully saved, false otherwise
+     */
     public boolean saveUsers() {
         try {
             List<User> users = UserList.getInstance().getUsers();
@@ -56,6 +80,15 @@ public class DataWriter {
         }
     }
 
+    /**
+     * Saves all questions from the QuestionList singleton into the questions JSON file.
+     * 
+     * Each question includes:
+     * id, title, user, description, sections, hints, difficulty,
+     * language, solutions, and provided solutions (images/text).
+     * 
+     * @return true if questions were successfully saved, false otherwise
+     */
     public boolean saveQuestions() {
         try {
             List<Question> questions = QuestionList.getInstance().getQuestions();
@@ -96,7 +129,15 @@ public class DataWriter {
 
     /* --- helpers --- */
 
-    // Convert List<Question> -> ["uuid", "uuid", ...]
+    /**
+     * Converts a list of Question objects into a JSON array of their UUIDs.
+     * 
+     * Example output:
+     * ["uuid1", "uuid2"]
+     * 
+     * @param list list of Question objects
+     * @return JSON-formatted string of question IDs
+     */
     static String listIds(List<Question> list) {
         if (list == null || list.isEmpty())
             return "[]";
@@ -113,7 +154,15 @@ public class DataWriter {
         return b.toString();
     }
 
-    // Convert List<Achievement> -> [{..},{..}]
+    /**
+     * Converts a list of Achievement objects into a JSON array.
+     * 
+     * Each achievement includes:
+     * leaderboard place, user level, total vote points, and streak.
+     * 
+     * @param a list of Achievement objects
+     * @return JSON-formatted string of achievements
+     */
     static String achList(List<Achievement> a) {
         if (a == null || a.isEmpty())
             return "[]";
@@ -135,8 +184,15 @@ public class DataWriter {
         return b.toString();
     }
 
-    // Convert List<UserSolution> ->
-    // [{"user":..,"description":..,"thread":[...],"user-vote":..,"total-vote":..}]
+    /**
+     * Converts a list of UserSolution objects into JSON format.
+     * 
+     * Each solution includes:
+     * user ID, description, comment thread, user vote, and total vote.
+     * 
+     * @param s list of UserSolution objects
+     * @return JSON-formatted string of solutions
+     */
     static String solutionList(List<UserSolution> s) {
         if (s == null || s.isEmpty())
             return "[]";
@@ -164,8 +220,15 @@ public class DataWriter {
         return b.toString();
     }
 
-    // Convert List<Section> ->
-    // [{"section-title":..,"section-content":[...],"section-text":..,"fileName":..}]
+    /**
+     * Converts a list of Section objects into JSON format.
+     * 
+     * Each section includes:
+     * section title, section content, section text, and file name.
+     * 
+     * @param sections list of Section objects
+     * @return JSON-formatted string of sections
+     */
     static String sectionList(List<Section> sections) {
         if (sections == null || sections.isEmpty())
             return "[]";
@@ -191,7 +254,15 @@ public class DataWriter {
         return b.toString();
     }
 
-    // Convert Enum -> ["ENUM_NAME"]
+    /**
+     * Converts an enum value into a JSON array format.
+     * 
+     * Example:
+     * EASY → ["EASY"]
+     * 
+     * @param e enum value
+     * @return JSON array string representation of the enum
+     */
     static String enumToArray(Enum<?> e) {
         if (e == null)
             return "[]";
@@ -199,7 +270,12 @@ public class DataWriter {
         return "[\"" + e.name() + "\"]";
     }
 
-    // Convert List<String> -> ["text1","text2",...]
+    /**
+     * Converts a list of strings into a JSON string array.
+     * 
+     * @param list list of strings
+     * @return JSON-formatted string array
+     */
     static String stringList(List<String> list) {
         if (list == null || list.isEmpty())
             return "[]";
@@ -218,8 +294,17 @@ public class DataWriter {
         return b.toString();
     }
 
-    // Convert List<Comment> -> [{"user":..,"comment":..,"replies":[...]}]
-    static String commentList(List<Comment> comments) {
+    /**
+     * Converts a list of Comment objects into JSON format.
+     * 
+     * Each comment includes:
+     * user ID, comment text, and nested replies.
+     * 
+     * This method is recursive to support threaded comments.
+     * 
+     * @param comments list of Comment objects
+     * @return JSON-formatted string of comments
+     */    static String commentList(List<Comment> comments) {
         if (comments == null || comments.isEmpty())
             return "[]";
 
@@ -256,6 +341,15 @@ public class DataWriter {
         return b.toString();
     }
 
+    /**
+     * Escapes special characters in a string for safe JSON formatting.
+     * 
+     * Handles:
+     * backslashes, quotes, newlines, carriage returns, and tabs.
+     * 
+     * @param text input string
+     * @return escaped string safe for JSON
+     */
     static String escape(String text) {
         if (text == null) {
             return "";
@@ -271,11 +365,18 @@ public class DataWriter {
 
 
 
-    /**
-     * THIS IS THE TESTER FOR THE DATAWRITER
+     /**
+     * Tester method for verifying that data is written and read correctly.
      * 
-     * GPT Loaded TESTER based on the code written above
+     * This method:
+     *   Creates sample users
+     *   Creates sample questions
+     *   Adds solutions and comment threads
+     *   Saves data to JSON files
+     *   Reloads data using DataLoader
+     *   Prints verification output
      * 
+     * @param args command-line arguments (not used)
      */
 public static void main(String[] args) {
 
