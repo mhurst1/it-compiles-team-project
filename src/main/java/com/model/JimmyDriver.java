@@ -21,18 +21,6 @@ import com.interviews.User;
 import com.interviews.UserSolution;
 
 
-/**
- * JimmyDriver class simulates a user named "Jimmy Cricket" interacting with the QuestionApplication system.
- * The driver performs the following steps:
- * 1. Logs in with valid credentials.
- * 2. Checks and prints the user's current daily streak and achievement level.
- * 3. Retrieves and prints the daily challenge question.
- * 4. Reviews the solutions for the daily challenge question.
- * 5. Posts a comment on the second solution of the daily challenge question.
- * 6. Prints the daily challenge question and its details to a text file.
- * 7. Searches for questions related to "Binary Search Tree" and prints the results.
- * 8. Logs out of the application.
- */
 public class JimmyDriver {
 
     public static void main(String [] args) {
@@ -70,9 +58,9 @@ QuestionApplication app = new QuestionApplication();
 
     System.out.println(" Today's challenge: ");
     System.out.println(" --------------------------------------------");
-    System.out.printf(" Title    : %-38s|%n", dailyChallenge.getTitle());
-    System.out.printf(" Difficulty       : %-38s|%n", dailyChallenge.getDifficulty());
-    System.out.printf( " Language     :%-38s|%n", dailyChallenge.getLanguage());
+    System.out.printf(" Title    : " + dailyChallenge.getTitle());
+    System.out.printf(" Difficulty       : " + dailyChallenge.getDifficulty());
+    System.out.printf( " Language     : " + , dailyChallenge.getLanguage());
     System.out.println(" --------------------------------------------");
 
     //Step 4: CLICK ON QUESTION AND REVIEW SOLUTIONS
@@ -132,7 +120,7 @@ QuestionApplication app = new QuestionApplication();
 
         int oldStreak = achievement.getStreak();
         achievement.streakCounter();
-        System.out.printf(" Streak updated: %d -> %d days%n", oldStreak, achievement.getStreak());
+        System.out.printf(" Streak updated: " + oldStreak + " -> " + achievement.getStreak() + "days");
 
         //Step 11: JIMMY LOGS OUT
 
@@ -141,16 +129,13 @@ QuestionApplication app = new QuestionApplication();
 
     }
 
-    /**
-     * Helper method to print the details of a question in a formatted manner.
-     * @param q The Question object to be printed.
-     */
+
     private static void printQuestion(Question q) {
 
         String bar = "   " + "-".repeat(56);
         System.out.println(bar);
-        System.out.printf("   Title       : %s%n", q.getTitle());
-        System.out.printf("   Difficulty       : %-12s    Language: %s%n", q.getDifficulty(), q.getLanguage());
+        System.out.printf("   Title       : " + q.getTitle());
+        System.out.printf("   Difficulty       : " + q.getDifficulty() + "    Language: " + q.getLanguage());
         System.out.println(bar);
         System.out.println("     Description: ");
         System.out.println("      " + q.getDescription());
@@ -171,7 +156,7 @@ QuestionApplication app = new QuestionApplication();
             System.out.println(bar);
             System.out.println(" Hints: ");
             for(int i = 0; i < q.getHints().size(); i++){
-                System.out.printf(".     %d. %s%n", i+1, q.getHints().get(i));
+                System.out.printf("     %d. %s%n", i+1, q.getHints().get(i));
             }
         }
 
@@ -194,11 +179,6 @@ QuestionApplication app = new QuestionApplication();
         System.out.println(bar);
     }
 
-    /**
-     * Helper method to print the details of a question to a text file in a formatted manner.
-     * @param q The Question object to be printed.
-     * @param filename The name of the file to which the question details will be written.
-     */
 private static void printQuestionToFile(Question q, String filename){
 
             try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
@@ -207,10 +187,10 @@ private static void printQuestionToFile(Question q, String filename){
             String thin  = "-".repeat(70);
  
             pw.println(thick);
-            pw.printf("  QUESTION: %s%n", q.getTitle());
+            pw.printf("  QUESTION: " + q.getTitle());
             pw.println(thick);
-            pw.printf("  Difficulty  : %s%n", q.getDifficulty());
-            pw.printf("  Language    : %s%n", q.getLanguage());
+            pw.printf("  Difficulty  : " + q.getDifficulty());
+            pw.printf("  Language    : " + q.getLanguage());
             pw.printf("  Printed on  : %s%n",
                 LocalDate.now().format(DateTimeFormatter.ofPattern("MMMM d, yyyy")));
             pw.println();
