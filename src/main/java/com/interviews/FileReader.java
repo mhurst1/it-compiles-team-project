@@ -9,11 +9,16 @@ import java.util.Scanner;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
-
+/**
+ * Utility class for reading text and image content from files.
+ */
 public class FileReader {
     
     /**
-     * Reads In Text File
+     * Reads all lines from a text file.
+     *
+     * @param fileName the path to the text file
+     * @return the file contents as a list of lines
      */
     public static ArrayList<String> getLines(String fileName) {
 
@@ -37,8 +42,10 @@ public class FileReader {
     }
 
     /**
-     * Reads In Image File (Made Changes in module-info.java: Added, java.desktop)
-     * Can take out bufferimage if that change effects anything but it should be fine
+     * Reads an image file into a buffered image.
+     *
+     * @param fileName the path to the image file
+     * @return the loaded image, or {@code null} if loading fails
      */
      public static BufferedImage getImage(String fileName) {
 

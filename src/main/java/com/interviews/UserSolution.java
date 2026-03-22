@@ -14,7 +14,15 @@ public class UserSolution {
     public boolean userVote;
     public int totalVote; // I think this can be replaced with upVotes and downVotes
 
-
+    /**
+     * Creates a fully populated solution object.
+     *
+     * @param user the user who posted the solution
+     * @param description the solution description
+     * @param solutionID the unique solution identifier
+     * @param replies the comments attached to the solution
+     * @param totalVote the current total vote count
+     */
     public UserSolution(User user, String description, UUID solutionID, ArrayList<Comment> replies, int totalVote){
         this.user = user;
         this.description = description;
@@ -23,6 +31,12 @@ public class UserSolution {
         this.totalVote = totalVote;
     }
 
+    /**
+     * Creates a new solution with a generated ID and no replies.
+     *
+     * @param user the user who posted the solution
+     * @param description the solution description
+     */
     public UserSolution(User user, String description){
         this.user = user;
         this.description = description;
@@ -32,22 +46,56 @@ public class UserSolution {
         this.userVote = false;
     }
 
-    // GETTERS 
+    /**
+     * Returns the user who posted the solution.
+     *
+     * @return the solution author
+     */
     public User getUser(){
         return user;
     }
+
+    /**
+     * Returns the solution description.
+     *
+     * @return the solution text
+     */
     public String getDescription(){
         return description;
     }
+
+    /**
+     * Returns the reply comments for this solution.
+     *
+     * @return the solution replies
+     */
     public ArrayList<Comment> getReplies(){
         return replies;
     }
+
+    /**
+     * Returns whether the current user has voted on this solution.
+     *
+     * @return {@code true} if the current user has voted, otherwise {@code false}
+     */
     public boolean getUserVote(){
         return userVote;
     }
+
+    /**
+     * Returns the total vote count for this solution.
+     *
+     * @return the total vote count
+     */
     public int getTotalVote(){
         return totalVote;
     }
+
+    /**
+     * Returns the unique solution identifier.
+     *
+     * @return the solution ID
+     */
     public UUID getSoulutionId(){
         return solutionID;
     }
@@ -60,7 +108,11 @@ public class UserSolution {
     }
     */
 
-    // Setters 
+    /**
+     * Sets whether the current user has voted on this solution.
+     *
+     * @param userVote the current-user vote flag
+     */
     public void setUserVote(boolean userVote){
         this.userVote = userVote;
     }
@@ -79,7 +131,13 @@ public class UserSolution {
 
     } */
 
-    // Fix Method Later
+    /**
+     * Returns the provided comment reference.
+     *
+     * @param comment the comment to access
+     * @param user the user requesting access
+     * @return the provided comment
+     */
     public Comment accessComment(Comment comment, User user){
         return comment;
     }

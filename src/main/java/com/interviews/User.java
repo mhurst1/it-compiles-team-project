@@ -25,6 +25,22 @@ public class User {
     private ArrayList<Comment> comments;
     private ArrayList<UserSolution> solutions;
 
+    /**
+     * Creates a fully populated user from stored data.
+     *
+     * @param id the user ID
+     * @param firstName the user's first name
+     * @param lastName the user's last name
+     * @param username the username
+     * @param password the password
+     * @param email the email address
+     * @param starredQuestions the starred questions
+     * @param answeredQuestions the answered questions
+     * @param achievements the user's achievements
+     * @param status the user status
+     * @param graduationYear the graduation year
+     * @param idUSC the USC ID
+     */
     public User(UUID id, String firstName, String lastName, String username, String password,  
                     String email, ArrayList<Question> starredQuestions, ArrayList<Question> answeredQuestions, 
                     ArrayList<Achievement> achievements, Status status, int graduationYear, String idUSC){
@@ -47,6 +63,17 @@ public class User {
 
     }
 
+    /**
+     * Creates a new standard user with a generated UUID.
+     *
+     * @param firstName the user's first name
+     * @param lastName the user's last name
+     * @param username the username
+     * @param password the password
+     * @param email the email address
+     * @param graduationYear the graduation year
+     * @param idUSC the USC ID
+     */
     public User(String firstName, String lastName, String username, 
                     String password, String email, int graduationYear, String idUSC){
 
@@ -69,11 +96,11 @@ public class User {
     }
 
     /**
-     * Method to see if the given username and password match 
+     * Checks whether the provided credentials match this user.
+     *
      * @param username the users public username 
      * @param password the users password
-     * @return a boolean eturns true if the username 
-     * and password match the current users information
+     * @return {@code true} when the username and password match
      */
     public boolean isMatch(String username, String password){
         return(this.username.equals(username)&&this.password.equals(password));
@@ -248,8 +275,9 @@ public class User {
     }
 
     /**
-     * method to get the id of the current user
-     * @return String of their id
+     * Returns the user's USC ID.
+     *
+     * @return the USC ID
      */
     public String getIdUSC(){
         return idUSC;
@@ -287,7 +315,9 @@ public class User {
         return id;
     }
 
-    // This needs to call a the MAKE ID where it will create a new UUID
+    /**
+     * Generates and stores a new UUID for the user.
+     */
     public void setId(){
         this.id = UUID.randomUUID();
     }

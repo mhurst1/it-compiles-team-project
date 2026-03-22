@@ -70,8 +70,26 @@ public class Achievement {
         return streak;
     }
 
+    /**
+     * Sets the user's current streak value.
+     *
+     * @param streak the streak to store
+     */
+    public void setStreak(int streak) {
+        this.streak = streak;
+    }
+
     public int getLevel() {
         return userLevel;
+    }
+
+    /**
+     * Sets the user's last active date used by the streak counter.
+     *
+     * @param lastActiveDate the date the user was last active
+     */
+    public void setLastActiveDate(LocalDate lastActiveDate) {
+        this.lastActiveDate = lastActiveDate;
     }
 
 
@@ -86,7 +104,12 @@ public class Achievement {
         return allVotePoints;
     }
 
-    // Call this once per day when user is active
+    /**
+     * Updates the user's streak based on the current date and the stored
+     * last active date.
+     *
+     * @return the updated streak value
+     */
     public int streakCounter() {
         LocalDate today = LocalDate.now();
 

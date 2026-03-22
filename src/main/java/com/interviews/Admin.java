@@ -8,6 +8,9 @@ import java.util.UUID;
  */
 public class Admin extends Contributor {
 
+    /**
+     * Creates the default admin user.
+     */
     public Admin(){
         super("Admin", "Admin", "Admin", "Admin", "Admin", 2024, "Admin");
     }
@@ -23,7 +26,8 @@ public class Admin extends Contributor {
     }
 
     /**
-     * Method that removes the status of the contributor
+     * Removes contributor status from a user.
+     *
      * @param id the unique UUID of the user
      */
     public void removeContributor(UUID id){
@@ -32,6 +36,4 @@ public class Admin extends Contributor {
             user.setStatus(Status.USER);
     }
 
-
-    
 }

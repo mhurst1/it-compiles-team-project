@@ -24,10 +24,16 @@ import com.interviews.UserSolution;
 public class Driver {
     private QuestionApplication questionApplication;
 
+    /**
+     * Creates the driver and initializes the shared application facade.
+     */
     Driver() {
         questionApplication = new QuestionApplication();
     }
 
+    /**
+     * Runs the configured driver scenarios in order.
+     */
     public void run() {
         scenario1();
         scenario2();
@@ -186,7 +192,10 @@ public class Driver {
         System.out.println("Sally Sparrow added 2 solutions to the question.");
     }
 
-    //Scenario 4: Sally successfully creates an account, sets contributor status, and logs in
+    /**
+     * Scenario 4 shows Sally creating an account, setting contributor status,
+     * and logging in using the original project flow.
+     */
     public void scenario4() {
         System.out.println();
 
@@ -211,6 +220,11 @@ public class Driver {
 
     
 
+    /**
+     * Launches the driver scenarios from the command line.
+     *
+     * @param args command-line arguments, unused
+     */
     public static void main(String[] args) {
         Driver driver = new Driver();
         driver.run();
