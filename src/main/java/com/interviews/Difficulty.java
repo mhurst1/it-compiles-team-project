@@ -1,7 +1,7 @@
 package com.interviews;
 
 /**
- * An enumeration of the difficulty level of the Question
+ * Represents the supported difficulty levels for a question.
  */
 public enum Difficulty {
     EASY,

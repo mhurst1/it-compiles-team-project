@@ -1,8 +1,7 @@
 package com.interviews;
 
 /**
- * An enumeration that determines the type
- * of content being displayed
+ * Represents the content type stored inside a question section.
  */
 public enum contentType {
     IMAGE,
