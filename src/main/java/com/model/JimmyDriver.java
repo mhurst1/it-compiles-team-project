@@ -8,15 +8,11 @@ import java.time.format.DateTimeFormatter;
 
 import com.interviews.Achievement;
 import com.interviews.Comment;
-import com.interviews.Difficulty;
-import com.interviews.Language;
 import com.interviews.Question;
 
 import java.util.ArrayList;
-import java.util.UUID;
 import com.interviews.QuestionApplication;
 import com.interviews.Section;
-import com.interviews.Status;
 import com.interviews.User;
 import com.interviews.UserSolution;
 

@@ -1,10 +1,15 @@
 package com.model;
 
+import java.util.ArrayList;
+
 import com.interviews.Difficulty;
 import com.interviews.Language;
+import com.interviews.Question;
 import com.interviews.QuestionApplication;
+import com.interviews.Section;
 import com.interviews.Status;
 import com.interviews.User;
+import com.interviews.UserSolution;
 
 /**
  * Driver class used to test account creation and login flows
@@ -13,7 +18,7 @@ import com.interviews.User;
  * It runs three scenarios:
  * 1. Duplicate account creation is rejected.
  * 2. A new contributor/publisher-style account is created and logged in.
- * 3. A new standard account is created, logged in, and logged out.
+ * 3. Sally creates a new question and two solutions.
  */
 
 public class Driver {
@@ -98,38 +103,87 @@ public class Driver {
     }
 
     /**
-     * Scenario 3 shows creating an account, logging in with that account,
-     * and then logging out.
-     *
-     * The method creates a new user account, attempts to log in using the
-     * new credentials, and verifies that logout works properly.
+     * Scenario 3 shows Sally creating a new question and adding two solutions.
      */
     public void scenario3() {
         System.out.println();
 
-        // Create a new account
-        questionApplication.createAccount(
-                "New", "User",
-                "newuser",
-                "newpass",
-                "newuser@email.com",
-                2026,
-                "U12345678");
-
-        questionApplication.login("newuser", "newpass");
-
-        if (questionApplication.getCurrentUser() == null) {
-            System.out.println("Sorry we couldn't login the new account.");
+        if (!questionApplication.login("sallysparrow", "sparrowpass2")
+                && questionApplication.getCurrentUser() == null) {
+            System.out.println("Sally Sparrow must be logged in to create a question.");
             return;
         }
 
-        System.out.println("newuser is now logged in");
+        User sally = questionApplication.getCurrentUser();
+        ArrayList<String> hints = new ArrayList<>();
+        hints.add("Think about prefix sums.");
+        hints.add("The array can contain negative numbers, so a sliding window is not enough.");
+        hints.add("Store the first occurrence of each prefix sum.");
 
-        questionApplication.logout();
+        ArrayList<Section> questionContent = new ArrayList<>();
 
-        if (questionApplication.getCurrentUser() == null) {
-            System.out.println("newuser is now logged out");
-        }
+        ArrayList<String> promptLines = new ArrayList<>();
+        promptLines.add("Given an integer array nums and an integer sum, return the length of the longest contiguous subarray whose total equals k.");
+        promptLines.add("The array can contain negative numbers.");
+        questionContent.add(new Section(
+                "Problem Statement",
+                promptLines,
+                "Find the length of the longest contiguous subarray whose sum is k."));
+
+        ArrayList<String> exampleOneLines = new ArrayList<>();
+        exampleOneLines.add("Input: nums = [1, -1, 5, -2, 3], k = 3");
+        exampleOneLines.add("Output: 4");
+        exampleOneLines.add("Explanation: The subarray [1, -1, 5, -2] sums to 3 and has length 4.");
+        questionContent.add(new Section(
+                "Example 1",
+                exampleOneLines,
+                "Longest valid subarray length is 4."));
+
+        ArrayList<String> exampleTwoLines = new ArrayList<>();
+        exampleTwoLines.add("Input: nums = [-2, -1, 2, 1], k = 3");
+        exampleTwoLines.add("Output: 2");
+        questionContent.add(new Section(
+                "Example 2",
+                exampleTwoLines,
+                "A second example with a different longest length."));
+
+        ArrayList<String> followUpLines = new ArrayList<>();
+        followUpLines.add("What is the time complexity of your algorithm?");
+        followUpLines.add("Can you find a way to make your algorithm faster?");
+        questionContent.add(new Section(
+                "Follow-up Questions",
+                followUpLines,
+                "Compare the brute force and optimized approaches."));
+
+        questionApplication.addQuestion(
+                "Longest Subarray with given Sum",
+                sally,
+                "Return the length of the longest contiguous subarray whose sum equals k.",
+                Difficulty.MEDIUM,
+                Language.JAVA,
+                hints,
+                questionContent);
+
+        Question question = questionApplication.getQuestions()
+                .get(questionApplication.getQuestions().size() - 1);
+
+        UserSolution bruteForceSolution = new UserSolution(
+                sally,
+                "Solution 1 - Brute Force Approach: Try every possible subarray and compute its sum. "
+                        + "Time Complexity: O(n^2). Java file: LongestSubarrayBruteForce.java");
+
+        UserSolution hashMapSolution = new UserSolution(
+                sally,
+                "Solution 2 - HashMap Version: Keep track of the running prefix sum in a HashMap and "
+                        + "store the first occurrence of each prefix sum. If (prefixSum - k) exists, "
+                        + "we found a valid subarray. Time Complexity: O(n). Java file: LongestSubarrayHashMap.java");
+
+        question.getSolutionList().add(bruteForceSolution);
+        question.getSolutionList().add(hashMapSolution);
+        questionApplication.getQuestionList().save();
+
+        System.out.println("Sally Sparrow created the question: " + question.getTitle());
+        System.out.println("Sally Sparrow added 2 solutions to the question.");
     }
 
     //Scenario 4: Sally successfully creates an account, sets contributor status, and logs in

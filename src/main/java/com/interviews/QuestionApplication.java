@@ -18,8 +18,8 @@ public class QuestionApplication {
         this.currentQuestion = null;
         this.currentUser = null;
         this.currentUserSolution = null;
-        this.questionList = QuestionList.getInstance();
-        this.userList = UserList.getInstance();
+        this.questionList = new QuestionList();
+        this.userList = new UserList();
 
     }
 
@@ -324,6 +324,16 @@ public class QuestionApplication {
         
     }
 
+     public void setStatus(String username, Status status) {
+        User user = userList.getUser(username);
+        if (user != null) {
+            user.setStatus(status);
+            userList.save();
+        }
+    }
+
+
+
     public void addSolution(String string, Object object, Object object2) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'addSolution'");
@@ -332,6 +342,11 @@ public class QuestionApplication {
     public void addComment(String question, Object user, Object comment) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'addComment'");
+    }
+
+    public void setStatus(String string, String string2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setStatus'");
     }
 
 }
