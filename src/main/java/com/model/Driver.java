@@ -24,37 +24,40 @@ public class Driver {
         scenario1();
         scenario2();
         scenario3();
-        scenario4();
-        scenario5();
-        scenario6();
     }
 
     /**
-     * Scenario 1 shows a successful login followed by a logout.
-     * 
-     * The method attempts to login a valid user ("asmith"). If the login
-     * succeeds, the user is then logged out and the logout is verified
-     * by checking if the current user becomes null.
+     * Scenario 1 shows a duplicate account creation being rejected.
+     *
+     * Sullivan Sparrow creates an account first. Sally Sparrow then attempts
+     * to create an account using the same username and is rejected.
      */
     public void scenario1() {
         System.out.println();
 
-        questionApplication.login("mhurst1", "");
+        try {
+            questionApplication.createAccount(
+                    "Sullivan", "Sparrow",
+                    "ssparrow",
+                    "sparrowpass1",
+                    "sullivan.sparrow@email.com",
+                    2027,
+                    "U11112222");
 
-        if (questionApplication.getCurrentUser() == null) {
-            System.out.println("Sorry we couldn't login.");
-            return;
+            System.out.println("Sullivan Sparrow's account was created.");
+
+            questionApplication.createAccount(
+                    "Sally", "Sparrow",
+                    "ssparrow",
+                    "sparrowpass2",
+                    "sally.sparrow@email.com",
+                    2028,
+                    "U33334444");
+
+            System.out.println("Sally Sparrow's account was created.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Sally Sparrow's account was rejected: " + e.getMessage());
         }
-
-        System.out.println("mhurst1 is now logged in");
-
-        questionApplication.logout();
-
-        // check
-        if (questionApplication.getCurrentUser() == null) {
-            System.out.println("mhurst1 is now logged out");
-        }
-
     }
 
     /**
