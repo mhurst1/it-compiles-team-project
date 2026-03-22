@@ -4,16 +4,36 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * A class that acts as a facade for the User 
-*/
+ * A facade class that manages interactions between users, questions,
+ * solutions, and comments within the application.
+ * 
+ * This class acts as the main controller for:
+ * User account creation and authentication
+ * Question creation, editing, searching, and deletion
+ * Solution submission and management
+ * Commenting and discussion threads
+ */
 public class QuestionApplication {
+
+    /** List of all questions in the application */
     private QuestionList questionList;
+
+    /** List of all users in the application */
     private UserList userList;
+
+    /** Currently logged-in user */
     private User currentUser;
+
+    /** Currently selected question */
     private Question currentQuestion;
+
+    /** Currently selected user solution */
     private UserSolution currentUserSolution;
     
 
+    /**
+     * Constructs a new QuestionApplication and initializes all fields.
+     */
     public QuestionApplication() {
         this.currentQuestion = null;
         this.currentUser = null;
@@ -23,23 +43,42 @@ public class QuestionApplication {
 
     }
 
+    /**
+     * Gets the question list.
+     * @return the QuestionList object
+     */
     public QuestionList getQuestionList() {
         return questionList;
     }
 
+    /**
+     * Sets the currently logged-in user.
+     * @param user the user to set as current
+     */
     public void setCurrentUser(User user) {
         this.currentUser = user;
     }
 
+    /**
+     * Gets the currently logged-in user.
+     * @return the current user
+     */
     public User getCurrentUser() {
         return currentUser;
     }
 
+    /**
+     * Gets the currently selected question.
+     * @return the current question
+     */
     public Question getCurrentQuestion() {
         return currentQuestion;
     }
 
-    /* Returns the users solution */
+    /**
+     * Gets the currently selected user solution.
+     * @return the current user solution
+     */
     public UserSolution getCurrentUserSolution() {
         return currentUserSolution;
     }
