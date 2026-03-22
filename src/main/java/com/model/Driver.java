@@ -3,14 +3,17 @@ package com.model;
 import com.interviews.Difficulty;
 import com.interviews.Language;
 import com.interviews.QuestionApplication;
+import com.interviews.Status;
+import com.interviews.User;
 
 /**
- * Driver class used to test the login and logout functionality
- * of the QuestionApplication system.
- * 
- * It runs two scenarios:
- * 1. A successful login followed by a logout.
- * 2. An unsuccessful login attempt.
+ * Driver class used to test account creation and login flows
+ * in the QuestionApplication system.
+ *
+ * It runs three scenarios:
+ * 1. Duplicate account creation is rejected.
+ * 2. A new contributor/publisher-style account is created and logged in.
+ * 3. A new standard account is created, logged in, and logged out.
  */
 
 public class Driver {
@@ -61,22 +64,37 @@ public class Driver {
     }
 
     /**
-     * Scenario 2 shows an unsuccessful login attempt.
-     * 
-     * The method attempts to log in using invalid credentials.
-     * If authentication fails, an error message is displayed.
+     * Scenario 2 shows successful account creation followed by a valid login.
+     *
+     * Sally changes her credentials so they no longer match Sullivan's, creates
+     * an account, is marked as a publisher/contributor, and then logs in.
      */
     public void scenario2() {
         System.out.println();
 
-        questionApplication.login("wronguser", "wrongpass");
+        try {
+            User sally = questionApplication.createAccount(
+                    "Sally", "Sparrow",
+                    "sallysparrow",
+                    "sparrowpass2",
+                    "sally.sparrow@email.com",
+                    2028,
+                    "U33334444");
 
-        if (questionApplication.getCurrentUser() == null) {
-            System.out.println("Sorry we couldn't login.");
-            return;
+            sally.setStatus(Status.CONTRIBUTOR);
+            System.out.println("Sally Sparrow created a publisher account.");
+
+            questionApplication.login("sallysparrow", "sparrowpass2");
+
+            if (questionApplication.getCurrentUser() == null) {
+                System.out.println("Sorry we couldn't login Sally Sparrow.");
+                return;
+            }
+
+            System.out.println("Sally Sparrow validly logged in.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Sally Sparrow's account could not be created: " + e.getMessage());
         }
-
-        System.out.println("User is now logged in");
     }
 
     /**

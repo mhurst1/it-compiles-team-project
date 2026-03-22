@@ -60,7 +60,7 @@ QuestionApplication app = new QuestionApplication();
     System.out.println(" --------------------------------------------");
     System.out.printf(" Title    : " + dailyChallenge.getTitle());
     System.out.printf(" Difficulty       : " + dailyChallenge.getDifficulty());
-    System.out.printf( " Language     : " + , dailyChallenge.getLanguage());
+    System.out.printf( " Language     : " + dailyChallenge.getLanguage());
     System.out.println(" --------------------------------------------");
 
     //Step 4: CLICK ON QUESTION AND REVIEW SOLUTIONS
