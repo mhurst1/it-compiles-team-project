@@ -113,6 +113,30 @@ public class Driver {
             System.out.println("newuser is now logged out");
         }
     }
+
+    //Scenario 4: Sally successfully creates an account, sets contributor status, and logs in
+    public void scenario4() {
+        System.out.println();
+
+        // Sally creates an account
+        questionApplication.createAccount(
+                 "Sally", "Sparrow",
+                    "ssparrow",
+                    "sparrowpass2",
+                    "sally.sparrow@email.com",
+                    2028,
+                    "U33334444");
+
+        
+        // Sally sets contributor status
+        questionApplication.setStatus("ssparrow", "contributor");
+
+        // Sally logs in
+        questionApplication.login("ssparrow", "sparrowpass2");
+    
+    }
+
+
     
 
     public static void main(String[] args) {
