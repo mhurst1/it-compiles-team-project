@@ -50,6 +50,7 @@ public class User {
     public User(String firstName, String lastName, String username, 
                     String password, String email, int graduationYear, String idUSC){
 
+        this.id = UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -57,6 +58,7 @@ public class User {
         this.email = email;
         this.graduationYear = graduationYear;
         this.idUSC = idUSC;
+        this.status = Status.USER;
 
         this.starredQuestions = new ArrayList<>();
         this.answeredQuestions = new ArrayList<>();

@@ -74,8 +74,7 @@ public class DataLoader{
         int gradYear = extractInt(obj, "graduation-year", 0);
         String idUsc = extractString(obj, "id-usc");
 
-        // Set password to default for now. (Probably should include it within the json)
-        String password = "";
+        String password = extractString(obj, "password");
         Status status = Status.USER;
 
         ArrayList<Question> starred = new ArrayList<>();
