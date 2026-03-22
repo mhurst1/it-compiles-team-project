@@ -20,7 +20,12 @@ public class Achievement {
     private static final int QUESTION_POINT_VALUE = 20;
     private static final int POINTS_PER_LEVEL = 100;
 
-    public Achievement() {
+    public Achievement(int leaderboardPlace, int userLevel, int allVotePoints, int streak) {
+        this.leaderboardPlace = leaderboardPlace;
+        this.userLevel = userLevel;
+        this.allVotePoints = allVotePoints;
+        this.streak = streak;
+
     }
 
     // Call this when user receives a vote

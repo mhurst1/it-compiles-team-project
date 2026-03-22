@@ -122,7 +122,15 @@ public class DataLoader{
         String achArr = extractArrayRaw(obj, "achievements"); // "[{...},{...}]"
         if (achArr != null) {
             List<String> achObjs = splitTopLevelObjects(achArr);
-            for (int i = 0; i < achObjs.size(); i++) achievements.add(new Achievement());
+            for (String achObj : achObjs) {
+                int leaderboardPlace = extractInt(achObj, "leaderboard-place", 0);
+                int userLevel = extractInt(achObj, "user-level", 1);
+                int allVotePoints = extractInt(achObj, "all-vote-points", 0);
+                int streak = extractInt(achObj, "streak", 0);
+                Achievement a = new Achievement(leaderboardPlace, userLevel, allVotePoints, streak);
+                 achievements.add(a);
+            }
+
         }
 
         return new User(
