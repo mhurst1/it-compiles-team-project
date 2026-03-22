@@ -22,7 +22,7 @@ import java.util.*;
 public class DataLoader{
 
     /** Base directory containing the JSON data files. */
-    private static final String DATA_DIR = "it-compiles-team-project/json";
+    private static final String DATA_DIR = "json";
 
     /** Path to the users JSON file. */
     private static final String USERS_PATH = DATA_DIR + "/users.json";
