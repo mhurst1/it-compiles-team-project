@@ -8,8 +8,9 @@ import java.util.*;
 public class DataLoader{
 
     // PATHS FOR BOTH THE QUESTION AND THE USER
-    private static final String USERS_PATH = "json/users.json";
-    private static final String QUESTIONS_PATH = "json/question.json";
+    private static final String DATA_DIR = "it-compiles-team-project/json";
+    private static final String USERS_PATH = DATA_DIR + "/users.json";
+    private static final String QUESTIONS_PATH = DATA_DIR + "/question.json";
 
     /**
      * GET USERS SECTION DATA LOADER

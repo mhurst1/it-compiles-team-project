@@ -9,13 +9,14 @@ import java.util.UUID;
 public class DataWriter {
 
     // PATHS FOR BOTH THE QUESTION AND THE USER
-    private static final String USERS_PATH = "json/users.json";
-    private static final String QUESTIONS_PATH = "json/question.json";
+    private static final String DATA_DIR = "it-compiles-team-project/json";
+    private static final String USERS_PATH = DATA_DIR + "/users.json";
+    private static final String QUESTIONS_PATH = DATA_DIR + "/question.json";
 
     public boolean saveUsers() {
         try {
             List<User> users = UserList.getInstance().getUsers();
-            new File("json").mkdirs();
+            new File(DATA_DIR).mkdirs();
 
             try (PrintWriter w = new PrintWriter(USERS_PATH)) {
                 w.println("[");
@@ -53,7 +54,7 @@ public class DataWriter {
     public boolean saveQuestions() {
         try {
             List<Question> questions = QuestionList.getInstance().getQuestions();
-            new File("json").mkdirs();
+            new File(DATA_DIR).mkdirs();
 
             try (PrintWriter w = new PrintWriter(QUESTIONS_PATH)) {
                 w.println("[");
