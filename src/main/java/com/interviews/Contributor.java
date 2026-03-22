@@ -10,11 +10,22 @@ public class Contributor extends User{
 
     private ArrayList<Question> postedQuestions;
 
+    /**
+     * Creates a contributor user.
+     *
+     * @param firstName the contributor's first name
+     * @param lastName the contributor's last name
+     * @param username the contributor's username
+     * @param password the contributor's password
+     * @param email the contributor's email
+     * @param graduationYear the contributor's graduation year
+     * @param idUSC the contributor's USC ID
+     */
     public Contributor(String firstName, String lastName, String username, 
                        String password, String email, int graduationYear, String idUSC){
         super(firstName, lastName, username, password, email, graduationYear, idUSC);
 
-        this.postedQuestions = new ArrayList<>(); // Should I be initializing this?? 
+        this.postedQuestions = new ArrayList<>();
     }
 
     /**

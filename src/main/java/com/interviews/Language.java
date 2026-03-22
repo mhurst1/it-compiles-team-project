@@ -1,7 +1,7 @@
 package com.interviews;
 
 /**
- * An enumeration for the different languages the problems could be shown in
+ * Represents the programming or markup languages supported by a question.
  */
 public enum Language {
     JAVA,

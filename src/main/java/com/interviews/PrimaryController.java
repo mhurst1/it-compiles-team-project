@@ -4,10 +4,15 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 
 /**
- * This class serves as the primary controller for the JavaFX application. It contains methods that handle
+ * Controller for the primary JavaFX view.
  */
 public class PrimaryController {
 
+    /**
+     * Switches from the primary view to the secondary view.
+     *
+     * @throws IOException if the secondary FXML view cannot be loaded
+     */
     @FXML
     private void switchToSecondary() throws IOException {
         App.setRoot("secondary");

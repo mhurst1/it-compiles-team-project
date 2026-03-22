@@ -22,7 +22,7 @@ import java.util.*;
 public class DataLoader{
 
     /** Base directory containing the JSON data files. */
-    private static final String DATA_DIR = "it-compiles-team-project/json";
+    private static final String DATA_DIR = "json";
 
     /** Path to the users JSON file. */
     private static final String USERS_PATH = DATA_DIR + "/users.json";
@@ -122,7 +122,15 @@ public class DataLoader{
         String achArr = extractArrayRaw(obj, "achievements"); // "[{...},{...}]"
         if (achArr != null) {
             List<String> achObjs = splitTopLevelObjects(achArr);
-            for (int i = 0; i < achObjs.size(); i++) achievements.add(new Achievement());
+            for (String achObj : achObjs) {
+                int leaderboardPlace = extractInt(achObj, "leaderboard-place", 0);
+                int userLevel = extractInt(achObj, "user-level", 1);
+                int allVotePoints = extractInt(achObj, "all-vote-points", 0);
+                int streak = extractInt(achObj, "streak", 0);
+                Achievement a = new Achievement(leaderboardPlace, userLevel, allVotePoints, streak);
+                 achievements.add(a);
+            }
+
         }
 
         return new User(

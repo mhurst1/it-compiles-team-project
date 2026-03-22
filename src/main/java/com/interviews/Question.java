@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * 
- * A class that creates a Question like a technical question that 
- * users can browse and add solutions to
+ * Represents a question that users can browse, answer, and discuss.
  */
 public class Question {
     
@@ -323,8 +321,8 @@ public class Question {
         */
 
     /**
-     * a method that searches through the saved questions 
-     * for the given question
+     * Prints the title when it matches the provided search string.
+     *
      * @param titleSearch the title of the question
      */
     public void searchQuestions(String titleSearch){

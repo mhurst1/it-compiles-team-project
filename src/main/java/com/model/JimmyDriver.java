@@ -21,7 +21,7 @@ public class JimmyDriver {
 
     public static void main(String [] args) {
 
-QuestionApplication app = new QuestionApplication();
+    QuestionApplication app = new QuestionApplication();
 
     //Step 1: LOGIN 
     boolean loggedIn = app.login("jcricket6", "ilovecrickets3");
@@ -37,9 +37,14 @@ QuestionApplication app = new QuestionApplication();
 
     //Step 2: STREAK
 
-    Achievement achievement = currentUser.getAchievements().get(0);
-    System.out.println(" Daily Streak : " + achievement.getStreak() + " days");
-    System.out.println(" Current Level: " + achievement.getLevel());
+    Achievement achievement = null;
+    if(!currentUser.getAchievements().isEmpty()){
+        achievement = currentUser.getAchievements().get(0);
+        System.out.println(" Daily Streak : " + achievement.getStreak() + " days");
+        System.out.println(" Current Level: " + achievement.getLevel());
+    } else { 
+        System.out.println("No achievements yet!");
+    }
 
     //Step 3: DAILY CHALLENGE
 

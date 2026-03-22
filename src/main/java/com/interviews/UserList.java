@@ -11,6 +11,9 @@ public class UserList {
     private static UserList userList;
     private ArrayList<User> users;
 
+    /**
+     * Creates a user list by loading users from persistent storage.
+     */
     public UserList(){
         users = DataLoader.getUsers();
     }
@@ -66,8 +69,9 @@ public class UserList {
     }
 
     /**
-     * Method that grabs the user by their username
-     * @param username
+     * Returns the user with the given username.
+     *
+     * @param username the username to search for
      * @return the User that matches that username
      */
     public User getUser(String username){
@@ -80,7 +84,8 @@ public class UserList {
     }
 
     /**
-     * a method that deletes the user
+     * Removes a user from the in-memory list.
+     *
      * @param user the current user
      */
     public void deleteUser(User user){
@@ -112,7 +117,7 @@ public class UserList {
     }
 
     /**
-     * a method that saves the users to the data writer
+     * Persists the current user list through the data writer.
      */
     public void save(){
         DataWriter writer = new DataWriter();
