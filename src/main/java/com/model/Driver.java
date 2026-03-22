@@ -38,6 +38,7 @@ public class Driver {
         scenario1();
         scenario2();
         scenario3();
+        scenario4();
     }
 
     /**
