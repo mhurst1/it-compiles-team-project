@@ -21,6 +21,18 @@ import com.interviews.User;
 import com.interviews.UserSolution;
 
 
+/**
+ * JimmyDriver class simulates a user named "Jimmy Cricket" interacting with the QuestionApplication system.
+ * The driver performs the following steps:
+ * 1. Logs in with valid credentials.
+ * 2. Checks and prints the user's current daily streak and achievement level.
+ * 3. Retrieves and prints the daily challenge question.
+ * 4. Reviews the solutions for the daily challenge question.
+ * 5. Posts a comment on the second solution of the daily challenge question.
+ * 6. Prints the daily challenge question and its details to a text file.
+ * 7. Searches for questions related to "Binary Search Tree" and prints the results.
+ * 8. Logs out of the application.
+ */
 public class JimmyDriver {
 
     public static void main(String [] args) {
@@ -129,7 +141,10 @@ QuestionApplication app = new QuestionApplication();
 
     }
 
-
+    /**
+     * Helper method to print the details of a question in a formatted manner.
+     * @param q The Question object to be printed.
+     */
     private static void printQuestion(Question q) {
 
         String bar = "   " + "-".repeat(56);
@@ -179,6 +194,11 @@ QuestionApplication app = new QuestionApplication();
         System.out.println(bar);
     }
 
+    /**
+     * Helper method to print the details of a question to a text file in a formatted manner.
+     * @param q The Question object to be printed.
+     * @param filename The name of the file to which the question details will be written.
+     */
 private static void printQuestionToFile(Question q, String filename){
 
             try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
