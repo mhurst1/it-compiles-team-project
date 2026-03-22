@@ -24,9 +24,6 @@ public class Driver {
         scenario1();
         scenario2();
         scenario3();
-        scenario4();
-        scenario5();
-        scenario6();
     }
 
     /**
@@ -111,99 +108,6 @@ public class Driver {
         }
     }
 
-    //Scenario 4 shows a user logging in, adding a question, and then logging out.
-    public void scenario4() {
-        System.out.println();
-
-        questionApplication.login("asmith", "");
-
-        if (questionApplication.getCurrentUser() == null) {
-            System.out.println("Sorry we couldn't login.");
-            return;
-        }
-
-        System.out.println("asmith is now logged in");
-
-        // Add a question
-        questionApplication.addQuestion(
-                "How to implement a linked list in Java?",
-                null, 
-                "What is the process of creating and using a LinkedList?",
-                Difficulty.MEDIUM,
-                Language.JAVA, null, null);
-
-        System.out.println("asmith has added a question.");
-
-        questionApplication.logout();
-
-        if (questionApplication.getCurrentUser() == null) {
-            System.out.println("asmith is now logged out");
-        }
-    }
-
-    //Scenario 5 shows a user logging in, accessing a question, uploading a solution, and then logging out.
-    public void scenario5() {
-        System.out.println();
-
-        questionApplication.login("asmith", "");
-
-        if (questionApplication.getCurrentUser() == null) {
-            System.out.println("Sorry we couldn't login.");
-            return;
-        }
-
-        System.out.println("asmith is now logged in");
-
-        // Access a question
-        questionApplication.findQuestion("How to implement a linked list in Java?");
-
-        // Upload a solution
-        questionApplication.addUserSolution(
-                null,
-                 "Here is a simple implementation of a linked list in Java...",
-                null, 
-                null,
-                 0);
-
-        System.out.println("asmith has uploaded a solution.");
-
-        questionApplication.logout();
-
-        if (questionApplication.getCurrentUser() == null) {
-            System.out.println("asmith is now logged out");
-        }
-    }
-
-    //Scenario 6 shows a user logging in, accessing a question uploaded by asmith, commenting on the solution, and then logging out.
-    public void scenario6() {
-        System.out.println();
-
-        questionApplication.login("jbrown1", "");
-
-        if (questionApplication.getCurrentUser() == null) {
-            System.out.println("Sorry we couldn't login.");
-            return;
-        }
-
-        System.out.println("jbrown1 is now logged in");
-
-        // Access a question
-        questionApplication.findQuestion("How to implement a linked list in Java?");
-
-        // Comment on the solution
-        questionApplication.addComment(
-                "This is a great question! I have a question about the time complexity.",
-                null, 
-                null);
-
-        System.out.println("jbrown1 has commented on the solution.");
-
-        questionApplication.logout();
-
-        if (questionApplication.getCurrentUser() == null) {
-            System.out.println("jbrown1 is now logged out");
-        }
-    }
     
 
 
