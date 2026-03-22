@@ -39,6 +39,7 @@ public class QuestionApplication {
         return currentQuestion;
     }
 
+    /* Returns the users solution */
     public UserSolution getCurrentUserSolution() {
         return currentUserSolution;
     }
@@ -105,6 +106,7 @@ public class QuestionApplication {
         }
      }
         return false;
+
     }
 
 
@@ -313,7 +315,11 @@ public class QuestionApplication {
             System.out.println("No user is currently logged in.");
             return;
         }
-        
+
+        DataWriter writer = new DataWriter();
+        writer.saveUsers();
+        writer.saveQuestions();
+
         currentUser = null;
         
     }
