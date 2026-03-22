@@ -5,16 +5,39 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+/**
+ * Loads user and question data from JSON files and converts that data
+ * into Java objects used by the interview application.
+ * 
+ * This class manually parses JSON text without using an external JSON library.
+ * It supports loading:
+ * Users
+ * Questions
+ * Sections inside questions
+ * Solutions and nested comment threads
+ * 
+ * The class also includes a tester in the main method to verify that
+ * the JSON data is being loaded correctly.
+ */
 public class DataLoader{
 
-    // PATHS FOR BOTH THE QUESTION AND THE USER
-    private static final String DATA_DIR = "it-compiles-team-project/json";
+    /** Base directory containing the JSON data files. */
+    private static final String DATA_DIR = "json";
+
+    /** Path to the users JSON file. */
     private static final String USERS_PATH = DATA_DIR + "/users.json";
+
+    /** Path to the questions JSON file. */
     private static final String QUESTIONS_PATH = DATA_DIR + "/question.json";
 
     /**
-     * GET USERS SECTION DATA LOADER
-     * @return
+     * Loads all users from the users JSON file.
+     * 
+     * The method reads the raw JSON, splits the top-level user objects,
+     * parses each one, and stores them in an ArrayList.
+     * 
+     * @return an ArrayList of User objects loaded from the JSON file;
+     *         returns an empty list if the file cannot be read
      */
     public static ArrayList<User> getUsers() {
         try {
@@ -35,8 +58,14 @@ public class DataLoader{
     }
 
     /**
-     * GET QUESTIONS SECTION DATA LOADER
-     * @return
+     * Loads all questions from the questions JSON file.
+     * 
+     * This method first loads users so question authors and solution authors
+     * can be connected to the proper User objects through their UUIDs.
+     * It then parses the question JSON and builds Question objects.
+     * 
+     * @return an ArrayList of Question objects loaded from the JSON file;
+     *         returns an empty list if the file cannot be read
      */
     public static ArrayList<Question> getQuestions() {
         try {
@@ -63,6 +92,15 @@ public class DataLoader{
         }
     }
 
+    /**
+     * Parses a single user JSON object into a User object.
+     * 
+     * The method extracts user fields such as ID, name, email, graduation year,
+     * and achievements. If the user ID is missing or invalid, null is returned.
+     * 
+     * @param obj the raw JSON substring representing one user object
+     * @return the parsed User object, or null if the ID is invalid
+     */
     private static User parseUser(String obj) {
         UUID id = asUUID(extractString(obj, "id"));
         if (id == null) return null;
@@ -80,7 +118,6 @@ public class DataLoader{
         ArrayList<Question> starred = new ArrayList<>();
         ArrayList<Question> answered = new ArrayList<>();
 
-       // We are going to need getters and setters for the achievement class
         ArrayList<Achievement> achievements = new ArrayList<>();
         String achArr = extractArrayRaw(obj, "achievements"); // "[{...},{...}]"
         if (achArr != null) {
@@ -95,6 +132,16 @@ public class DataLoader{
         );
     }
 
+    /**
+     * Parses a single question JSON object into a Question object.
+     * 
+     * This includes the main question data, associated user, difficulty,
+     * language, hints, question sections, solutions, and threaded comments.
+     * 
+     * @param obj the raw JSON substring representing one question object
+     * @param usersById a map of user UUIDs to User objects for linking authors
+     * @return the parsed Question object
+     */
     private static Question parseQuestion(String obj, Map<UUID, User> usersById) {
         UUID id = asUUID(extractString(obj, "id"));
         String title = extractString(obj, "title");
@@ -166,7 +213,15 @@ public class DataLoader{
     }
 
 
-    // Helpers 
+    /**
+     * Splits a JSON array of objects into a list of raw object strings.
+     * 
+     * This method is designed to split only top-level JSON objects and
+     * correctly handles nested braces and quoted strings.
+     * 
+     * @param json the raw JSON text containing an array of objects
+     * @return a list of individual JSON object substrings
+     */
     private static List<String> splitTopLevelObjects(String json) {
         List<String> objects = new ArrayList<>();
         if (json == null) return objects;
@@ -218,11 +273,11 @@ public class DataLoader{
     }
 
     /**
-     * Extracts a JSON string value for a key inside an object substring.
+     * Returns an empty string if the key is missing or not a string.
      * 
-     * 
-     * Example: "title": "What is JSON?" -> returns What is JSON?
-     * Returns "" if missing.
+     * @param obj the raw JSON object string
+     * @param key the key whose string value should be extracted
+     * @return the extracted string value, or an empty string if not found
      */
     private static String extractString(String obj, String key) {
         if (obj == null){
@@ -272,7 +327,11 @@ public class DataLoader{
 
     /**
      * Extracts a raw JSON array substring for a key:  Example: "hints": [ ... ]
-     * Returns the substring including brackets
+     * The returned string includes the surrounding square brackets.
+     * 
+     * @param obj the raw JSON object string
+     * @param key the key whose array value should be extracted
+     * @return the raw JSON array substring including brackets, or null if not found
      */
     private static String extractArrayRaw(String obj, String key) {
         if (obj == null) return null;
@@ -293,6 +352,18 @@ public class DataLoader{
         return obj.substring(i, end + 1);
     }
 
+    /**
+     * Finds the matching closing bracket for a given opening bracket position.
+     * 
+     * This helper is used to correctly locate the end of nested JSON arrays
+     * or objects while ignoring brackets that appear inside quoted strings.
+     * 
+     * @param s the string being searched
+     * @param start the starting index of the opening bracket
+     * @param open the opening bracket character
+     * @param close the closing bracket character
+     * @return the index of the matching closing bracket, or -1 if not found
+     */
     private static int findMatchingBracket(String s, int start, char open, char close) {
         int depth = 0;
         boolean inString = false;
@@ -312,6 +383,17 @@ public class DataLoader{
         return -1;
     }
 
+    /**
+     * Extracts an integer value for a given key from a JSON object substring.
+     * 
+     * If the key is missing or the value cannot be parsed as an integer,
+     * the fallback value is returned.
+     * 
+     * @param obj the raw JSON object string
+     * @param key the key whose integer value should be extracted
+     * @param fallback the default value to return if parsing fails
+     * @return the parsed integer value, or the fallback value
+     */
     private static int extractInt(String obj, String key, int fallback) {
         if (obj == null) return fallback;
         String pattern = "\"" + key + "\"";
@@ -335,6 +417,15 @@ public class DataLoader{
         }
     }
 
+    /**
+     * Parses a raw JSON string array into an ArrayList of Java strings.
+     * 
+     * This method supports escaped characters and also handles
+     * non-string raw values by storing them as trimmed text.
+     * 
+     * @param arrayRaw the raw JSON array string
+     * @return an ArrayList containing the parsed string values
+     */
     private static ArrayList<String> parseStringArray(String arrayRaw) {
         ArrayList<String> out = new ArrayList<>();
         if (arrayRaw == null) return out;
@@ -379,6 +470,15 @@ public class DataLoader{
         return out;
     }
 
+    /**
+     * Returns the first string stored in a JSON string array for a given key.
+     * 
+     * If the array is empty or missing, an empty string is returned.
+     * 
+     * @param obj the raw JSON object string
+     * @param key the key whose array should be checked
+     * @return the first string in the array, or an empty string if none exists
+     */
     private static String firstStringInStringArray(String obj, String key) {
         String rawArray = extractArrayRaw(obj, key);
         ArrayList<String> list = parseStringArray(rawArray);
@@ -389,6 +489,15 @@ public class DataLoader{
         return list.get(0);
     }
 
+    /**
+     * Converts a string into a UUID object.
+     * 
+     * If the string is null, blank, or not a valid UUID format,
+     * this method returns null.
+     * 
+     * @param s the string to convert
+     * @return the UUID represented by the string, or null if invalid
+     */
     private static UUID asUUID(String s) {
         if (s == null || s.isBlank()){
             return null;
@@ -400,6 +509,15 @@ public class DataLoader{
         }
     }
 
+    /**
+     * Converts a difficulty string into a Difficulty enum value.
+     * 
+     * Accepts EASY, MEDIUM, DIFFICULT, and HARD.
+     * HARD is treated as DIFFICULT.
+     * 
+     * @param s the difficulty string
+     * @return the matching Difficulty enum value, or null if not recognized
+     */
     private static Difficulty parseDifficulty(String s) {
         if (s == null){
             return null;
@@ -420,7 +538,15 @@ public class DataLoader{
         return null;
     }
 
-    // Because in the language tab these all have similar names, we need to differentiate them.
+    /**
+     * Converts a language string into a Language enum value.
+     * 
+     * Supports common variations such as JAVASCRIPT and JAVA_SCRIPT.
+     * If parsing fails, the method defaults to JAVASCRIPT.
+     * 
+     * @param s the language string
+     * @return the matching Language enum value, or null if the input is null
+     */
     private static Language parseLanguage(String s) {
         if (s == null){
             return null;
@@ -439,6 +565,16 @@ public class DataLoader{
         }
     }
 
+    /**
+     * Recursively parses a JSON comments array into a list of Comment objects.
+     * 
+     * Each comment may contain nested replies, which are parsed by calling
+     * this same method again.
+     * 
+     * @param commentsRaw the raw JSON array string containing comment data
+     * @param usersById a map of user UUIDs to User objects for linking comment authors
+     * @return an ArrayList of parsed Comment objects
+     */
     private static ArrayList<Comment> parseComments(String commentsRaw, Map<UUID, User> usersById) {
     ArrayList<Comment> comments = new ArrayList<>();
 
@@ -466,11 +602,14 @@ public class DataLoader{
     return comments;
     }
 
+
     /**
-     * THIS IS THE TESTER FOR THE DATALOADER
+     * Tester method for verifying that users, questions, solutions,
+     * and comments load correctly from the JSON files.
      * 
-     * GPT Loaded TESTER based on the code written above
+     * It prints the loaded objects in a readable format to the console.
      * 
+     * @param args command-line arguments (not used)
      */
     public static void main(String[] args) {
 
@@ -558,6 +697,15 @@ public class DataLoader{
         }
     }
 
+    /**
+     * Recursively prints a comment and all nested replies with indentation.
+     * 
+     * This is used by the tester to show threaded comment structures
+     * in a readable format.
+     * 
+     * @param comment the comment to print
+     * @param indent the indentation prefix used for formatting nested replies
+     */
     private static void printComment(Comment comment, String indent) {
         if (comment == null) {
             return;

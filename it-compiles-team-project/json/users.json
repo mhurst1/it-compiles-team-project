@@ -1,0 +1,5 @@
+[
+  {"id":"1946c7fe-b5a5-4ec3-896f-7d866dc47486","first-name":"Sullivan","last-name":"Sparrow","username":"ssparrow","password":"sparrowpass1","email":"sullivan.sparrow@email.com","graduation-year":2027,"id-usc":"U11112222","starred-questions":[],"answered-questions":[],"achievements":[]},
+  {"id":"a330466f-a73d-45d7-ad0d-6a34b135ff69","first-name":"Sally","last-name":"Sparrow","username":"sallysparrow","password":"sparrowpass2","email":"sally.sparrow@email.com","graduation-year":2028,"id-usc":"U33334444","starred-questions":[],"answered-questions":[],"achievements":[]},
+  {"id":"b606a328-3122-4007-bdf8-2514711d3416","first-name":"New","last-name":"User","username":"newuser","password":"newpass","email":"newuser@email.com","graduation-year":2026,"id-usc":"U12345678","starred-questions":[],"answered-questions":[],"achievements":[]}
+]

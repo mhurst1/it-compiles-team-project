@@ -6,11 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
 public class DataWriter {
 
-    // PATHS FOR BOTH THE QUESTION AND THE USER
+    /** Base directory containing the JSON data files. */
     private static final String DATA_DIR = "it-compiles-team-project/json";
+
+    /** Path to the users JSON file. */
     private static final String USERS_PATH = DATA_DIR + "/users.json";
+
+    /** Path to the questions JSON file. */
     private static final String QUESTIONS_PATH = DATA_DIR + "/question.json";
 
     public boolean saveUsers() {
