@@ -58,11 +58,6 @@ public class JimmyDriver {
     Question dailyChallenge = allQuestions.get(0);
 
     System.out.println(" Today's challenge: ");
-    System.out.println(" --------------------------------------------");
-    System.out.printf(" Title    : " + dailyChallenge.getTitle());
-    System.out.printf(" Difficulty       : " + dailyChallenge.getDifficulty());
-    System.out.printf( " Language     : " + dailyChallenge.getLanguage());
-    System.out.println(" --------------------------------------------");
 
     //Step 4: CLICK ON QUESTION AND REVIEW SOLUTIONS
     //method below
