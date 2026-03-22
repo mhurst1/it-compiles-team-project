@@ -37,9 +37,14 @@ public class JimmyDriver {
 
     //Step 2: STREAK
 
-    Achievement achievement = currentUser.getAchievements().get(0);
-    System.out.println(" Daily Streak : " + achievement.getStreak() + " days");
-    System.out.println(" Current Level: " + achievement.getLevel());
+    Achievement achievement = null;
+    if(!currentUser.getAchievements().isEmpty()){
+        achievement = currentUser.getAchievements().get(0);
+        System.out.println(" Daily Streak : " + achievement.getStreak() + " days");
+        System.out.println(" Current Level: " + achievement.getLevel());
+    } else { 
+        System.out.println("No achievements yet!");
+    }
 
     //Step 3: DAILY CHALLENGE
 
