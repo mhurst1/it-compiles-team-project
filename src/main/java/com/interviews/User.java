@@ -58,6 +58,12 @@ public class User {
         this.graduationYear = graduationYear;
         this.idUSC = idUSC;
 
+        this.starredQuestions = new ArrayList<>();
+        this.answeredQuestions = new ArrayList<>();
+        this.achievements = new ArrayList<>();
+        this.comments = new ArrayList<>();
+        this.solutions = new ArrayList<>();
+
     }
 
     /**
