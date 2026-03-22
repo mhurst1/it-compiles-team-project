@@ -23,7 +23,6 @@ public class JimmyDriver {
 
 QuestionApplication app = new QuestionApplication();
 
-System.out.println(System.getProperty("user.dir"));
     //Step 1: LOGIN 
     boolean loggedIn = app.login("jcricket6", "ilovecrickets3");
 
