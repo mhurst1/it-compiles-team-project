@@ -64,6 +64,7 @@ QuestionApplication app = new QuestionApplication();
     System.out.println(" --------------------------------------------");
 
     //Step 4: CLICK ON QUESTION AND REVIEW SOLUTIONS
+    //method below
 
     printQuestion(dailyChallenge);
 
@@ -94,6 +95,7 @@ QuestionApplication app = new QuestionApplication();
         }
 
         //Step 7: JIMMY PRINTS QUESTION TO A TEXT FILE
+        //method below
 
         String filename = dailyChallenge.getTitle().replace(" ", "_") + "_Review.txt";
         printQuestionToFile(dailyChallenge, filename);
