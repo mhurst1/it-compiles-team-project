@@ -78,16 +78,6 @@ public class Driver {
 
         try {
             questionApplication.createAccount(
-                    "Sullivan", "Sparrow",
-                    "ssparrow",
-                    "sparrowpass1",
-                    "sullivan.sparrow@email.com",
-                    2027,
-                    "U11112222");
-
-            System.out.println("Sullivan Sparrow's account was created.");
-
-            questionApplication.createAccount(
                     "Sally", "Sparrow",
                     "ssparrow",
                     "sparrowpass2",
