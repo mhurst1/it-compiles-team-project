@@ -46,9 +46,25 @@ public class Driver {
      * Runs the configured driver scenarios in order.
      */
     public void run() {
+
+        System.out.println("---------------------------------------\n" 
+                            + "Scenario 1 \n" 
+                            + "---------------------------------------\n");
         //scenario1();
+
+        System.out.println("---------------------------------------\n" 
+                            + "Scenario 2 \n" 
+                            + "---------------------------------------\n");
         scenario2();
+
+        System.out.println("---------------------------------------\n" 
+                            + "Scenario 3 \n" 
+                            + "---------------------------------------\n");
         scenario3();
+
+        System.out.println("---------------------------------------\n" 
+                            + "Scenario 4 \n" 
+                            + "---------------------------------------\n");
         //scenario4();
     }
 
