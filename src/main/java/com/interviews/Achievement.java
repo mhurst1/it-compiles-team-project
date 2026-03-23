@@ -119,7 +119,7 @@ public class Achievement {
         LocalDate today = LocalDate.now();
 
         if (lastActiveDate == null) {
-            streak = 1;
+            streak++;
         } else if (lastActiveDate.plusDays(1).equals(today)) {
             streak++;
         } else if (!lastActiveDate.equals(today)) {
