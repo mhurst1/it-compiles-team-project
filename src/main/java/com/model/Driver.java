@@ -259,8 +259,8 @@ public class Driver {
 
         ArrayList<UserSolution> solutions = dailyChallenge.getSolutionList();
 
-        if (solutions != null && solutions.size() >= 2) {
-            UserSolution solutionTwo = solutions.get(1);
+        if (solutions != null && solutions.size() >= 1) {
+            UserSolution solutionTwo = solutions.get(0);
 
             String dateStr = LocalDate.now().format(DateTimeFormatter.ofPattern("MMMM d, yyyy"));
             String commentText = "[" + currentUser.getUsername() + " - " + dateStr + "] "
