@@ -38,8 +38,8 @@ public class QuestionApplication {
         this.currentQuestion = null;
         this.currentUser = null;
         this.currentUserSolution = null;
-        this.questionList = new QuestionList();
-        this.userList = new UserList();
+        this.questionList = QuestionList.getInstance();
+        this.userList = UserList.getInstance();
 
     }
 
@@ -268,13 +268,10 @@ public class QuestionApplication {
             ArrayList<Comment> replies, int totalVote) {
         
         UserSolution newSolu = new UserSolution(user, description, solutionID, replies, totalVote);
+        if (currentQuestion != null) {
+            newSolu.setQuestionId(currentQuestion.getId());
+        }
         currentQuestion.getSolutionList().add(newSolu);
-
-    }
-
-    //?? What solutions are we finding? In answered questions? Or searching a particular user? Idk what we have this method for tbh.
-    public UserSolution findSolution() {
-        return null;
 
     }
 
@@ -340,16 +337,11 @@ public class QuestionApplication {
         currentUser.getStarredQuestions().add(question);
     }
 
-    //* what do we want this to do  */
-    public void editUser(User user, UUID id) {
-
-    }
-
     /**
      * a method that logs the user out of their account
+     * This method checks if there is a currently logged-in user. If there is, it saves the current state of users and questions using a DataWriter, and then sets the current user to null, effectively logging them out. If no user is currently logged in, it simply prints a message indicating that there is no user to log out.
      */
     public void logout(){
-
         if (currentUser == null) {
             System.out.println("No user is currently logged in.");
             return;
@@ -360,9 +352,12 @@ public class QuestionApplication {
         writer.saveQuestions();
 
         currentUser = null;
-        
     }
 
+    /**
+     * A method that sets the status of a user. This method takes a username and a Status enum value as parameters. It retrieves the User object associated with the given username from the user list. If the user exists, it updates their status to the provided Status value and saves the updated user list. This allows users to change their status (e.g., active, inactive, banned) within the application.
+      * @param username the username of the user whose status is to be updated
+     */
      public void setStatus(String username, Status status) {
         User user = userList.getUser(username);
         if (user != null) {
@@ -371,20 +366,28 @@ public class QuestionApplication {
         }
     }
 
-
-
+    /**
+     * A method that adds a solution to a question. This method takes a string representing the solution, an object representing the user who created the solution, and another object representing the question to which the solution is being added. It creates a new UserSolution object using these parameters and adds it to the list of solutions for the specified question. This allows users to contribute solutions to questions within the application.
+       * @param solutionDescription the description of the solution being added
+     */
     public void addSolution(String string, Object object, Object object2) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'addSolution'");
     }
 
+    /**
+     * A method that adds a comment to a question or solution. This method takes a string representing the comment, an object representing the user who created the comment, and another object representing the question or solution to which the comment is being added. It creates a new Comment object using these parameters and adds it to the list of comments for the specified question or solution. This allows users to engage in discussions and provide feedback on questions and solutions within the application.
+       * @param commentDescription the description of the comment being added
+     */
     public void addComment(String question, Object user, Object comment) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'addComment'");
     }
 
+    /**
+     * A method that sets the status of a user. This method takes a string representing the username and another string representing the new status. It retrieves the User object associated with the given username from the user list, updates its status to the new value, and saves the updated user list. This allows users to change their status (e.g., active, inactive, banned) within the application.
+       * @param username the username of the user whose status is to be updated
+      * @param newStatus the new status to be set for the user
+     */
     public void setStatus(String string, String string2) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setStatus'");
     }
 

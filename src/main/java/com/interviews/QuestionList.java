@@ -37,8 +37,11 @@ public class QuestionList {
     }
 
     /**
-     * ??? I am assuming this is used to search for a question
-     * If it is we need to change the name
+     * Searches for questions that contain the specified keyword in their title. 
+     * This method iterates through the list of questions and checks if the title of each question 
+     * contains the given keyword (case-insensitive). If a question's title matches the keyword, 
+     * it is added to the result list, which is then returned at the end. This allows users to 
+     * search for questions based on specific keywords in their titles.
      * 
      * @param keyword
      * @return

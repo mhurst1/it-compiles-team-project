@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 import com.interviews.Achievement;
 import com.interviews.Comment;
+import com.interviews.DataWriter;
 import com.interviews.Question;
 
 import java.util.ArrayList;
@@ -119,6 +120,10 @@ public class JimmyDriver {
         System.out.printf(" Streak updated: " + oldStreak + " -> " + achievement.getStreak() + "days");
 
         //Step 11: JIMMY LOGS OUT
+
+        DataWriter writer = new DataWriter();
+        writer.saveUsers();
+        writer.saveQuestions();
 
         app.logout();
         System.out.println(" Jimmy has been logged out. See you next time!");

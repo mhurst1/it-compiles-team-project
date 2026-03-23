@@ -11,6 +11,7 @@ public class UserSolution {
     private String description;
     private ArrayList<Comment> replies;
     private UUID solutionID;
+    private UUID questionID;
     public boolean userVote;
     public int totalVote; // I think this can be replaced with upVotes and downVotes
 
@@ -26,7 +27,7 @@ public class UserSolution {
     public UserSolution(User user, String description, UUID solutionID, ArrayList<Comment> replies, int totalVote){
         this.user = user;
         this.description = description;
-        this.solutionID = solutionID;
+        this.solutionID = (solutionID == null) ? UUID.randomUUID() : solutionID;
         this.replies = replies;
         this.totalVote = totalVote;
     }
@@ -100,6 +101,15 @@ public class UserSolution {
         return solutionID;
     }
 
+    /**
+     * Returns the owning question identifier for this solution.
+     *
+     * @return the question ID
+     */
+    public UUID getQuestionId() {
+        return questionID;
+    }
+
     // ?? Are we just using thread as a mean to return replies
     //yes and we already have this method above
     /*
@@ -115,6 +125,15 @@ public class UserSolution {
      */
     public void setUserVote(boolean userVote){
         this.userVote = userVote;
+    }
+
+    /**
+     * Stores the owning question identifier for this solution.
+     *
+     * @param questionID the parent question ID
+     */
+    public void setQuestionId(UUID questionID) {
+        this.questionID = questionID;
     }
 
     /* I DONT THINK WE NEED THESE MH
