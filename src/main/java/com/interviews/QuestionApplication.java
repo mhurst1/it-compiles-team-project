@@ -268,6 +268,9 @@ public class QuestionApplication {
             ArrayList<Comment> replies, int totalVote) {
         
         UserSolution newSolu = new UserSolution(user, description, solutionID, replies, totalVote);
+        if (currentQuestion != null) {
+            newSolu.setQuestionId(currentQuestion.getId());
+        }
         currentQuestion.getSolutionList().add(newSolu);
 
     }

@@ -109,7 +109,7 @@ public class DataWriter {
                             + "\"hints\":" + stringList(q.getHints()) + ","
                             + "\"difficulty\":" + enumToArray(q.getDifficulty()) + ","
                             + "\"question-language\":" + enumToArray(q.getLanguage()) + ","
-                            + "\"solution-list\":" + solutionList(q.getSolutionList()) + ","
+                            + "\"solution-list\":" + solutionList(q.getSolutionList(), q.getId()) + ","
                             + "\"given-solution-img\":" + stringList(q.getGivenSolutionImg()) + ","
                             + "\"given-solution-text\":" + stringList(q.getGivenSolutionText())
                             + "}");
@@ -193,7 +193,7 @@ public class DataWriter {
      * @param s list of UserSolution objects
      * @return JSON-formatted string of solutions
      */
-    static String solutionList(List<UserSolution> s) {
+    static String solutionList(List<UserSolution> s, UUID questionId) {
         if (s == null || s.isEmpty())
             return "[]";
 
@@ -203,8 +203,13 @@ public class DataWriter {
             UserSolution us = s.get(i);
             String uid = us.getUser() == null ? "" : String.valueOf(us.getUser().getId());
             String desc = us.getDescription() == null ? "" : us.getDescription();
+            if (us.getQuestionId() == null) {
+                us.setQuestionId(questionId);
+            }
 
             b.append("{")
+             .append("\"id\":\"").append(us.getSoulutionId()).append("\",")
+             .append("\"question-id\":\"").append(us.getQuestionId() == null ? "" : us.getQuestionId()).append("\",")
              .append("\"user\":\"").append(escape(uid)).append("\",")
              .append("\"description\":\"").append(escape(desc)).append("\",")
              .append("\"thread\":").append(commentList(us.getReplies())).append(",")

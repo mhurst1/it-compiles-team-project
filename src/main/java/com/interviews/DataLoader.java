@@ -194,6 +194,7 @@ public class DataLoader{
 
             for (String solObj : solObjs) {
                 UUID solutionId = asUUID(extractString(solObj, "id"));
+                UUID questionId = asUUID(extractString(solObj, "question-id"));
                 String solutionDescription = extractString(solObj, "description");
                 int totalVote = extractInt(solObj, "total-vote", 0);
 
@@ -209,6 +210,7 @@ public class DataLoader{
                     replies,
                     totalVote
                 );
+                solution.setQuestionId(questionId == null ? q.getId() : questionId);
 
                 solutions.add(solution);
             }

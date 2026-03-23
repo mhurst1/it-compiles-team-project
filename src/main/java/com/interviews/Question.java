@@ -267,6 +267,7 @@ public class Question {
      * @return list of solutions
      */
     public ArrayList<UserSolution> getSolutionList(){
+        syncSolutionQuestionIds();
         return solutionList;
     }
 
@@ -276,6 +277,7 @@ public class Question {
      */
     public void setSolutionList(ArrayList<UserSolution> solutionList){
         this.solutionList = solutionList;
+        syncSolutionQuestionIds();
     }
 
     /**
@@ -330,6 +332,18 @@ public class Question {
             return;
         } else if (this.title.toLowerCase().contains(titleSearch.toLowerCase())){
             System.out.println(this.title);
+        }
+    }
+
+    private void syncSolutionQuestionIds() {
+        if (solutionList == null || id == null) {
+            return;
+        }
+
+        for (UserSolution solution : solutionList) {
+            if (solution != null) {
+                solution.setQuestionId(id);
+            }
         }
     }
 
