@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import com.interviews.Achievement;
 import com.interviews.Comment;
+import com.interviews.DataWriter;
 import com.interviews.Difficulty;
 import com.interviews.Language;
 import com.interviews.Question;
@@ -295,8 +296,13 @@ public class Driver {
             System.out.printf("Streak updated: %d -> %d days%n", oldStreak, achievement.getStreak());
         }
 
+        DataWriter writer = new DataWriter();
+        writer.saveUsers();
+        writer.saveQuestions();
+
         questionApplication.logout();
         System.out.println("Jimmy has been logged out. See you next time!");
+        
     }
 
     /**
