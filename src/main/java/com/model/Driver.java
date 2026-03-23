@@ -49,7 +49,7 @@ public class Driver {
         System.out.println("---------------------------------------\n" 
                             + "Scenario 1 \n" 
                             + "---------------------------------------\n");
-        //scenario1();
+        scenario1();
 
         System.out.println("---------------------------------------\n" 
                             + "Scenario 2 \n" 
@@ -64,7 +64,7 @@ public class Driver {
         System.out.println("---------------------------------------\n" 
                             + "Scenario 4 \n" 
                             + "---------------------------------------\n");
-        //scenario4();
+        scenario4();
     }
 
     /**
