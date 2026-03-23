@@ -27,8 +27,7 @@ import com.interviews.UserSolution;
  * 1. Duplicate account creation is rejected.
  * 2. A new contributor/publisher-style account is created and logged in.
  * 3. Sally creates a new question and two solutions.
- * 4. Sally uses the original project flow.
- * 5. Jimmy logs in, reviews a daily challenge, comments on a solution,
+ * 4. Jimmy logs in, reviews a daily challenge, comments on a solution,
  *    exports the question, searches for Binary Search Tree questions,
  *    updates his streak, and logs out.
  */
