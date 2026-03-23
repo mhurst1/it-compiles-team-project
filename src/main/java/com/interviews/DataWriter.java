@@ -2,6 +2,8 @@ package com.interviews;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -23,15 +25,13 @@ import java.util.UUID;
  * A tester is included in the main method to verify writing and reloading.
  */
 public class DataWriter {
-
-    /** Base directory containing the JSON data files. */
-    private static final String DATA_DIR = "json";
+    private static final String PROJECT_DIR = "it-compiles-team-project";
 
     /** Path to the users JSON file. */
-    private static final String USERS_PATH = DATA_DIR + "/users.json";
+    private static final Path USERS_PATH = resolveDataFile("users.json");
 
     /** Path to the questions JSON file. */
-    private static final String QUESTIONS_PATH = DATA_DIR + "/question.json";
+    private static final Path QUESTIONS_PATH = resolveDataFile("question.json");
 
     /**
      * Saves all users from the UserList singleton into the users JSON file.
@@ -45,9 +45,9 @@ public class DataWriter {
     public boolean saveUsers() {
         try {
             List<User> users = UserList.getInstance().getUsers();
-            new File(DATA_DIR).mkdirs();
+            new File(USERS_PATH.getParent().toString()).mkdirs();
 
-            try (PrintWriter w = new PrintWriter(USERS_PATH)) {
+            try (PrintWriter w = new PrintWriter(USERS_PATH.toFile())) {
                 w.println("[");
 
                 for (int i = 0; i < users.size(); i++) {
@@ -92,9 +92,9 @@ public class DataWriter {
     public boolean saveQuestions() {
         try {
             List<Question> questions = QuestionList.getInstance().getQuestions();
-            new File(DATA_DIR).mkdirs();
+            new File(QUESTIONS_PATH.getParent().toString()).mkdirs();
 
-            try (PrintWriter w = new PrintWriter(QUESTIONS_PATH)) {
+            try (PrintWriter w = new PrintWriter(QUESTIONS_PATH.toFile())) {
                 w.println("[");
 
                 for (int i = 0; i < questions.size(); i++) {
@@ -558,4 +558,27 @@ public static void main(String[] args) {
         System.out.println("Solutions: " + q.getSolutionList().size());
     }
 }
+
+    private static Path resolveDataFile(String fileName) {
+        Path start = Paths.get("").toAbsolutePath().normalize();
+
+        for (Path current = start; current != null; current = current.getParent()) {
+            Path directPath = current.resolve("json").resolve(fileName);
+            if (directPath.toFile().exists()) {
+                return directPath;
+            }
+
+            Path projectPath = current.resolve(PROJECT_DIR).resolve("json").resolve(fileName);
+            if (projectPath.toFile().exists()) {
+                return projectPath;
+            }
+        }
+
+        Path projectDir = start.resolve(PROJECT_DIR);
+        if (projectDir.resolve("json").toFile().isDirectory()) {
+            return projectDir.resolve("json").resolve(fileName);
+        }
+
+        return start.resolve("json").resolve(fileName);
+    }
 }

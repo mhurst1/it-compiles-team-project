@@ -45,11 +45,10 @@ public class Driver {
      * Runs the configured driver scenarios in order.
      */
     public void run() {
-        scenario1();
-        scenario2();
-        scenario3();
+        //scenario1();
+        //scenario2();
+        //scenario3();
         scenario4();
-        scenario5();
     }
 
     /**
@@ -208,30 +207,17 @@ public class Driver {
      * Scenario 4 shows Sally creating an account, setting contributor status,
      * and logging in using the original project flow.
      */
-    public void scenario4() {
-        System.out.println();
 
-        questionApplication.createAccount(
-                "Sally", "Sparrow",
-                "ssparrow",
-                "sparrowpass2",
-                "sally.sparrow@email.com",
-                2028,
-                "U33334444");
-
-        questionApplication.setStatus("ssparrow", "contributor");
-        questionApplication.login("ssparrow", "sparrowpass2");
-    }
 
     /**
-     * Scenario 5 merges JimmyDriver into this shared driver.
+     * Scenario 4 merges JimmyDriver into this shared driver.
      *
      * Jimmy logs in, checks his streak, opens the daily challenge,
      * comments on solution 2, exports the question to a text file,
      * searches for Binary Search Tree questions, updates his streak,
      * and logs out.
      */
-    public void scenario5() {
+    public void scenario4() {
         System.out.println();
 
         boolean loggedIn = questionApplication.login("jcricket6", "ilovecrickets3");

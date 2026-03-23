@@ -3,6 +3,7 @@ package com.interviews;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -20,15 +21,13 @@ import java.util.*;
  * the JSON data is being loaded correctly.
  */
 public class DataLoader{
-
-    /** Base directory containing the JSON data files. */
-    private static final String DATA_DIR = "json";
+    private static final String PROJECT_DIR = "it-compiles-team-project";
 
     /** Path to the users JSON file. */
-    private static final String USERS_PATH = DATA_DIR + "/users.json";
+    private static final Path USERS_PATH = resolveDataFile("users.json");
 
     /** Path to the questions JSON file. */
-    private static final String QUESTIONS_PATH = DATA_DIR + "/question.json";
+    private static final Path QUESTIONS_PATH = resolveDataFile("question.json");
 
     /**
      * Loads all users from the users JSON file.
@@ -41,7 +40,7 @@ public class DataLoader{
      */
     public static ArrayList<User> getUsers() {
         try {
-            String json = Files.readString(Path.of(USERS_PATH));
+            String json = Files.readString(USERS_PATH);
             List<String> objs = splitTopLevelObjects(json);
 
             ArrayList<User> users = new ArrayList<>();
@@ -75,7 +74,7 @@ public class DataLoader{
                 if (u != null && u.getId() != null) usersById.put(u.getId(), u);
             }
 
-            String json = Files.readString(Path.of(QUESTIONS_PATH));
+            String json = Files.readString(QUESTIONS_PATH);
             List<String> objs = splitTopLevelObjects(json);
 
             ArrayList<Question> questions = new ArrayList<>();
@@ -733,5 +732,28 @@ public class DataLoader{
                 printComment(reply, indent + "    ");
             }
         }
+    }
+
+    private static Path resolveDataFile(String fileName) {
+        Path start = Paths.get("").toAbsolutePath().normalize();
+
+        for (Path current = start; current != null; current = current.getParent()) {
+            Path directPath = current.resolve("json").resolve(fileName);
+            if (Files.exists(directPath)) {
+                return directPath;
+            }
+
+            Path projectPath = current.resolve(PROJECT_DIR).resolve("json").resolve(fileName);
+            if (Files.exists(projectPath)) {
+                return projectPath;
+            }
+        }
+
+        Path projectDir = start.resolve(PROJECT_DIR);
+        if (Files.isDirectory(projectDir.resolve("json"))) {
+            return projectDir.resolve("json").resolve(fileName);
+        }
+
+        return start.resolve("json").resolve(fileName);
     }
 }

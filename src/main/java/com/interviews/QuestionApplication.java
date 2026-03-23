@@ -38,8 +38,8 @@ public class QuestionApplication {
         this.currentQuestion = null;
         this.currentUser = null;
         this.currentUserSolution = null;
-        this.questionList = new QuestionList();
-        this.userList = new UserList();
+        this.questionList = QuestionList.getInstance();
+        this.userList = UserList.getInstance();
 
     }
 
