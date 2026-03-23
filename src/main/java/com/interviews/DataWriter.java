@@ -60,6 +60,7 @@ public class DataWriter {
                             + "\"username\":\"" + escape(u.getUsername()) + "\","
                             + "\"password\":\"" + escape(u.getPassword()) + "\","
                             + "\"email\":\"" + escape(u.getEmail()) + "\","
+                            + "\"status\":\"" + u.getStatus() + "\","
                             + "\"graduation-year\":" + u.getGraduationYear() + ","
                             + "\"id-usc\":\"" + escape(u.getIdUSC()) + "\","
                             + "\"starred-questions\":" + listIds(u.getStarredQuestionList()) + ","

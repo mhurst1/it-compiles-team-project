@@ -635,9 +635,10 @@ public class DataLoader{
             System.out.println("Last Name: " + user.getLastName());
             System.out.println("Username: " + user.getUsername());
             System.out.println("Email: " + user.getEmail());
+            System.out.println("Status:" + user.getStatus());
             System.out.println("Graduation Year: " + user.getGraduationYear());
             System.out.println("USC ID: " + user.getIdUSC());
-            System.out.println("Achievements: " + user.getAchievements().size()); // Error In Testing
+            System.out.println("Achievements: " + user.getAchievements().size());
             System.out.println();
         }
 
