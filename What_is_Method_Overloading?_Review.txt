@@ -1,0 +1,37 @@
+======================================================================
+QUESTION: What is Method Overloading?
+======================================================================
+Difficulty : EASY
+Language   : JAVA
+Printed on : March 22, 2026
+
+DESCRIPTION
+----------------------------------------------------------------------
+  Explain how method overloading works in Java.
+
+DEFINITION
+----------------------------------------------------------------------
+  Overloading allows one method name to perform similar tasks with different inputs.
+  - Method overloading happens when multiple methods share the same name.
+  - The methods must differ by parameter list.
+  - This improves readability and reuse.
+
+HINTS
+----------------------------------------------------------------------
+  1. Think about reusable code
+  2. Methods can have the same name
+  3. This is a compile-time feature
+
+SOLUTIONS
+======================================================================
+
+Solution 1
+----------------------------------------------------------------------
+Method overloading lets you define multiple methods with the same name as long as their parameters are different.
+Votes: 12
+
+COMMENTS:
+  How can Java tell the methods apart?
+  [jcricket6 - March 22, 2026] I am confused about this solution, can you explain?
+  [jcricket6 - March 22, 2026] I am confused about this solution, can you explain?
+----------------------------------------------------------------------
