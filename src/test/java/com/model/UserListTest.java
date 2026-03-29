@@ -7,6 +7,65 @@ import static org.junit.Assert.*;
 
 import java.util.UUID;
 
+/*
++-------------------------------------------------------+-------------------------------------------------------------------+
+| Test                                                  | Reasoning                                                         |
++-------------------------------------------------------+-------------------------------------------------------------------+
+| username = null                                       | a username shouldn't be null it should be a string                                                              |
+| password = null                                       | a password shouldn't be null it should be a string                                                                  |
+| firstName = null                                      | a first name shouldn't be null it should be a string                                                                  |
+| lastName = null                                       | a last name shouldn't be null it should be a string                                                                  |
+| email = null                                          | an email shouldn't be null it should be a string                                                                  |
+| idUSC = null                                          | a usc id shouldn't be null it should be a string                                                                  |
++-------------------------------------------------------+-------------------------------------------------------------------+
+| username = ""                                         | a username shouldn't be empty it should be a string                                                                  |
+| password = ""                                         | a password shouldn't be empty it should be a string                                                               |
+| firstName = ""                                        | a first name shouldn't be empty it should be a string                                                                |
+| lastName = ""                                         | a last name shouldn't be empty it should be a string                                                                 |
+| password = "   " (spaces only)                        | an email shouldn't be only spaces it should be a string                                                                  |
+| username = "   " (spaces only)                        | a usc id shouldn't be only spaces it should be a string                                                                  |
++-------------------------------------------------------+-------------------------------------------------------------------+
+| password = "a" (1 char)                               | passwords should be atleast 7 chars, have atleast one uppercase, and atleast one special char                                                                  |
+| password = "abcdef!" (no uppercase)                   | passwords need atleast one uppercase                                                                   |
+| password = "Abcdefg" (no special character)           | passwords need atleast one special character
+| password = "A!" (uppercase + special, under 7 chars)  | passwords need to be atleast 7 chars                                                                                          |
++-------------------------------------------------------+-------------------------------------------------------------------+
+| email = "notanemail" (no @)                           | emails need to have an @ symbol                                                                  |
+| email = "user@" (no domain)                           | the email needs to have a correct domain                                                                  |
+| email = "@" (just @ symbol)                           | emails need to have a proper beginning and ending                                                                  |
++-------------------------------------------------------+-------------------------------------------------------------------+
+| graduationYear = -1                                   | graduation years cannot be negative                                                                  |
+| graduationYear = 0                                    | graduation year cannot be 0                                                                  |
+| graduationYear = 1                                    | graduation years must start with 20                                                                   |
++-------------------------------------------------------+-------------------------------------------------------------------+
+| setUsername(null)                                     | a username cannot be set to a null value, it must be a string or smth of substance                                                                 |
+| setPassword(null)                                     | a password cannot be set to a null value, it must be a string or smth of substance                                                                  |
+| setUsername("")                                       | a username cannot be empty, it must be a string or smth of substance                                                                  |
+| setPassword("")                                       | a password cannot be empty, it must be a string or smth of substance                                                                  |
+| setEmail("bademail")                                  | an email cannot be just anything it has to pass the email req mentioned before                                                                  |
++-------------------------------------------------------+-------------------------------------------------------------------+
+| user with null username added, then getUser(username) | a null pointer exception will be called                                                                  |
+| user with null username added, then getUser(u, pw)    | a null pointer exception will be called                                                              |
+| user with null password added, then getUser(u, pw)    | a null pointer exception will be called                                                                 |
+| isMatch() called with null username                   | a null pointer exception will be called                                                                  |
+| isMatch() called with null password                   | a null pointer exception will be called                                                                  |
++-------------------------------------------------------+-------------------------------------------------------------------+
+| add same user object twice                            | every user must be unique                                                                  |
+| add two users with same username                      | there cannot be 2 users with the same username
+| add two users with same uscID                         | there cannot be 2 users with the same uscID
+| add two users with same email                         | there cannot be 2 users with the same email
++-------------------------------------------------------+-------------------------------------------------------------------+
+| editUser() on user not in list                        | a user should be notified that they are not in our database                                                                  |
+| editUser() sets username to null                      | a username should not be allowed to be set to null, it must be of substance                                                                  |
+| editUser() sets password to null                      | a password should not be allowed to be set to null, it must be of substance                                                                  |
+| editUser() sets username to ""                        | a username should not be allowed to be set to empty, it must be of substance                                                                  |
+| editUser() sets username to existing username "bob"   | a password should not be allowed to be set to empty, it must be of substance                                                                  |
++-------------------------------------------------------+-------------------------------------------------------------------+
+| deleteUser() with a copy object (same UUID, new ref)  |                                                                   |
++-------------------------------------------------------+-------------------------------------------------------------------+
+
+*/
+
 /**
  * Comprehensive bug-finding tests for UserList and User.
  *
@@ -139,29 +198,36 @@ public class UserListTest {
     }
 
     // =========================================================================
-    // SECTION 3 — PASSWORD STRENGTH (FAILS — no minimum length enforced)
-    // =========================================================================
+// SECTION 3 — PASSWORD STRENGTH (FAILS — no length, uppercase, or special character enforced)
+// =========================================================================
 
-    /** BUG: single-character password is accepted. FAILS. */
-    @Test
-    public void testPasswordMinimumLengthSingleChar() {
-        User u = new User("First", "Last", "user1", "a", "email@test.com", 2025, "USC001");
-        assertTrue(u.getPassword().length() >= 8); // FAILS — "a" (length 1) accepted
-    }
+/** BUG: single-character password is accepted. FAILS. */
+@Test
+public void testPasswordTooShort() {
+    User u = new User("First", "Last", "user1", "a", "email@test.com", 2025, "USC001");
+    assertTrue(u.getPassword().length() >= 7); // FAILS — "a" (length 1) accepted
+}
 
-    /** BUG: 3-character password is accepted. FAILS. */
-    @Test
-    public void testPasswordMinimumLength3Chars() {
-        User u = new User("First", "Last", "user1", "abc", "email@test.com", 2025, "USC001");
-        assertTrue(u.getPassword().length() >= 8); // FAILS — "abc" (length 3) accepted
-    }
+/** BUG: password with no uppercase letter is accepted. FAILS. */
+@Test
+public void testPasswordMustHaveUppercase() {
+    User u = new User("First", "Last", "user1", "abcdef!", "email@test.com", 2025, "USC001");
+    assertTrue(u.getPassword().chars().anyMatch(Character::isUpperCase)); // FAILS — no uppercase
+}
 
-    /** BUG: 7-character password (just under common minimum) is accepted. FAILS. */
-    @Test
-    public void testPasswordMinimumLength7Chars() {
-        User u = new User("First", "Last", "user1", "1234567", "email@test.com", 2025, "USC001");
-        assertTrue(u.getPassword().length() >= 8); // FAILS — "1234567" (length 7) accepted
-    }
+/** BUG: password with no special character is accepted. FAILS. */
+@Test
+public void testPasswordMustHaveSpecialCharacter() {
+    User u = new User("First", "Last", "user1", "Abcdefg", "email@test.com", 2025, "USC001");
+    assertTrue(u.getPassword().chars().anyMatch(c -> !Character.isLetterOrDigit(c))); // FAILS — no special char
+}
+
+/** BUG: password with uppercase and special character but under 7 chars is accepted. FAILS. */
+@Test
+public void testPasswordMustMeetAllRequirements() {
+    User u = new User("First", "Last", "user1", "A!", "email@test.com", 2025, "USC001");
+    assertTrue(u.getPassword().length() >= 7); // FAILS — "A!" (length 2) accepted
+}
 
     // =========================================================================
     // SECTION 4 — EMAIL FORMAT VALIDATION (FAILS — no format check exists)
@@ -189,29 +255,30 @@ public class UserListTest {
     }
 
     // =========================================================================
-    // SECTION 5 — GRADUATION YEAR VALIDATION (FAILS — any int accepted)
-    // =========================================================================
+// SECTION 5 — GRADUATION YEAR VALIDATION (FAILS — any int accepted)
+// =========================================================================
 
-    /** BUG: negative graduation year is accepted. FAILS. */
-    @Test
-    public void testGraduationYearCannotBeNegative() {
-        User u = new User("First", "Last", "user1", "pass123", "email@test.com", -1, "USC001");
-        assertTrue(u.getGraduationYear() > 0); // FAILS — -1 stored
-    }
+/** BUG: negative graduation year is accepted. FAILS. */
+@Test
+public void testGraduationYearCannotBeNegative() {
+    User u = new User("First", "Last", "user1", "pass123", "email@test.com", -1, "USC001");
+    assertTrue(u.getGraduationYear() >= 2000); // FAILS — -1 stored
+}
 
-    /** BUG: graduation year 0 is accepted. FAILS. */
-    @Test
-    public void testGraduationYearCannotBeZero() {
-        User u = new User("First", "Last", "user1", "pass123", "email@test.com", 0, "USC001");
-        assertTrue(u.getGraduationYear() > 0); // FAILS — 0 stored
-    }
+/** BUG: graduation year 0 is accepted. FAILS. */
+@Test
+public void testGraduationYearCannotBeZero() {
+    User u = new User("First", "Last", "user1", "pass123", "email@test.com", 0, "USC001");
+    assertTrue(u.getGraduationYear() >= 2000); // FAILS — 0 stored
+}
 
-    /** BUG: clearly impossible graduation year (year 1) is accepted. FAILS. */
-    @Test
-    public void testGraduationYearMustBeReasonable() {
-        User u = new User("First", "Last", "user1", "pass123", "email@test.com", 1, "USC001");
-        assertTrue(u.getGraduationYear() >= 2000); // FAILS — 1 stored
-    }
+/** BUG: graduation year not starting with 20 is accepted. FAILS. */
+@Test
+public void testGraduationYearMustStartWith20() {
+    User u = new User("First", "Last", "user1", "pass123", "email@test.com", 1999, "USC001");
+    assertTrue(u.getGraduationYear() >= 2000 && u.getGraduationYear() <= 2099); // FAILS — 1999 stored
+}
+
 
     // =========================================================================
     // SECTION 6 — SETTER VALIDATION (FAILS — setters accept anything)
@@ -323,6 +390,35 @@ public class UserListTest {
     // SECTION 8 — MISSING addUser() / DUPLICATE PREVENTION
     // =========================================================================
 
+    /**
+ * BUG: two users with the same USC ID can both be added.
+ * There is no uniqueness check on USC ID.
+ * FAILS — count of users with USC ID "USC001" is 2, not 1.
+ */
+@Test
+public void testDuplicateUSCIdIsNotAllowed() {
+    User alice2 = new User("Alice2", "B", "alice2", "otherpass", "alice2@test.com", 2025, "USC001");
+    userList.getUsers().add(alice2);
+    long count = userList.getUsers().stream()
+            .filter(u -> "USC001".equals(u.getIdUSC()))
+            .count();
+    assertEquals(1, count); // FAILS — count is 2
+}
+
+/**
+ * BUG: two users with the same email can both be added.
+ * There is no uniqueness check on email.
+ * FAILS — count of users with email "alice@test.com" is 2, not 1.
+ */
+@Test
+public void testDuplicateEmailIsNotAllowed() {
+    User alice2 = new User("Alice2", "B", "alice2", "otherpass", "alice@test.com", 2025, "USC003");
+    userList.getUsers().add(alice2);
+    long count = userList.getUsers().stream()
+            .filter(u -> "alice@test.com".equals(u.getEmail()))
+            .count();
+    assertEquals(1, count); // FAILS — count is 2
+}
     /**
      * BUG: there is no addUser() method on UserList.
      * The only way to add a user is to reach into getUsers() directly.
