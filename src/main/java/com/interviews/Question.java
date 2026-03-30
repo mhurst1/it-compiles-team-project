@@ -57,6 +57,9 @@ public class Question {
      */
     public Question(String title, User user, String description, ArrayList<Section> questionContent,
                 ArrayList<String> hints, Difficulty difficulty, Language questionLang){
+        this.id = UUID.randomUUID();
+        if (title == null || title.isBlank()) { System.out.println("Invalid title: cannot be null or empty. Setting to empty string."); title = ""; }
+        if (description == null) { System.out.println("Invalid description: cannot be null. Setting to empty string."); description = ""; }
         this.title = title;
         this.user = user;
         this.description = description;
@@ -67,6 +70,8 @@ public class Question {
 
         this.comments = new ArrayList<>();
         this.solutionList = new ArrayList<>();
+        this.givenSolutionIMG = new ArrayList<>();
+        this.givenSolutionTXT = new ArrayList<>();
     }
 
     /**
@@ -93,6 +98,14 @@ public class Question {
             ArrayList<String> hints, ArrayList<Section> questionContent) {
 
         this.id = UUID.randomUUID(); // This will create a random question id
+        if (title == null || title.isBlank()) {
+            System.out.println("Invalid title: cannot be null or empty. Setting to Default Title.");
+            title = "Default Title";
+        }
+        if (description == null) {
+            System.out.println("Invalid description: cannot be null. Setting to Default Description.");
+            description = "Default Description.";
+        }
         this.title = title;
         this.user = user;
         this.description = description;
@@ -103,6 +116,8 @@ public class Question {
 
         this.comments = new ArrayList<>();
         this.solutionList = new ArrayList<>();
+        this.givenSolutionIMG = new ArrayList<>();
+        this.givenSolutionTXT = new ArrayList<>();
     }
 
     /**
@@ -118,6 +133,10 @@ public class Question {
      * @param title the new title
      */
     public void setTitle(String title){
+        if (title == null || title.isBlank()) {
+            System.out.println("Invalid title: cannot be null or empty.");
+            return;
+        }
         this.title = title;
     }
 
@@ -134,6 +153,10 @@ public class Question {
      * @param description the new description
      */
     public void setDescription(String description){
+        if (description == null) {
+            System.out.println("Invalid description: cannot be null.");
+            return;
+        }
         this.description = description;
     }
 
@@ -166,6 +189,10 @@ public class Question {
      * @param user the new user
      */
     public void setUser(User user){
+        if (user == null) {
+            System.out.println("Invalid user: cannot be null.");
+            return;
+        }
         this.user = user;
     }
 
@@ -234,6 +261,10 @@ public class Question {
      * @param questionContent the new sections
      */
     public void setQuestionContent(ArrayList<Section> questionContent){
+        if (questionContent == null) {
+            System.out.println("Invalid question content: cannot be null.");
+            return;
+        }
         this.questionContent = questionContent;
     }
 
@@ -250,6 +281,10 @@ public class Question {
      * @param hints the new hints
      */
     public void setHint(ArrayList<String> hints){
+        if (hints == null) {
+            System.out.println("Invalid hints: cannot be null.");
+            return;
+        }
         this.hints = hints;
     }
 
@@ -330,7 +365,7 @@ public class Question {
     public void searchQuestions(String titleSearch){
         if (titleSearch == null){
             return;
-        } else if (this.title.toLowerCase().contains(titleSearch.toLowerCase())){
+        } else if (this.title != null && this.title.toLowerCase().contains(titleSearch.toLowerCase())){
             System.out.println(this.title);
         }
     }
