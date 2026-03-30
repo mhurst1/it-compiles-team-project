@@ -20,6 +20,12 @@ import com.interviews.User;
 import com.interviews.UserList;
 import com.interviews.UserSolution;
 
+/**
+ * CHAT GPT Generated the code for the test cases along with the formatting of the table.
+ *  
+ * The Test and Reasoning Chart was then filled out manually 
+ */
+
 /*
 +-------------------------------------------------------+-------------------------------------------------------------------+
 | Test                                                  | Reasoning                                                         |
