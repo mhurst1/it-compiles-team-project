@@ -359,88 +359,179 @@ public class DataWriter {
      * @param args command-line arguments (not used)
      */
     public static void main(String[] args) {
-        System.out.println("========= DATA WRITER 1 TESTER =========");
+        System.out.println("========= DATA WRITER TESTER =========\n");
+
+        // Fixed UUIDs so re-running this tester is safe — DataWriter skips
+        // any entry whose UUID already exists in the file.
+        java.util.UUID user1Id = java.util.UUID.fromString("cccccccc-0000-0000-0000-cccccccccccc");
+        java.util.UUID user2Id = java.util.UUID.fromString("dddddddd-0000-0000-0000-dddddddddddd");
+        java.util.UUID q1Id    = java.util.UUID.fromString("eeeeeeee-0000-0000-0000-eeeeeeeeeeee");
+        java.util.UUID q2Id    = java.util.UUID.fromString("ffffffff-0000-0000-0000-ffffffffffff");
+        java.util.UUID sol1Id  = java.util.UUID.fromString("11111111-aaaa-aaaa-aaaa-111111111111");
+        java.util.UUID sol2Id  = java.util.UUID.fromString("22222222-bbbb-bbbb-bbbb-222222222222");
+
+        // --- Build users ---
+        Achievement a1 = new Achievement(3, 2, 40, 5);
+        ArrayList<Achievement> achievements1 = new ArrayList<>();
+        achievements1.add(a1);
 
         User user1 = new User(
-                java.util.UUID.randomUUID(),
-                "Liam", "Anderson", "landerson", "secure123",
-                "liam.anderson@email.com",
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                Status.USER, 2025, "M11112222"
+                user1Id,
+                "Carlos", "Rivera", "crivera98", "Secure!99",
+                "carlos.rivera@test.com",
+                new ArrayList<>(), new ArrayList<>(), achievements1,
+                Status.USER, 2028, "M55556666"
         );
+
         User user2 = new User(
-                java.util.UUID.randomUUID(),
-                "Emma", "Thompson", "ethompson", "pass999",
-                "emma.thompson@email.com",
+                user2Id,
+                "Diana", "Patel", "dpatel99", "Hello!77",
+                "diana.patel@test.com",
                 new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),
-                Status.CONTRIBUTOR, 2026, "M33334444"
+                Status.CONTRIBUTOR, 2027, "M77778888"
         );
 
         ArrayList<User> users = new ArrayList<>();
         users.add(user1);
         users.add(user2);
 
-        ArrayList<String> hints = new ArrayList<>();
-        hints.add("Think about dynamic arrays");
-        hints.add("Part of java.util");
+        // --- Build question 1: Stack ---
+        ArrayList<String> stackHints = new ArrayList<>();
+        stackHints.add("Think about LIFO order");
+        stackHints.add("Java has a built-in Stack class");
+        stackHints.add("Push adds to the top, pop removes from the top");
 
-        ArrayList<String> content = new ArrayList<>();
-        content.add("ArrayList is a resizable array.");
-        content.add("It allows adding and removing elements.");
+        ArrayList<String> stackContent = new ArrayList<>();
+        stackContent.add("A stack follows Last-In First-Out order.");
+        stackContent.add("Elements are pushed onto and popped off the top.");
+        stackContent.add("Common uses include undo history and call stacks.");
 
-        ArrayList<Section> sections = new ArrayList<>();
-        sections.add(new Section("Overview", content, "ArrayList grows automatically when needed."));
+        ArrayList<Section> stackSections = new ArrayList<>();
+        stackSections.add(new Section("Definition", stackContent,
+                "A Stack is a linear data structure that follows LIFO ordering."));
 
         Question q1 = new Question(
-                "What is an ArrayList?",
+                "What is a Stack?",
                 user1,
-                "Explain how ArrayList works in Java.",
+                "Explain what a stack data structure is and how it works.",
                 Difficulty.EASY,
                 Language.JAVA,
-                hints,
-                sections
+                stackHints,
+                stackSections
         );
+        q1.setId(q1Id);
 
-        Comment reply = new Comment(user1, "Because arrays are fixed size.");
-        ArrayList<Comment> replies = new ArrayList<>();
-        replies.add(reply);
+        Comment stackReply = new Comment(user1, "Right, it's like a pile of plates.");
+        ArrayList<Comment> stackReplies = new ArrayList<>();
+        stackReplies.add(stackReply);
 
-        Comment comment = new Comment(user2, "Why not just use arrays?", replies);
-        ArrayList<Comment> thread = new ArrayList<>();
-        thread.add(comment);
+        Comment stackComment = new Comment(user2, "Is a stack different from a queue?", stackReplies);
+        ArrayList<Comment> stackThread = new ArrayList<>();
+        stackThread.add(stackComment);
 
-        UserSolution sol = new UserSolution(
+        UserSolution sol1 = new UserSolution(
                 user2,
-                "ArrayList allows dynamic resizing unlike normal arrays.",
-                java.util.UUID.randomUUID(),
-                thread,
-                30
+                "A stack processes elements in LIFO order. Use push() to add and pop() to remove.",
+                sol1Id,
+                stackThread,
+                15
         );
-        q1.getSolutionList().add(sol);
+        sol1.setQuestionId(q1Id);
+        q1.getSolutionList().add(sol1);
+
+        // --- Build question 2: Polymorphism ---
+        ArrayList<String> polyHints = new ArrayList<>();
+        polyHints.add("Think about method overriding");
+        polyHints.add("A parent reference can point to a child object");
+        polyHints.add("This is a core OOP principle");
+
+        ArrayList<String> polyContent = new ArrayList<>();
+        polyContent.add("Polymorphism means 'many forms'.");
+        polyContent.add("A subclass can override a method from its parent.");
+        polyContent.add("The correct method is chosen at runtime.");
+
+        ArrayList<Section> polySections = new ArrayList<>();
+        polySections.add(new Section("Concept", polyContent,
+                "Polymorphism allows one interface to represent different underlying types."));
+
+        Question q2 = new Question(
+                "What is Polymorphism?",
+                user2,
+                "Describe polymorphism in Java with an example.",
+                Difficulty.MEDIUM,
+                Language.JAVA,
+                polyHints,
+                polySections
+        );
+        q2.setId(q2Id);
+
+        UserSolution sol2 = new UserSolution(
+                user1,
+                "Polymorphism lets a parent-type variable hold a child object and call overridden methods.",
+                sol2Id,
+                new ArrayList<>(),
+                22
+        );
+        sol2.setQuestionId(q2Id);
+        q2.getSolutionList().add(sol2);
 
         ArrayList<Question> questions = new ArrayList<>();
         questions.add(q1);
+        questions.add(q2);
 
-        boolean usersSaved = saveUsers(users);
+        // --- Save ---
+        System.out.println("--- Saving ---");
+        boolean usersSaved     = saveUsers(users);
         boolean questionsSaved = saveQuestions(questions);
-        System.out.println("Users saved: " + usersSaved);
+        System.out.println("Users saved:     " + usersSaved);
         System.out.println("Questions saved: " + questionsSaved);
 
-        System.out.println("\n========= VERIFY RELOAD =========");
-        ArrayList<User> loadedUsers = DataLoader.getUsers();
+        // --- Reload and verify the two new entries specifically ---
+        System.out.println("\n--- Reload Verification ---");
+        ArrayList<User> loadedUsers         = DataLoader.getUsers();
         ArrayList<Question> loadedQuestions = DataLoader.getQuestions();
-        System.out.println("Users reloaded: " + loadedUsers.size());
-        System.out.println("Questions reloaded: " + loadedQuestions.size());
+        System.out.println("Total users in file:     " + loadedUsers.size());
+        System.out.println("Total questions in file: " + loadedQuestions.size());
 
-        for (Question q : loadedQuestions) {
-            System.out.println("\nTitle: " + q.getTitle());
-            System.out.println("Solutions: " + q.getSolutionList().size());
-            for (UserSolution s : q.getSolutionList()) {
-                System.out.println("  Description: " + s.getDescription());
-                System.out.println("  Votes: " + s.getTotalVote());
-                System.out.println("  Comments: " + s.getReplies().size());
+        System.out.println("\n--- New Users ---");
+        for (User u : loadedUsers) {
+            if (u.getId().equals(user1Id) || u.getId().equals(user2Id)) {
+                System.out.println("  Username:   " + u.getUsername());
+                System.out.println("  Name:       " + u.getFirstName() + " " + u.getLastName());
+                System.out.println("  Email:      " + u.getEmail());
+                System.out.println("  Grad Year:  " + u.getGraduationYear());
+                System.out.println("  USC ID:     " + u.getIdUSC());
+                System.out.println("  Status:     " + u.getStatus());
+                System.out.println("  Achievements: " + u.getAchievements().size());
+                System.out.println();
             }
         }
+
+        System.out.println("--- New Questions ---");
+        for (Question q : loadedQuestions) {
+            if (q.getId().equals(q1Id) || q.getId().equals(q2Id)) {
+                System.out.println("  Title:      " + q.getTitle());
+                System.out.println("  Difficulty: " + q.getDifficulty());
+                System.out.println("  Language:   " + q.getLanguage());
+                System.out.println("  Hints:      " + q.getHints().size());
+                System.out.println("  Sections:   " + q.getSections().size());
+                System.out.println("  Solutions:  " + q.getSolutionList().size());
+                for (UserSolution s : q.getSolutionList()) {
+                    System.out.println("    Solution: " + s.getDescription());
+                    System.out.println("    Votes:    " + s.getTotalVote());
+                    System.out.println("    Comments: " + s.getReplies().size());
+                    for (Comment c : s.getReplies()) {
+                        System.out.println("      [" + (c.getUser() != null ? c.getUser().getUsername() : "?") + "]: " + c.getComment());
+                        for (Comment r : c.getReplies()) {
+                            System.out.println("        -> " + r.getComment());
+                        }
+                    }
+                }
+                System.out.println();
+            }
+        }
+
+        System.out.println("========= DONE =========");
     }
 
     // -------------------------------------------------------------------------

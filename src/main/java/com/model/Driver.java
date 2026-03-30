@@ -11,6 +11,8 @@ import com.interviews.Achievement;
 import com.interviews.Comment;
 import com.interviews.DataWriter;
 import com.interviews.Difficulty;
+import com.interviews.QuestionList;
+import com.interviews.UserList;
 import com.interviews.Language;
 import com.interviews.Question;
 import com.interviews.QuestionApplication;
@@ -301,9 +303,8 @@ public class Driver {
             System.out.printf("Streak updated: %d -> %d days%n", oldStreak, achievement.getStreak());
         }
 
-        DataWriter writer = new DataWriter();
-        writer.saveUsers();
-        writer.saveQuestions();
+        DataWriter.saveUsers(UserList.getInstance().getUsers());
+        DataWriter.saveQuestions(QuestionList.getInstance().getQuestions());
 
         questionApplication.logout();
         System.out.println("Jimmy has been logged out. See you next time!");

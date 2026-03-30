@@ -347,9 +347,8 @@ public class QuestionApplication {
             return;
         }
 
-        DataWriter writer = new DataWriter();
-        writer.saveUsers();
-        writer.saveQuestions();
+        DataWriter.saveUsers(userList.getUsers());
+        DataWriter.saveQuestions(questionList.getQuestions());
 
         currentUser = null;
     }
