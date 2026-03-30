@@ -8,6 +8,11 @@ import static org.junit.Assert.*;
 import java.util.UUID;
 
 /*
+I  used chat gpt to make my entire test cases below but filled 
+out the reasoning behind eeach test case with my own reasoning
+ */
+
+/*
 +-------------------------------------------------------+-------------------------------------------------------------------+
 | Test                                                  | Reasoning                                                         |
 +-------------------------------------------------------+-------------------------------------------------------------------+
