@@ -104,6 +104,19 @@ public class QuestionApplication {
     public User createAccount(String firstName, String lastName, String username,
             String password, String email, int graduationYear, String idUSC) {
 
+        if (username == null || username.isBlank()) {
+            System.out.println("Invalid username: cannot be null or empty.");
+            return null;
+        }
+        if (password == null || password.isBlank()) {
+            System.out.println("Invalid password: cannot be null or empty.");
+            return null;
+        }
+        if (email == null || email.isBlank() || !email.contains("@")) {
+            System.out.println("Invalid email: cannot be null or empty.");
+            return null;
+        }
+
         for (User existing : this.userList.getUsers()) {
         if (existing.getUsername().equalsIgnoreCase(username)) {
             // Username already used
@@ -174,9 +187,15 @@ public class QuestionApplication {
     public boolean addQuestion(String title, User user, String description, Difficulty difficulty,
         Language questionLanguage, ArrayList<String> hints, ArrayList<Section> questionContent) {
 
+        if (title == null || title.isBlank()){
+            return false;
+        }
+        if (user == null){
+            return false;
+        }
         Question question = new Question(title, user, description, difficulty, questionLanguage, hints,
             questionContent);
-        
+
         this.questionList.getQuestions().add(question);
         this.questionList.save();
 
@@ -200,7 +219,7 @@ public class QuestionApplication {
         String description, ArrayList<Section> questionContent, ArrayList<String> hints, Difficulty difficulty, Language questionLanguage) {
     
 
-    if (question !=null && questionList.getQuestions().contains(question)) {
+    if (question != null && title != null && questionList.getQuestions().contains(question)) {
 
         question.setTitle(title);
         question.setUser(user);
@@ -293,7 +312,7 @@ public class QuestionApplication {
     * @param userSolution the solution to remove (may be null)
     */
     public void removeUserSolution(Question question, UserSolution userSolution) {
-        if (question == null && userSolution == null) 
+        if (question == null || userSolution == null)
             return;
         currentQuestion.getSolutionList().remove(userSolution);
         this.questionList.save();
@@ -315,6 +334,9 @@ public class QuestionApplication {
      * @param comment the comment the user wants to publish
      */
     public void addComment(UserSolution userSolution, User user, String comment) {
+        if (userSolution == null || user == null || comment == null || comment.isBlank()){
+            return;
+        }
         Comment newComment = new Comment(user, comment, new ArrayList<>());
         userSolution.getReplies().add(newComment);
     }
@@ -334,6 +356,9 @@ public class QuestionApplication {
      * @param id the id of the user
      */
     public void starQuestion(Question question, UUID id) {
+        if (currentUser == null || question == null){
+            return;
+        }
         currentUser.getStarredQuestions().add(question);
     }
 
