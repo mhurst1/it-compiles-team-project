@@ -15,6 +15,10 @@ import org.json.simple.JSONObject;
 
 /**
  * Writes User and Question data to JSON files.
+ * 
+ * The @SuppressWarnings was what ChatGPT told me to write in order to fix the yellow lines.
+ * The code still functions as it should, but I think I was possibly supposed to use something 
+ * other than a HashMap when mapping both the users and the questions.
  */
 public class DataWriter {
 
@@ -33,6 +37,7 @@ public class DataWriter {
      * @param users the list of users to add
      * @return true if saved successfully, false otherwise
      */
+    @SuppressWarnings("unchecked")
     public static boolean saveUsers(ArrayList<User> users) {
         Map<UUID, User> userMap = new HashMap<>();
         for (User u : DataLoader.getUsers()) {
@@ -75,6 +80,7 @@ public class DataWriter {
      * @param questions the list of questions to add
      * @return true if saved successfully, false otherwise
      */
+    @SuppressWarnings("unchecked")
     public static boolean saveQuestions(ArrayList<Question> questions) {
         Map<UUID, Question> questionMap = new HashMap<>();
         for (Question q : DataLoader.getQuestions()) {
@@ -82,7 +88,7 @@ public class DataWriter {
         }
         for (Question q : questions) {
             if (questionMap.containsKey(q.getId())) {
-                System.err.println("DataWriter1: question already exists:" + q.getTitle());
+                System.err.println("DataWriter: question already exists:" + q.getTitle());
             } else {
                 questionMap.put(q.getId(), q);
             }
@@ -125,6 +131,7 @@ public class DataWriter {
      * @param list the list of Questions to convert
      * @return a JSONArray of UUID strings, or an empty array if the list is null
      */
+    @SuppressWarnings("unchecked")
     private static JSONArray questionIdArray(ArrayList<Question> list) {
         JSONArray arr = new JSONArray();
         if (list == null) {
@@ -147,6 +154,7 @@ public class DataWriter {
      * @param list the list of Achievements to convert
      * @return a JSONArray of achievement objects, or an empty array if the list is null
      */
+    @SuppressWarnings("unchecked")
     private static JSONArray achievementArray(ArrayList<Achievement> list) {
         JSONArray arr = new JSONArray();
         if (list == null) {
@@ -169,6 +177,7 @@ public class DataWriter {
      * @param sections the list of Sections to convert
      * @return a JSONArray of section objects, or an empty array if the list is null
      */
+    @SuppressWarnings("unchecked")
     private static JSONArray sectionArray(ArrayList<Section> sections) {
         JSONArray arr = new JSONArray();
         if (sections == null) {
@@ -209,6 +218,7 @@ public class DataWriter {
      * @param questionId the UUID of the parent question
      * @return a JSONArray of solution objects, or an empty array if the list is null
      */
+    @SuppressWarnings("unchecked")
     private static JSONArray solutionArray(ArrayList<UserSolution> solutions, UUID questionId) {
         JSONArray arr = new JSONArray();
         if (solutions == null) {
@@ -256,6 +266,7 @@ public class DataWriter {
      * @param comments the list of Comments to convert
      * @return a JSONArray of comment objects, or an empty array if the list is null
      */
+    @SuppressWarnings("unchecked")
     private static JSONArray commentArray(ArrayList<Comment> comments) {
         JSONArray arr = new JSONArray();
         if (comments == null) {
@@ -288,6 +299,7 @@ public class DataWriter {
      * @param list the list of Strings to convert
      * @return a JSONArray of string values, or an empty array if the list is null
      */
+    @SuppressWarnings("unchecked")
     private static JSONArray stringArray(ArrayList<String> list) {
         JSONArray arr = new JSONArray();
         if (list == null) {
@@ -314,6 +326,7 @@ public class DataWriter {
      * @param e the enum value to wrap
      * @return a JSONArray containing the enum's name, or an empty array if null
      */
+    @SuppressWarnings("unchecked")
     private static JSONArray enumArray(Enum<?> e) {
         JSONArray arr = new JSONArray();
         if (e != null) {
@@ -338,7 +351,7 @@ public class DataWriter {
             }
             return true;
         } catch (IOException e) {
-            System.err.println("DataWriter1: could not write to " + path + e.getMessage());
+            System.err.println("DataWriter: could not write to " + path + e.getMessage());
             return false;
         }
     }
