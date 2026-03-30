@@ -177,4 +177,6 @@ public class UserSolution {
         }
         return totalVote;
     }
+
+    
 }
