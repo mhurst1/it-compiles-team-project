@@ -112,9 +112,6 @@ public class QuestionList {
      * Saves the current list of questions to persistent storage. This method creates an instance of DataWriter and calls its saveQuestions() method to write the current state of the questions list to a file or database. This allows the application to maintain data persistence, ensuring that any changes made to the questions list are saved and can be retrieved later when the application is restarted.
      */
     public void save() {
-
-        DataWriter writer = new DataWriter();
-        writer.saveQuestions();
-
+        DataWriter.saveQuestions(questions);
     }
 }

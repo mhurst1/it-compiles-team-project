@@ -120,8 +120,6 @@ public class UserList {
      * Persists the current user list through the data writer.
      */
     public void save(){
-        DataWriter writer = new DataWriter();
-        writer.saveUsers();
+        DataWriter.saveUsers(users);
     }
-    
 }

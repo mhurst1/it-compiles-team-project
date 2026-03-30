@@ -1,0 +1,4 @@
+--patch-module
+com.interviews=_
+--add-reads
+com.interviews=ALL-UNNAMED
