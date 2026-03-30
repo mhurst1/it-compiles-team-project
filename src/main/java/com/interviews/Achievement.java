@@ -21,11 +21,30 @@ public class Achievement {
     private static final int POINTS_PER_LEVEL = 100;
 
     public Achievement(int leaderboardPlace, int userLevel, int allVotePoints, int streak) {
+
+        // This Method Should Get the Lowest Leaderboard Place and Place the user there
+        // Set to 0 for now until I find a way to get all the users from json and set it as an int
+        if (leaderboardPlace < 0) {
+            System.out.println("Invalid leaderboard place: " + leaderboardPlace + ". Setting to lowest leaderboard place."); 
+            leaderboardPlace = 0; 
+        }
+
+        if (userLevel < 1) {
+            System.out.println("Invalid user level: " + userLevel + ". Setting User Level to 1.");
+            userLevel = 1;
+        }
+        if (allVotePoints < 0) {
+            System.out.println("Invalid vote points: " + allVotePoints + ". Setting Vote Points to 0.");
+            allVotePoints = 0;
+        }
+        if (streak < 0) {
+            System.out.println("Invalid streak: " + streak + ". Setting Streak to 0.");
+            streak = 0;
+        }
         this.leaderboardPlace = leaderboardPlace;
         this.userLevel = userLevel;
         this.allVotePoints = allVotePoints;
         this.streak = streak;
-
     }
 
     // Call this when user receives a vote
@@ -81,6 +100,11 @@ public class Achievement {
      * @param streak the streak to store
      */
     public void setStreak(int streak) {
+        if (streak < 0) { 
+            System.err.println("Invalid streak: " + streak + ". Your streak is a negative number. \n"); 
+            System.out.println("Setting streak to 0");
+            streak = 0; 
+        }
         this.streak = streak;
     }
 
