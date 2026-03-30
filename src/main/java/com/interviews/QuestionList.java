@@ -48,7 +48,11 @@ public class QuestionList {
      */
     public ArrayList<Question> getQuestions(String keyword) {
         ArrayList<Question> result = new ArrayList<>();
+        if (keyword == null) {
+            return result;
+        }
         for (Question question : questions) {
+            if (question.getTitle() == null) continue;
             if (question.getTitle().toLowerCase().contains(keyword.toLowerCase())) {
                 result.add(question);
             }
@@ -85,7 +89,16 @@ public class QuestionList {
       * @param question the Question object to be removed from the list
      */
     public void deleteQuestion(Question question) {
-        questions.remove(question);
+        if(question == null || question.getId() == null){
+            return;
+        }
+        if(question.getId().equals(question.getId())){
+            questions.remove(question);
+            System.out.println("Question " + question + " has successfully ben removed.");
+        }else{
+            System.err.println("There was an error removing " + question + ". Please Try Again.");            
+        }
+    
     }
 
     /**
