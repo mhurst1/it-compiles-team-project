@@ -10,4 +10,5 @@ public enum Language {
     HTML,
     CSS,
     LINUX,
+    UNKNOWN
 }
