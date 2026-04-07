@@ -1,7 +1,13 @@
 package com.controllers;
 
 import java.io.IOException;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+//import java.model.*;
+
 import com.interviews.App;
 
 /**
@@ -9,13 +15,23 @@ import com.interviews.App;
  */
 public class LoginController {
 
-    /**
-     * Switches the view back to the primary screen.
-     *
-     * @throws IOException if there is an error loading the primary view
-     */
+    
     @FXML
-    private void goToHome() throws IOException {
+    private Button loginButton;
+
+    @FXML
+    private TextField txt_password;
+
+    @FXML
+    private TextField txt_username;
+
+    @FXML
+    void goToHome(ActionEvent event) throws IOException {
         App.setRoot("home");
+    }
+
+    @FXML
+    void login(ActionEvent event) {
+
     }
 }
