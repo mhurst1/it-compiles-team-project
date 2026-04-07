@@ -3,12 +3,9 @@ module com.interviews {
     requires javafx.fxml;
     requires json.simple;
     
-    /**
-     * Added for functionallity for the filereader (BufferImage and ImageIO)
-     * transitive - Just means that any module now has access to java.desktop features 
-     */
-    requires transitive java.desktop; 
-
-    opens com.interviews to javafx.fxml;
+    opens com.controllers to javafx.fxml;
+    opens com.interviews to javafx.fml;
     exports com.interviews;
+
+    requires transitive java.desktop; 
 }
