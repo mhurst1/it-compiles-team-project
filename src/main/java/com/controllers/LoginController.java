@@ -7,7 +7,7 @@ import com.interviews.App;
 /**
  * Controller for the secondary JavaFX view.
  */
-public class SecondaryController {
+public class LoginController {
 
     /**
      * Switches the view back to the primary screen.
@@ -15,7 +15,7 @@ public class SecondaryController {
      * @throws IOException if there is an error loading the primary view
      */
     @FXML
-    private void switchToPrimary() throws IOException {
-        App.setRoot("primary");
+    private void goToHome() throws IOException {
+        App.setRoot("home");
     }
 }
