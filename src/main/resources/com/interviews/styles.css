@@ -35,7 +35,7 @@
 
 /* Right box titles */
 #codeBoardName {
-    -fx-text-fill: #6a0dad;
+    -fx-text-fill: #7734ED;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
@@ -79,4 +79,60 @@
 
 #homeButton:hover {
     -fx-opacity: 0.9;
+}
+
+/* Forgot Password link */
+#forgotPassBtn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #7734ED;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+#forgotPassBtn:hover {
+    -fx-opacity: 0.75;
+}
+
+/* "or" divider */
+#orDivider {
+    -fx-fill: #aaa;
+    -fx-font-size: 12px;
+}
+
+/* "Don't have an account?" + Sign up row */
+#signUpHint {
+    -fx-fill: #666;
+    -fx-font-size: 13px;
+}
+
+#signUpBtn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #7734ED;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+#signUpBtn:hover {
+    -fx-opacity: 0.75;
+}
+
+/* Continue without logging in */
+#continueBtn {
+    -fx-background-color: #f0f0f0;
+    -fx-text-fill: #888;
+    -fx-font-size: 13px;
+    -fx-background-radius: 10;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+#continueBtn:hover {
+    -fx-background-color: #e4e4e4;
 }

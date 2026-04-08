@@ -18,4 +18,19 @@ public class HomeController {
     private void goToLogin() throws IOException {
         App.setRoot("login");
     }
+
+    @FXML
+    private void signUp() throws IOException {
+        App.setRoot("login");
+    }
+
+    @FXML
+    private void continueWithoutLogin() throws IOException {
+        App.setRoot("dashboard");
+    }
+
+    @FXML
+    private void forgotPassword() {
+        
+    }
 }

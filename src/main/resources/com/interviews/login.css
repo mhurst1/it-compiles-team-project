@@ -1,0 +1,149 @@
+.root {
+    -fx-background-color: linear-gradient(to top right, #7734ED, #ff6ec7);
+    -fx-font-family: "Segoe UI";
+}
+
+/* Left Side*/
+#leftPanel {
+    -fx-background-color: transparent;
+}
+
+/* Join Title */
+#joinTitle1,
+#joinTitle2 {
+    -fx-fill: white;
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+}
+
+/* Subtitles */
+#joinSubtitle {
+    -fx-fill: rgba(255, 255, 255, 0.80);
+    -fx-font-size: 13px;
+    -fx-wrap-text: true;
+}
+
+/* Bullet points*/
+#bullet1,
+#bullet2,
+#bullet3,
+#bullet4 {
+    -fx-text-fill: rgba(255, 255, 255, 0.85);
+    -fx-font-size: 13px;
+}
+
+/* ── Right Side*/
+#loginCard {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.18), 24, 0.15, 0, 8);
+}
+
+/* Logo */
+#codeBoardName {
+    -fx-text-fill: #7734ED;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Create Account Title */
+#createTitle {
+    -fx-fill: #1a1a1a;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+/* Subtitle */
+#createSub {
+    -fx-fill: #999;
+    -fx-font-size: 12px;
+}
+
+/* Text Box Labels*/
+#firstNameLabel,
+#lastNameLabel,
+#emailLabel,
+#usernameTitle,
+#uscIdLabel,
+#gradYearLabel,
+#passwordTitle,
+#confirmLabel {
+    -fx-text-fill: #333;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+/* Text Box Titles */
+#txt_firstName,
+#txt_lastName,
+#txt_email,
+#txt_username,
+#txt_uscId,
+#txt_gradYear,
+#txt_password,
+#txt_confirmPassword {
+    -fx-background-color: #f4f4f8;
+    -fx-background-radius: 8;
+    -fx-border-color: #e0e0e8;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-background-insets: 0;
+    -fx-padding: 9 12 9 12;
+    -fx-font-size: 13px;
+    -fx-prompt-text-fill: #bbb;
+}
+
+/* Used To Show The Text Box The User is Currently On */
+#txt_firstName:focused,
+#txt_lastName:focused,
+#txt_email:focused,
+#txt_username:focused,
+#txt_uscId:focused,
+#txt_gradYear:focused,
+#txt_password:focused,
+#txt_confirmPassword:focused {
+    -fx-border-color: #7734ED;
+    -fx-background-color: white;
+}
+
+/* Create Account Button */
+#createBtn {
+    -fx-background-color: linear-gradient(to right, #7734ED, #ff6ec7);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 10;
+    -fx-padding: 12 20 12 20;
+    -fx-cursor: hand;
+}
+
+#createBtn:hover {
+    -fx-opacity: 0.90;
+}
+
+/* Footer Section*/
+#alreadyText {
+    -fx-fill: #999;
+    -fx-font-size: 12px;
+}
+
+#loginButton {
+    -fx-background-color: transparent;
+    -fx-text-fill: #7734ED;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-underline: true;
+    -fx-border-color: transparent;
+}
+
+#loginButton:hover {
+    -fx-opacity: 0.75;
+}
+
+/* Error For Email / Other Possible Messages */
+#errorLabel {
+    -fx-text-fill: #e53935;
+    -fx-font-size: 12px;
+}
