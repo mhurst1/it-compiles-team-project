@@ -62,10 +62,17 @@
 #username_txt,
 #password_txt {
     -fx-background-color: #f5f5f7;
-    -fx-background-radius: 10;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
     -fx-border-color: transparent;
     -fx-background-insets: 0;
     -fx-padding: 10;
+}
+
+#username_txt:focused,
+#password_txt:focused{
+    -fx-border-color: #7734ED;
+    -fx-background-color: white;
 }
 
 /* Login button */
