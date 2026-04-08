@@ -89,16 +89,17 @@ public class QuestionList {
       * @param question the Question object to be removed from the list
      */
     public void deleteQuestion(Question question) {
-        if(question == null || question.getId() == null){
+        if (question == null || question.getId() == null) {
             return;
         }
-        if(question.getId().equals(question.getId())){
-            questions.remove(question);
-            System.out.println("Question " + question + " has successfully ben removed.");
-        }else{
-            System.err.println("There was an error removing " + question + ". Please Try Again.");            
+        for (int i = 0; i < questions.size(); i++) {
+            if (questions.get(i).getId().equals(question.getId())) {
+                questions.remove(i);
+                System.out.println("Question " + question + " has successfully been removed.");
+                return;
+            }
         }
-    
+        System.err.println("There was an error removing " + question + ". Please Try Again.");
     }
 
     /**

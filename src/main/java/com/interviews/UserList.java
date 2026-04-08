@@ -76,7 +76,7 @@ public class UserList {
      */
     public User getUser(String username){
          for(User user : users){
-            if(user.getUsername().equals(username)){
+            if(user.getUsername() != null && user.getUsername().equals(username)){
                 return user;
             }
          }
@@ -89,7 +89,13 @@ public class UserList {
      * @param user the current user
      */
     public void deleteUser(User user){
-        users.remove(user);
+        if (user == null || user.getId() == null) return;
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId().equals(user.getId())) {
+                users.remove(i);
+                return;
+            }
+        }
     }
 
     /**
@@ -103,17 +109,30 @@ public class UserList {
      * @param graduationYear the users graduation year
      * @param idUSC the users USC id
      */
-    public void editUser(User user, String firstName, String lastName, String username, 
+    public void editUser(User user, String firstName, String lastName, String username,
         String password, String email, int graduationYear, String idUSC){
-        if(users.contains(user)){
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
-            user.setUsername(username);
-            user.setPassword(password);
-            user.setEmail(email);
-            user.setGraduationYear(graduationYear);
-            user.setIdUSC(idUSC);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+
+        // Only update username if it is not null/blank and not already taken by another user
+        if (username != null && !username.isBlank()) {
+            boolean isDuplicate = false;
+            for (User u : users) {
+                if (u != user && username.equals(u.getUsername())) {
+                    isDuplicate = true;
+                    break;
+                }
+            }
+            if (!isDuplicate) {
+                user.setUsername(username);
+            }
         }
+
+        // setPassword and setEmail have built-in validation that rejects null/blank/invalid
+        user.setPassword(password);
+        user.setEmail(email);
+        user.setGraduationYear(graduationYear);
+        user.setIdUSC(idUSC);
     }
 
     /**

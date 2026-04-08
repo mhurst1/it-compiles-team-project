@@ -60,6 +60,10 @@ public class Question {
         this.id = UUID.randomUUID();
         if (title == null || title.isBlank()) { System.out.println("Invalid title: cannot be null or empty. Setting to empty string."); title = ""; }
         if (description == null) { System.out.println("Invalid description: cannot be null. Setting to empty string."); description = ""; }
+        if (user == null) {
+            System.out.println("Invalid user: cannot be null. Setting to default user.");
+            user = new User("unknown", "unknown", "unknown", "Unknown!1", "unknown@placeholder.com", 2000, "unknown");
+        }
         this.title = title;
         this.user = user;
         this.description = description;
@@ -80,7 +84,15 @@ public class Question {
      * @param id the UUID (not used directly; generates a new one)
      */
     public Question(UUID id){
-        this.id = UUID.randomUUID();
+        if (id != null) {
+            this.id = id;
+        } else {
+            this.id = UUID.randomUUID();
+        }
+        this.comments = new ArrayList<>();
+        this.solutionList = new ArrayList<>();
+        this.givenSolutionIMG = new ArrayList<>();
+        this.givenSolutionTXT = new ArrayList<>();
     }
 
     /**
@@ -105,6 +117,10 @@ public class Question {
         if (description == null) {
             System.out.println("Invalid description: cannot be null. Setting to Default Description.");
             description = "Default Description.";
+        }
+        if (user == null) {
+            System.out.println("Invalid user: cannot be null. Setting to default user.");
+            user = new User("unknown", "unknown", "unknown", "Unknown!1", "unknown@placeholder.com", 2000, "unknown");
         }
         this.title = title;
         this.user = user;
@@ -338,7 +354,7 @@ public class Question {
      * @return a string (currently placeholder)
      */
     public String toString(){
-        return " "; // Edit this
+        return "Question[id=" + id + ", title=" + title + ", difficulty=" + difficulty + ", language=" + questionLang + "]";
     }
 
     /* CONTAINTS MIGHT HAVE TO GO WITIN SECTION

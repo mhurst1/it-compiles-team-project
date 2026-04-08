@@ -74,10 +74,40 @@ public class User {
      * @param graduationYear the graduation year
      * @param idUSC the USC ID
      */
-    public User(String firstName, String lastName, String username, 
+    public User(String firstName, String lastName, String username,
                     String password, String email, int graduationYear, String idUSC){
 
         this.id = UUID.randomUUID();
+
+        if (firstName == null || firstName.isBlank()) {
+            System.out.println("Invalid firstName: cannot be null or blank. Setting to 'unknown'.");
+            firstName = "unknown";
+        }
+        if (lastName == null || lastName.isBlank()) {
+            System.out.println("Invalid lastName: cannot be null or blank. Setting to 'unknown'.");
+            lastName = "unknown";
+        }
+        if (username == null || username.isBlank()) {
+            System.out.println("Invalid username: cannot be null or blank. Setting to 'unknown'.");
+            username = "unknown";
+        }
+        if (password == null || password.isBlank()) {
+            System.out.println("Invalid password: cannot be null or blank. Setting to default.");
+            password = "Unknown!1";
+        }
+        if (email == null || !email.contains("@") || email.indexOf("@") == 0 || email.indexOf("@") == email.length() - 1) {
+            System.out.println("Invalid email format. Setting to default.");
+            email = "unknown@placeholder.com";
+        }
+        if (graduationYear < 2000 || graduationYear > 2099) {
+            System.out.println("Invalid graduation year. Setting to 2000.");
+            graduationYear = 2000;
+        }
+        if (idUSC == null || idUSC.isBlank()) {
+            System.out.println("Invalid idUSC: cannot be null or blank. Setting to 'unknown'.");
+            idUSC = "unknown";
+        }
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -103,7 +133,8 @@ public class User {
      * @return {@code true} when the username and password match
      */
     public boolean isMatch(String username, String password){
-        return(this.username.equals(username)&&this.password.equals(password));
+        return this.username != null && this.username.equals(username)
+                && this.password != null && this.password.equals(password);
     }
 
     /**
@@ -239,6 +270,10 @@ public class User {
      * @param username the username the user inputs 
      */
     public void setUsername(String username){
+        if (username == null || username.isBlank()) {
+            System.out.println("Invalid username: cannot be null or blank. Username not updated.");
+            return;
+        }
         this.username = username;
     }
 
@@ -255,6 +290,10 @@ public class User {
      * @param password the password the user inputs 
      */
     public void setPassword(String password){
+        if (password == null || password.isBlank()) {
+            System.out.println("Invalid password: cannot be null or blank. Password not updated.");
+            return;
+        }
         this.password = password;
     }
 
@@ -271,6 +310,10 @@ public class User {
      * @param email the email the user inputs 
      */
     public void setEmail(String email){
+        if (email == null || !email.contains("@") || email.indexOf("@") == 0 || email.indexOf("@") == email.length() - 1) {
+            System.out.println("Invalid email format. Email not updated.");
+            return;
+        }
         this.email = email;
     }
 
