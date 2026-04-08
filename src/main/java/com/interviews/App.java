@@ -14,6 +14,7 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
+    public static User currentUser;
 
     /**
      * Starts the JavaFX application and loads the primary scene.

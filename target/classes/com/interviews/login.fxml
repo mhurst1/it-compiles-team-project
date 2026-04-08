@@ -15,6 +15,7 @@
       <TextField fx:id="txt_password" />
         <Button fx:id="loginButton" onAction="#goToHome" text="Back" />
       <Button mnemonicParsing="false" onAction="#login" text="Login" />
+      <Label fx:id="errorLabel" style="-fx-text-fill: red;" />
     </children>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
