@@ -1,0 +1,316 @@
+.root {
+    -fx-font-family: "Segoe UI";
+    -fx-background-color: #f0f2f5;
+}
+.navbar {
+    -fx-background-color: #12112a;
+}
+
+.nav-logo {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.nav-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #b0b0c8;
+    -fx-font-size: 13px;
+    -fx-font-weight: normal;
+    -fx-background-radius: 6;
+    -fx-padding: 6 14 6 14;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.nav-btn:hover {
+    -fx-text-fill: white;
+    -fx-background-color: rgba(255,255,255,0.08);
+}
+
+.nav-btn-active {
+    -fx-background-color: linear-gradient(to top right, #7734ED, #ff6ec7);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.nav-btn-active:hover {
+    -fx-opacity: 0.88;
+}
+
+.nav-username {
+    -fx-text-fill: #d0cfe8;
+    -fx-font-size: 13px;
+}
+
+.nav-avatar {
+    -fx-fill: linear-gradient(to top right, #7734ED, #ff6ec7);
+    -fx-stroke: #ff6ec7;
+    -fx-stroke-width: 2;
+}
+
+.left-sidebar {
+    -fx-background-color: white;
+    -fx-border-color: transparent #e8e8ec transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+
+.sidebar-section-title {
+    -fx-text-fill: #9090a8;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 4 0 8 4;
+}
+
+.sidebar-item {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6;
+    -fx-padding: 7 8 7 8;
+    -fx-cursor: hand;
+}
+
+.sidebar-item:hover {
+    -fx-background-color: #f3effe;
+}
+
+.sidebar-item-active {
+    -fx-background-color: #f0eaff;
+}
+
+.sidebar-item-label {
+    -fx-text-fill: #333348;
+    -fx-font-size: 13px;
+}
+
+.sidebar-item-active .sidebar-item-label {
+    -fx-text-fill: #7734ED;
+    -fx-font-weight: bold;
+}
+
+.sidebar-count {
+    -fx-text-fill: #9090a8;
+    -fx-font-size: 11px;
+    -fx-background-color: #f0f2f5;
+    -fx-background-radius: 10;
+    -fx-padding: 1 6 1 6;
+}
+
+.sidebar-item-active .sidebar-count {
+    -fx-text-fill: #7734ED;
+    -fx-background-color: #e6d8ff;
+}
+
+.main-content {
+    -fx-background-color: #f0f2f5;
+}
+
+/* Welcome greeting */
+.welcome-greeting {
+    -fx-text-fill: #1a1a2e;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+/* Search bar */
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #e0e0ea;
+    -fx-border-width: 1;
+    -fx-background-insets: 0;
+    -fx-padding: 9 14 9 14;
+    -fx-font-size: 13px;
+    -fx-text-fill: #333;
+    -fx-prompt-text-fill: #aaa;
+}
+
+.search-field:focused {
+    -fx-border-color: #7734ED;
+    -fx-background-color: white;
+}
+
+/* Title + subtitle */
+.content-title {
+    -fx-text-fill: #1a1a2e;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.content-subtitle {
+    -fx-text-fill: #9090a8;
+    -fx-font-size: 12px;
+}
+
+/* Difficulty filter buttons */
+.filter-btn {
+    -fx-background-color: white;
+    -fx-text-fill: #555;
+    -fx-font-size: 12px;
+    -fx-background-radius: 20;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 20;
+    -fx-border-width: 1;
+    -fx-padding: 5 14 5 14;
+    -fx-cursor: hand;
+}
+
+.filter-btn:hover {
+    -fx-background-color: #f3effe;
+    -fx-border-color: #7734ED;
+    -fx-text-fill: #7734ED;
+}
+
+.filter-btn-active {
+    -fx-background-color: linear-gradient(to top right, #7734ED, #ff6ec7);
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+    -fx-font-weight: bold;
+}
+
+.filter-btn-active:hover {
+    -fx-opacity: 0.88;
+}
+
+.add-btn {
+    -fx-background-color: linear-gradient(to top right, #7734ED, #ff6ec7);
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-border-color: transparent;
+    -fx-min-width: 32;
+    -fx-min-height: 32;
+    -fx-padding: 0 10 2 10;
+    -fx-cursor: hand;
+}
+
+.add-btn:hover {
+    -fx-opacity: 0.88;
+}
+
+.question-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #ebebf2;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 2);
+    -fx-cursor: hand;
+}
+
+.question-card:hover {
+    -fx-border-color: #c4a8f5;
+    -fx-effect: dropshadow(gaussian, rgba(119,52,237,0.12), 10, 0, 0, 3);
+}
+
+.dot-solved {
+    -fx-fill: #22c55e;
+}
+
+.dot-unsolved {
+    -fx-fill: #d1d5db;
+}
+
+.question-number {
+    -fx-text-fill: #aaa;
+    -fx-font-size: 12px;
+    -fx-min-width: 28;
+}
+
+.question-title {
+    -fx-text-fill: #1a1a2e;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.question-category {
+    -fx-text-fill: #9090a8;
+    -fx-font-size: 11px;
+}
+
+/* Difficulty badges */
+.badge {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 3 10 3 10;
+    -fx-min-width: 58;
+    -fx-alignment: center;
+}
+
+.badge-easy {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #16a34a;
+}
+
+.badge-medium {
+    -fx-background-color: #fff7ed;
+    -fx-text-fill: #ea580c;
+}
+
+.badge-hard {
+    -fx-background-color: #fef2f2;
+    -fx-text-fill: #dc2626;
+}
+
+.vote-count {
+    -fx-text-fill: #9090a8;
+    -fx-font-size: 12px;
+    -fx-min-width: 40;
+    -fx-alignment: center-right;
+}
+
+.arrow {
+    -fx-text-fill: #c0c0d0;
+    -fx-font-size: 18px;
+}
+
+.right-sidebar {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent transparent #e8e8ec;
+    -fx-border-width: 0 0 0 1;
+}
+
+.stat-card {
+    -fx-background-color: #fafafa;
+    -fx-background-radius: 8;
+    -fx-border-color: #ebebf2;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-padding: 10 12 10 12;
+}
+
+.stat-label {
+    -fx-text-fill: #9090a8;
+    -fx-font-size: 11px;
+}
+
+.stat-value {
+    -fx-text-fill: #1a1a2e;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.stat-streak {
+    -fx-text-fill: #f97316;
+}
+
+.stat-rank {
+    -fx-text-fill: #c040a0;
+}
+
+.stat-upvote {
+    -fx-text-fill: #16a34a;
+}
+
+.stat-downvote {
+    -fx-text-fill: #dc2626;
+}
+
+/* Recent activity */
+.activity-item {
+    -fx-text-fill: #555570;
+    -fx-font-size: 12px;
+    -fx-padding: 2 0 2 0;
+}

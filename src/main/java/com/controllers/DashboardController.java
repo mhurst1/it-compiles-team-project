@@ -13,9 +13,16 @@ public class DashboardController {
     private Label welcomeLabel;
 
     @FXML
+    private Label welcomeGreeting;
+
+    @FXML
     private void initialize() {
         if (App.currentUser != null) {
-            welcomeLabel.setText("Welcome, " + App.currentUser.getFirstName() + "!");
+            String name = App.currentUser.getFirstName();
+            welcomeLabel.setText("Welcome, " + name + "!");
+            welcomeGreeting.setText("Welcome, " + name + "!");
+        } else {
+            welcomeGreeting.setText("Welcome!");
         }
     }
 }
