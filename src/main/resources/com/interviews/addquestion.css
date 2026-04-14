@@ -1,0 +1,278 @@
+/* ── Page root & scroll pane ──────────────────────────────── */
+.root,
+.scroll-pane,
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    -fx-font-family: "System";
+}
+
+#pageRoot {
+    -fx-background-color: linear-gradient(to top right, #7734ED, #ff6ec7);
+    -fx-min-height: 700px;
+}
+
+/* ── Breadcrumb bar ───────────────────────────────────────── */
+#breadcrumbBar {
+    -fx-background-color: rgba(0, 0, 0, 0.25);
+    -fx-border-color: rgba(255, 255, 255, 0.12);
+    -fx-border-width: 0 0 1 0;
+}
+
+.breadcrumb-link {
+    -fx-text-fill: rgba(255, 255, 255, 0.75);
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+
+.breadcrumb-link:hover {
+    -fx-text-fill: white;
+    -fx-underline: true;
+}
+
+.breadcrumb-sep {
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+    -fx-font-size: 13px;
+}
+
+.breadcrumb-current {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* ── Sidebar card ─────────────────────────────────────────── */
+#sidebarCard {
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.30), 20, 0.15, 0, 6);
+}
+
+.sidebar-title {
+    -fx-text-fill: #1a1a2e;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.sidebar-empty {
+    -fx-text-fill: #bbb;
+    -fx-font-size: 12px;
+}
+
+/* ── Form card ────────────────────────────────────────────── */
+#formCard {
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.30), 20, 0.15, 0, 6);
+}
+
+.form-title {
+    -fx-text-fill: #1a1a2e;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+/* ── Field labels ─────────────────────────────────────────── */
+.field-label {
+    -fx-text-fill: #555;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 0.3px;
+}
+
+/* ── Text fields ──────────────────────────────────────────── */
+.field-input {
+    -fx-background-color: #f7f7fb;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #e2e2ec;
+    -fx-border-width: 1.5;
+    -fx-padding: 9 13 9 13;
+    -fx-font-size: 13px;
+    -fx-text-fill: #1a1a2e;
+    -fx-prompt-text-fill: #b0b0c8;
+}
+
+.field-input:focused {
+    -fx-background-color: white;
+    -fx-border-color: #7734ED;
+    -fx-effect: dropshadow(gaussian, rgba(119,52,237,0.18), 8, 0.2, 0, 0);
+}
+
+/* ── TextArea ─────────────────────────────────────────────── */
+.field-textarea {
+    -fx-background-color: #f7f7fb;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #e2e2ec;
+    -fx-border-width: 1.5;
+    -fx-padding: 9 13 9 13;
+    -fx-font-size: 13px;
+    -fx-text-fill: #1a1a2e;
+    -fx-prompt-text-fill: #b0b0c8;
+}
+
+.field-textarea:focused {
+    -fx-background-color: white;
+    -fx-border-color: #7734ED;
+    -fx-effect: dropshadow(gaussian, rgba(119,52,237,0.18), 8, 0.2, 0, 0);
+}
+
+/* ── ComboBox ─────────────────────────────────────────────── */
+.combo-box {
+    -fx-background-color: #f7f7fb;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #e2e2ec;
+    -fx-border-width: 1.5;
+    -fx-font-size: 13px;
+}
+
+.combo-box:focused {
+    -fx-border-color: #7734ED;
+}
+
+.combo-box .list-cell {
+    -fx-padding: 6 12 6 12;
+    -fx-text-fill: #1a1a2e;
+    -fx-font-size: 13px;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.18), 12, 0.1, 0, 4);
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: #f3ecff;
+    -fx-text-fill: #7734ED;
+}
+
+/* ── Submit button (green) ────────────────────────────────── */
+.btn-submit {
+    -fx-background-color: #22c55e;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8;
+    -fx-padding: 9 22 9 22;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(34,197,94,0.35), 10, 0.2, 0, 3);
+}
+
+.btn-submit:hover {
+    -fx-background-color: #16a34a;
+}
+
+/* ── Save Draft button (outlined purple) ──────────────────── */
+.btn-outline {
+    -fx-background-color: transparent;
+    -fx-text-fill: #7734ED;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #7734ED;
+    -fx-border-width: 1.5;
+    -fx-padding: 9 18 9 18;
+    -fx-cursor: hand;
+}
+
+.btn-outline:hover {
+    -fx-background-color: #f3ecff;
+}
+
+/* ── Ghost / link buttons ─────────────────────────────────── */
+.btn-ghost {
+    -fx-background-color: transparent;
+    -fx-text-fill: #7734ED;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+    -fx-padding: 4 0 4 0;
+    -fx-cursor: hand;
+}
+
+.btn-ghost:hover {
+    -fx-opacity: 0.75;
+    -fx-underline: true;
+}
+
+/* ── Remove hint (✕) button ───────────────────────────────── */
+.btn-remove-hint {
+    -fx-background-color: #fef2f2;
+    -fx-text-fill: #f87171;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-border-color: transparent;
+    -fx-padding: 5 9 5 9;
+    -fx-cursor: hand;
+}
+
+.btn-remove-hint:hover {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #ef4444;
+}
+
+/* ── Published questions card ─────────────────────────────── */
+#publishedCard {
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.30), 20, 0.15, 0, 6);
+}
+
+.section-heading {
+    -fx-text-fill: #1a1a2e;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+/* ── Table ────────────────────────────────────────────────── */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #ebebf5;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #f7f7fb;
+    -fx-background-radius: 8 8 0 0;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #7734ED;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #f0f0f8 transparent;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #faf8ff;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #ede9ff;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: #333;
+    -fx-font-size: 13px;
+    -fx-padding: 8 12 8 12;
+}
+
+/* ── Feedback label ───────────────────────────────────────── */
+.feedback-label {
+    -fx-font-size: 12px;
+}
+
+/* ── Separator ────────────────────────────────────────────── */
+.separator .line {
+    -fx-border-color: #ebebf5;
+}
