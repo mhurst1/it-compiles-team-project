@@ -4,7 +4,7 @@ module com.interviews {
     requires json.simple;
     
     opens com.controllers to javafx.fxml;
-    opens com.interviews to javafx.fml;
+    opens com.interviews to javafx.fxml;
     exports com.interviews;
 
     requires transitive java.desktop; 

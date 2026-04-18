@@ -1,496 +1,541 @@
 package com.controllers;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import com.interviews.App;
+import com.interviews.DataLoader;
 import com.interviews.Difficulty;
+import com.interviews.Question;
 import com.interviews.Status;
+import com.interviews.User;
+import com.interviews.UserSolution;
 
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.VBox;
 
-/**
- * Controller for the admin dashboard view.
- */
 public class AdminDashboardController {
 
     @FXML
-    private Label profileInitialsLabel;
+    private Label welcomeLabel;
 
     @FXML
-    private Label totalUsersLabel;
+    private Label avatarLabel;
 
     @FXML
-    private Label totalUsersTrendLabel;
+    private Label dashboardSubtitle;
 
     @FXML
-    private Label questionsCountLabel;
+    private Label totalUsersValue;
 
     @FXML
-    private Label questionsTrendLabel;
+    private Label totalUsersTrend;
 
     @FXML
-    private Label upvotesCountLabel;
+    private Label totalQuestionsValue;
 
     @FXML
-    private Label upvotesTrendLabel;
+    private Label totalQuestionsTrend;
 
     @FXML
-    private Label solutionsCountLabel;
+    private Label totalUpvotesValue;
 
     @FXML
-    private Label solutionsTrendLabel;
+    private Label totalUpvotesTrend;
 
     @FXML
-    private TableView<UserRow> userTable;
+    private Label totalSolutionsValue;
 
     @FXML
-    private TableColumn<UserRow, String> usernameColumn;
+    private Label totalSolutionsTrend;
 
     @FXML
-    private TableColumn<UserRow, Status> roleColumn;
+    private VBox userManagementRows;
 
     @FXML
-    private TableColumn<UserRow, String> solvedColumn;
+    private VBox questionManagementRows;
 
     @FXML
-    private TableColumn<UserRow, String> votesColumn;
+    private VBox leaderboardRows;
 
     @FXML
-    private TableColumn<UserRow, UserRow> userActionsColumn;
+    private VBox pendingReviewRows;
 
     @FXML
-    private TableView<QuestionRow> questionTable;
+    private Label actionMessage;
 
-    @FXML
-    private TableColumn<QuestionRow, String> questionTitleColumn;
-
-    @FXML
-    private TableColumn<QuestionRow, Difficulty> difficultyColumn;
-
-    @FXML
-    private TableColumn<QuestionRow, String> attemptsColumn;
-
-    @FXML
-    private TableColumn<QuestionRow, String> authorColumn;
-
-    @FXML
-    private TableColumn<QuestionRow, QuestionRow> questionActionsColumn;
-
-    @FXML
-    private TableView<LeaderboardRow> leaderboardTable;
-
-    @FXML
-    private TableColumn<LeaderboardRow, String> rankColumn;
-
-    @FXML
-    private TableColumn<LeaderboardRow, String> leaderboardUsernameColumn;
-
-    @FXML
-    private TableColumn<LeaderboardRow, Status> leaderboardRoleColumn;
-
-    @FXML
-    private TableColumn<LeaderboardRow, String> leaderboardUpvotesColumn;
-
-    @FXML
-    private TableView<PendingReviewRow> pendingReviewTable;
-
-    @FXML
-    private TableColumn<PendingReviewRow, String> reviewTitleColumn;
-
-    @FXML
-    private TableColumn<PendingReviewRow, String> submittedByColumn;
-
-    @FXML
-    private TableColumn<PendingReviewRow, PendingReviewRow> reviewActionsColumn;
+    private List<User> users;
+    private List<Question> questions;
+    private Map<String, UserMetrics> metricsByUser;
 
     @FXML
     private void initialize() {
-        configureSummaryCards();
-        configureUserTable();
-        configureQuestionTable();
-        configureLeaderboardTable();
-        configurePendingReviewTable();
-        loadSampleData();
+        users = dedupeUsers(DataLoader.getUsers());
+        questions = DataLoader.getQuestions();
+        metricsByUser = buildUserMetrics(users, questions);
+
+        configureWelcomeState();
+        populateStatCards();
+        populateUserManagement();
+        populateQuestionManagement();
+        populateLeaderboard();
+        populatePendingReviews();
     }
 
-    private void configureSummaryCards() {
-        totalUsersLabel.setText("248");
-        totalUsersTrendLabel.setText("\u2191 12 this week");
-        questionsCountLabel.setText("128");
-        questionsTrendLabel.setText("\u2191 5 new");
-        upvotesCountLabel.setText("5,240");
-        upvotesTrendLabel.setText("\u2191 312 this week");
-        solutionsCountLabel.setText("3,816");
-        solutionsTrendLabel.setText("\u2191 204 this week");
-        profileInitialsLabel.setText("AD");
+    @FXML
+    private void goHome() {
+        showActionMessage("Home navigation is ready for wiring.");
     }
 
-    private void configureUserTable() {
-        usernameColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getUsername()));
-        roleColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getRole()));
-        solvedColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getSolvedDisplay()));
-        votesColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getVotesDisplay()));
-        userActionsColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue()));
+    @FXML
+    private void openQuestions() {
+        showActionMessage("Question management section is open.");
+    }
 
-        roleColumn.setCellFactory(column -> createTagCell());
-        userActionsColumn.setCellFactory(column -> new TableCell<UserRow, UserRow>() {
-            @Override
-            protected void updateItem(UserRow item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                    return;
+    @FXML
+    private void openCommunity() {
+        showActionMessage("Community tools can be connected here next.");
+    }
+
+    private void configureWelcomeState() {
+        User currentUser = App.currentUser;
+        String displayName = "Admin";
+
+        if (currentUser != null) {
+            if (currentUser.getFirstName() != null && !currentUser.getFirstName().isBlank()) {
+                displayName = currentUser.getFirstName();
+            } else if (currentUser.getUsername() != null && !currentUser.getUsername().isBlank()) {
+                displayName = currentUser.getUsername();
+            }
+        }
+
+        welcomeLabel.setText(displayName);
+        avatarLabel.setText(displayName.substring(0, 1).toUpperCase(Locale.US));
+        dashboardSubtitle.setText("Platform overview for " + users.size() + " users and "
+                + questions.size() + " questions.");
+    }
+
+    private void populateStatCards() {
+        int totalVotes = 0;
+        int totalSolutions = 0;
+        int questionsWithSolutions = 0;
+        int pendingReviews = 0;
+
+        for (Question question : questions) {
+            ArrayList<UserSolution> solutions = question.getSolutionList();
+            if (solutions != null && !solutions.isEmpty()) {
+                questionsWithSolutions++;
+                totalSolutions += solutions.size();
+                for (UserSolution solution : solutions) {
+                    totalVotes += Math.max(0, solution.getTotalVote());
+                }
+            } else {
+                pendingReviews++;
+            }
+        }
+
+        totalUsersValue.setText(formatNumber(users.size()));
+        totalUsersTrend.setText(users.size() + " active profiles loaded");
+
+        totalQuestionsValue.setText(formatNumber(questions.size()));
+        totalQuestionsTrend.setText(questionsWithSolutions + " questions already answered");
+
+        totalUpvotesValue.setText(formatNumber(totalVotes));
+        totalUpvotesTrend.setText(totalSolutions == 0 ? "No upvotes yet" : totalSolutions + " solution votes tracked");
+
+        totalSolutionsValue.setText(formatNumber(totalSolutions));
+        totalSolutionsTrend.setText(pendingReviews + " questions still pending review");
+    }
+
+    private void populateUserManagement() {
+        userManagementRows.getChildren().clear();
+
+        List<UserMetrics> rankedUsers = new ArrayList<>(metricsByUser.values());
+        rankedUsers.sort(Comparator.comparingInt(UserMetrics::getVoteTotal).reversed()
+                .thenComparingInt(UserMetrics::getSolvedCount).reversed()
+                .thenComparing(UserMetrics::getUsername, String.CASE_INSENSITIVE_ORDER));
+
+        int limit = Math.min(5, rankedUsers.size());
+        for (int i = 0; i < limit; i++) {
+            UserMetrics metrics = rankedUsers.get(i);
+            HBox row = createPanelRow();
+            row.getChildren().addAll(
+                    textCell(metrics.getUsername(), "panel-cell user-name-cell", 150),
+                    badgeCell(roleLabel(metrics.getStatus()), roleClass(metrics.getStatus()), 95),
+                    textCell(String.valueOf(metrics.getSolvedCount()), "panel-cell", 70),
+                    accentCell(String.valueOf(metrics.getVoteTotal()), 70),
+                    actionButton("Edit", "action-btn primary-action",
+                            "Edit user flow for @" + metrics.getUsername() + " is ready to connect.")
+            );
+            userManagementRows.getChildren().add(row);
+        }
+    }
+
+    private void populateQuestionManagement() {
+        questionManagementRows.getChildren().clear();
+
+        List<QuestionSnapshot> rankedQuestions = buildQuestionSnapshots();
+        rankedQuestions.sort(Comparator.comparingInt(QuestionSnapshot::getVoteTotal).reversed()
+                .thenComparing(QuestionSnapshot::getTitle, String.CASE_INSENSITIVE_ORDER));
+
+        int limit = Math.min(5, rankedQuestions.size());
+        for (int i = 0; i < limit; i++) {
+            QuestionSnapshot snapshot = rankedQuestions.get(i);
+            HBox row = createPanelRow();
+            row.getChildren().addAll(
+                    textCell(snapshot.getTitle(), "panel-cell question-title-cell", 220),
+                    badgeCell(difficultyLabel(snapshot.getDifficulty()), difficultyClass(snapshot.getDifficulty()), 84),
+                    accentCell(String.valueOf(snapshot.getVoteTotal()), 55),
+                    textCell(snapshot.getAuthor(), "panel-cell by-cell", 96),
+                    actionButton("Edit", "action-btn primary-action",
+                            "Edit question flow for \"" + snapshot.getTitle() + "\" is ready to connect."),
+                    actionButton("Remove", "action-btn danger-action",
+                            "Remove question flow for \"" + snapshot.getTitle() + "\" is ready to connect.")
+            );
+            questionManagementRows.getChildren().add(row);
+        }
+    }
+
+    private void populateLeaderboard() {
+        leaderboardRows.getChildren().clear();
+
+        List<UserMetrics> leaderboard = new ArrayList<>(metricsByUser.values());
+        leaderboard.sort(Comparator.comparingInt(UserMetrics::getVoteTotal).reversed()
+                .thenComparing(UserMetrics::getUsername, String.CASE_INSENSITIVE_ORDER));
+
+        int limit = Math.min(5, leaderboard.size());
+        for (int i = 0; i < limit; i++) {
+            UserMetrics metrics = leaderboard.get(i);
+            HBox row = createPanelRow();
+            row.getChildren().addAll(
+                    textCell("#" + (i + 1), "panel-cell rank-cell", 52),
+                    textCell(metrics.getUsername(), "panel-cell user-name-cell", 130),
+                    badgeCell(roleLabel(metrics.getStatus()), roleClass(metrics.getStatus()), 95),
+                    accentCell(String.valueOf(metrics.getVoteTotal()), 70)
+            );
+            leaderboardRows.getChildren().add(row);
+        }
+    }
+
+    private void populatePendingReviews() {
+        pendingReviewRows.getChildren().clear();
+
+        List<QuestionSnapshot> pending = buildQuestionSnapshots();
+        pending.removeIf(snapshot -> snapshot.getSolutionCount() > 0);
+        pending.sort(Comparator.comparing(QuestionSnapshot::getTitle, String.CASE_INSENSITIVE_ORDER));
+
+        int limit = Math.min(5, pending.size());
+        for (int i = 0; i < limit; i++) {
+            QuestionSnapshot snapshot = pending.get(i);
+            HBox row = createPanelRow();
+            row.getChildren().addAll(
+                    textCell(snapshot.getTitle(), "panel-cell question-title-cell", 220),
+                    textCell(snapshot.getAuthor(), "panel-cell by-cell", 120),
+                    actionButton("Approve", "action-btn primary-action",
+                            "Approve flow for \"" + snapshot.getTitle() + "\" is ready to connect."),
+                    actionButton("Reject", "action-btn danger-action",
+                            "Reject flow for \"" + snapshot.getTitle() + "\" is ready to connect.")
+            );
+            pendingReviewRows.getChildren().add(row);
+        }
+    }
+
+    private List<QuestionSnapshot> buildQuestionSnapshots() {
+        List<QuestionSnapshot> snapshots = new ArrayList<>();
+
+        for (Question question : questions) {
+            int totalVotes = 0;
+            int solutionCount = 0;
+
+            ArrayList<UserSolution> solutions = question.getSolutionList();
+            if (solutions != null) {
+                solutionCount = solutions.size();
+                for (UserSolution solution : solutions) {
+                    totalVotes += Math.max(0, solution.getTotalVote());
+                }
+            }
+
+            snapshots.add(new QuestionSnapshot(
+                    safeQuestionTitle(question.getTitle()),
+                    question.getDifficulty(),
+                    totalVotes,
+                    resolveUsername(question.getUser()),
+                    solutionCount
+            ));
+        }
+
+        return snapshots;
+    }
+
+    private Map<String, UserMetrics> buildUserMetrics(List<User> userList, List<Question> questionList) {
+        Map<String, UserMetrics> results = new LinkedHashMap<>();
+
+        for (User user : userList) {
+            String key = resolveUsername(user);
+            results.putIfAbsent(key, new UserMetrics(user, key));
+        }
+
+        for (Question question : questionList) {
+            ArrayList<UserSolution> solutions = question.getSolutionList();
+            if (solutions == null) {
+                continue;
+            }
+
+            for (UserSolution solution : solutions) {
+                User user = solution.getUser();
+                if (user == null) {
+                    continue;
                 }
 
-                Button editButton = createActionButton("Edit", "#175CD3", "#EFF8FF", event ->
-                    showActionMessage("Edit User", "Editing user " + item.getUsername())
-                );
-                Button removeButton = createActionButton("Remove", "#B42318", "#FEF3F2", event ->
-                    showActionMessage("Remove User", "Removing user " + item.getUsername())
-                );
-
-                HBox actionBox = new HBox(8, editButton, removeButton);
-                setGraphic(actionBox);
+                String key = resolveUsername(user);
+                UserMetrics metrics = results.computeIfAbsent(key, ignored -> new UserMetrics(user, key));
+                metrics.addSolvedQuestion();
+                metrics.addVotes(Math.max(0, solution.getTotalVote()));
             }
-        });
+        }
 
-        alignTableColumns(usernameColumn, solvedColumn, votesColumn);
+        return results;
     }
 
-    private void configureQuestionTable() {
-        questionTitleColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getTitle()));
-        difficultyColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getDifficulty()));
-        attemptsColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getAttemptsDisplay()));
-        authorColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getAuthor()));
-        questionActionsColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue()));
+    private List<User> dedupeUsers(List<User> loadedUsers) {
+        Map<String, User> uniqueUsers = new LinkedHashMap<>();
 
-        difficultyColumn.setCellFactory(column -> createTagCell());
-        questionActionsColumn.setCellFactory(column -> new TableCell<QuestionRow, QuestionRow>() {
-            @Override
-            protected void updateItem(QuestionRow item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                    return;
-                }
-
-                Button editButton = createActionButton("Edit", "#175CD3", "#EFF8FF", event ->
-                    showActionMessage("Edit Question", "Editing question " + item.getTitle())
-                );
-                Button removeButton = createActionButton("Remove", "#B42318", "#FEF3F2", event ->
-                    showActionMessage("Remove Question", "Removing question " + item.getTitle())
-                );
-
-                HBox actionBox = new HBox(8, editButton, removeButton);
-                setGraphic(actionBox);
+        for (User user : loadedUsers) {
+            String key = buildUserKey(user);
+            if (!uniqueUsers.containsKey(key)) {
+                uniqueUsers.put(key, user);
             }
-        });
-
-        alignTableColumns(questionTitleColumn, attemptsColumn, authorColumn);
-    }
-
-    private void configureLeaderboardTable() {
-        rankColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getRank()));
-        leaderboardUsernameColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getUsername()));
-        leaderboardRoleColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue().getRole()));
-        leaderboardUpvotesColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getUpvotesDisplay()));
-
-        leaderboardRoleColumn.setCellFactory(column -> createTagCell());
-        alignTableColumns(rankColumn, leaderboardUsernameColumn, leaderboardUpvotesColumn);
-    }
-
-    private void configurePendingReviewTable() {
-        reviewTitleColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getTitle()));
-        submittedByColumn.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getSubmittedBy()));
-        reviewActionsColumn.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue()));
-
-        reviewActionsColumn.setCellFactory(column -> new TableCell<PendingReviewRow, PendingReviewRow>() {
-            @Override
-            protected void updateItem(PendingReviewRow item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                    return;
-                }
-
-                Button approveButton = createActionButton("Approve", "#027A48", "#ECFDF3", event ->
-                    showActionMessage("Approve Review", "Approved \"" + item.getTitle() + "\"")
-                );
-                Button rejectButton = createActionButton("Reject", "#B42318", "#FEF3F2", event ->
-                    showActionMessage("Reject Review", "Rejected \"" + item.getTitle() + "\"")
-                );
-
-                HBox actionBox = new HBox(8, approveButton, rejectButton);
-                setGraphic(actionBox);
-            }
-        });
-
-        alignTableColumns(reviewTitleColumn, submittedByColumn);
-    }
-
-    private void loadSampleData() {
-        userTable.setItems(FXCollections.observableArrayList(
-            new UserRow("jimmy", Status.USER, 77, 156)
-        ));
-
-        questionTable.setItems(FXCollections.observableArrayList(
-            new QuestionRow("Two Sum", Difficulty.EASY, 39, "john_dev")
-        ));
-
-        leaderboardTable.setItems(FXCollections.observableArrayList(
-            new LeaderboardRow("#1", "alex_l", Status.ADMIN, 621)
-        ));
-
-        pendingReviewTable.setItems(FXCollections.observableArrayList(
-            new PendingReviewRow("Design a Rate Limiter", "jimmy")
-        ));
-    }
-
-    @FXML
-    private void handleHomeNav() {
-        showActionMessage("Navigation", "Home tab selected.");
-    }
-
-    @FXML
-    private void handleQuestionsNav() {
-        showActionMessage("Navigation", "Questions tab selected.");
-    }
-
-    @FXML
-    private void handleCommunityNav() {
-        showActionMessage("Navigation", "Community tab selected.");
-    }
-
-    @FXML
-    private void handleAddUser() {
-        showActionMessage("Add User", "Add user action will be connected to form or ArrayList workflow later.");
-    }
-
-    @FXML
-    private void handleAddQuestion() {
-        showActionMessage("Add Question", "Add question action will be connected to form or ArrayList workflow later.");
-    }
-
-    private <S, T> TableCell<S, T> createTagCell() {
-        return new TableCell<S, T>() {
-            @Override
-            protected void updateItem(T item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                    setText(null);
-                    return;
-                }
-
-                Label tag = new Label(formatTagText(item));
-                tag.setStyle(resolveTagStyle(item));
-                tag.setTextFill(Color.web(resolveTagTextColor(item)));
-                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                setGraphic(tag);
-            }
-        };
-    }
-
-    private String formatTagText(Object item) {
-        if (item instanceof Difficulty) {
-            Difficulty difficulty = (Difficulty) item;
-            String lower = difficulty.name().toLowerCase(Locale.ROOT);
-            return Character.toUpperCase(lower.charAt(0)) + lower.substring(1);
         }
-        return item.toString();
+
+        return new ArrayList<>(uniqueUsers.values());
     }
 
-    private String resolveTagStyle(Object item) {
-        return "-fx-background-color: " + resolveTagBackground(item)
-            + "; -fx-background-radius: 999; -fx-padding: 6 12 6 12; -fx-font-size: 11px; -fx-font-weight: bold;";
+    private String buildUserKey(User user) {
+        if (user == null) {
+            return "unknown-user";
+        }
+        if (user.getUsername() != null && !user.getUsername().isBlank()) {
+            return "username:" + user.getUsername().trim().toLowerCase(Locale.US);
+        }
+        if (user.getEmail() != null && !user.getEmail().isBlank()) {
+            return "email:" + user.getEmail().trim().toLowerCase(Locale.US);
+        }
+        return "id:" + user.getId();
     }
 
-    private String resolveTagBackground(Object item) {
-        if (item == Status.ADMIN) {
-            return "#EEF4FF";
+    private String resolveUsername(User user) {
+        if (user == null) {
+            return "unknown";
         }
-        if (item == Status.CONTRIBUTOR) {
-            return "#EFF8FF";
+        if (user.getUsername() != null && !user.getUsername().isBlank()) {
+            return user.getUsername();
         }
-        if (item == Status.USER) {
-            return "#F2F4F7";
+        if (user.getFirstName() != null && !user.getFirstName().isBlank()) {
+            return user.getFirstName().toLowerCase(Locale.US);
         }
-        if (item == Difficulty.EASY) {
-            return "#ECFDF3";
-        }
-        if (item == Difficulty.MEDIUM) {
-            return "#FFF7ED";
-        }
-        if (item == Difficulty.DIFFICULT) {
-            return "#FEF3F2";
-        }
-        return "#F2F4F7";
+        return "unknown";
     }
 
-    private String resolveTagTextColor(Object item) {
-        if (item == Status.ADMIN) {
-            return "#3538CD";
+    private String safeQuestionTitle(String title) {
+        if (title == null || title.isBlank()) {
+            return "Untitled Question";
         }
-        if (item == Status.CONTRIBUTOR) {
-            return "#175CD3";
-        }
-        if (item == Status.USER) {
-            return "#344054";
-        }
-        if (item == Difficulty.EASY) {
-            return "#027A48";
-        }
-        if (item == Difficulty.MEDIUM) {
-            return "#B54708";
-        }
-        if (item == Difficulty.DIFFICULT) {
-            return "#B42318";
-        }
-        return "#344054";
+        return title;
     }
 
-    private Button createActionButton(String text, String textColor, String backgroundColor,
-            javafx.event.EventHandler<javafx.event.ActionEvent> handler) {
+    private HBox createPanelRow() {
+        HBox row = new HBox(10);
+        row.getStyleClass().add("panel-row");
+        row.setPadding(new Insets(10, 14, 10, 14));
+        return row;
+    }
+
+    private Label textCell(String text, String styleClasses, double width) {
+        Label label = new Label(text);
+        label.getStyleClass().addAll(parseStyleClasses(styleClasses));
+        label.setMinWidth(width);
+        label.setPrefWidth(width);
+        label.setMaxWidth(width);
+        return label;
+    }
+
+    private Label accentCell(String text, double width) {
+        return textCell(text, "panel-cell accent-cell", width);
+    }
+
+    private Label badgeCell(String text, String badgeClass, double width) {
+        Label badge = new Label(text);
+        badge.getStyleClass().addAll("panel-cell", "mini-badge", badgeClass);
+        badge.setMinWidth(width);
+        badge.setPrefWidth(width);
+        badge.setMaxWidth(width);
+        return badge;
+    }
+
+    private Button actionButton(String text, String styleClasses, String message) {
         Button button = new Button(text);
-        button.setOnAction(handler);
-        button.setStyle("-fx-background-color: " + backgroundColor
-            + "; -fx-background-radius: 999; -fx-text-fill: " + textColor
-            + "; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 6 12 6 12; -fx-cursor: hand;");
+        button.getStyleClass().addAll(parseStyleClasses(styleClasses));
+        button.setOnAction(event -> showActionMessage(message));
         return button;
     }
 
-    @SafeVarargs
-    private final <S> void alignTableColumns(TableColumn<S, ?>... columns) {
-        for (TableColumn<S, ?> column : columns) {
-            column.setStyle("-fx-alignment: CENTER-LEFT;");
+    private List<String> parseStyleClasses(String styleClasses) {
+        List<String> classes = new ArrayList<>();
+        for (String styleClass : styleClasses.split(" ")) {
+            if (!styleClass.isBlank()) {
+                classes.add(styleClass.trim());
+            }
+        }
+        return classes;
+    }
+
+    private String difficultyLabel(Difficulty difficulty) {
+        if (difficulty == null) {
+            return "Unknown";
+        }
+        switch (difficulty) {
+            case EASY:
+                return "Easy";
+            case MEDIUM:
+                return "Medium";
+            case DIFFICULT:
+                return "Hard";
+            default:
+                return "Unknown";
         }
     }
 
-    private void showActionMessage(String title, String message) {
-        System.out.println(title + ": " + message);
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.show();
+    private String difficultyClass(Difficulty difficulty) {
+        if (difficulty == null) {
+            return "badge-neutral";
+        }
+        switch (difficulty) {
+            case EASY:
+                return "badge-easy";
+            case MEDIUM:
+                return "badge-medium";
+            case DIFFICULT:
+                return "badge-hard";
+            default:
+                return "badge-neutral";
+        }
     }
 
-    public static class UserRow {
+    private String roleLabel(Status status) {
+        if (status == null) {
+            return "USER";
+        }
+        switch (status) {
+            case ADMIN:
+                return "ADMIN";
+            case CONTRIBUTOR:
+                return "CONTRIBUTOR";
+            case USER:
+            default:
+                return "USER";
+        }
+    }
+
+    private String roleClass(Status status) {
+        if (status == null) {
+            return "role-user";
+        }
+        switch (status) {
+            case ADMIN:
+                return "role-admin";
+            case CONTRIBUTOR:
+                return "role-contributor";
+            case USER:
+            default:
+                return "role-user";
+        }
+    }
+
+    private String formatNumber(int value) {
+        return String.format(Locale.US, "%,d", value);
+    }
+
+    private void showActionMessage(String message) {
+        actionMessage.setText(message);
+    }
+
+    private static final class UserMetrics {
+        private final User user;
         private final String username;
-        private final Status role;
-        private final int solvedCount;
-        private final int votes;
+        private int solvedCount;
+        private int voteTotal;
 
-        public UserRow(String username, Status role, int solvedCount, int votes) {
+        private UserMetrics(User user, String username) {
+            this.user = user;
             this.username = username;
-            this.role = role;
-            this.solvedCount = solvedCount;
-            this.votes = votes;
         }
 
-        public String getUsername() {
+        private void addSolvedQuestion() {
+            solvedCount++;
+        }
+
+        private void addVotes(int votes) {
+            voteTotal += votes;
+        }
+
+        private int getSolvedCount() {
+            return solvedCount;
+        }
+
+        private int getVoteTotal() {
+            return voteTotal;
+        }
+
+        private String getUsername() {
             return username;
         }
 
-        public Status getRole() {
-            return role;
-        }
-
-        public String getSolvedDisplay() {
-            return solvedCount + " solved";
-        }
-
-        public String getVotesDisplay() {
-            return String.valueOf(votes);
+        private Status getStatus() {
+            return user != null ? user.getStatus() : Status.USER;
         }
     }
 
-    public static class QuestionRow {
+    private static final class QuestionSnapshot {
         private final String title;
         private final Difficulty difficulty;
-        private final int attempts;
+        private final int voteTotal;
         private final String author;
+        private final int solutionCount;
 
-        public QuestionRow(String title, Difficulty difficulty, int attempts, String author) {
+        private QuestionSnapshot(String title, Difficulty difficulty, int voteTotal, String author, int solutionCount) {
             this.title = title;
             this.difficulty = difficulty;
-            this.attempts = attempts;
+            this.voteTotal = voteTotal;
             this.author = author;
+            this.solutionCount = solutionCount;
         }
 
-        public String getTitle() {
+        private String getTitle() {
             return title;
         }
 
-        public Difficulty getDifficulty() {
+        private Difficulty getDifficulty() {
             return difficulty;
         }
 
-        public String getAttemptsDisplay() {
-            return String.valueOf(attempts);
+        private int getVoteTotal() {
+            return voteTotal;
         }
 
-        public String getAuthor() {
+        private String getAuthor() {
             return author;
         }
-    }
 
-    public static class LeaderboardRow {
-        private final String rank;
-        private final String username;
-        private final Status role;
-        private final int upvotes;
-
-        public LeaderboardRow(String rank, String username, Status role, int upvotes) {
-            this.rank = rank;
-            this.username = username;
-            this.role = role;
-            this.upvotes = upvotes;
-        }
-
-        public String getRank() {
-            return rank;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public Status getRole() {
-            return role;
-        }
-
-        public String getUpvotesDisplay() {
-            return String.valueOf(upvotes);
-        }
-    }
-
-    public static class PendingReviewRow {
-        private final String title;
-        private final String submittedBy;
-
-        public PendingReviewRow(String title, String submittedBy) {
-            this.title = title;
-            this.submittedBy = submittedBy;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getSubmittedBy() {
-            return submittedBy;
+        private int getSolutionCount() {
+            return solutionCount;
         }
     }
 }

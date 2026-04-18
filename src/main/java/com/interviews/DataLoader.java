@@ -121,7 +121,7 @@ public class DataLoader {
 
         return new User(id, firstName, lastName, username, password,
                 email, new ArrayList<>(), new ArrayList<>(),
-                achievements, Status.USER, gradYear, idUSC);
+                achievements, parseStatus(getString(obj, "status")), gradYear, idUSC);
     }
 
     /**
@@ -355,6 +355,24 @@ public class DataLoader {
             return Language.valueOf(s.trim().toUpperCase());
         } catch (Exception e) {
             return Language.UNKNOWN;
+        }
+    }
+
+    /**
+     * Converts a user status string to the matching Status enum value.
+     * Defaults to USER when the provided value is missing or invalid.
+     *
+     * @param s the status string read from JSON
+     * @return the matching status, or USER when unavailable
+     */
+    private static Status parseStatus(String s) {
+        if (s == null || s.isBlank()) {
+            return Status.USER;
+        }
+        try {
+            return Status.valueOf(s.trim().toUpperCase());
+        } catch (Exception e) {
+            return Status.USER;
         }
     }
 

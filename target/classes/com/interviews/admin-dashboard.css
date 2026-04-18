@@ -1,0 +1,265 @@
+.root {
+    -fx-font-family: "Segoe UI";
+}
+
+.admin-root {
+    -fx-background-color: linear-gradient(to bottom, #f7f6ff 0%, #f4f4fc 100%);
+}
+
+.topbar {
+    -fx-background-color: #1f293b;
+    -fx-border-color: #121827;
+    -fx-border-width: 0 0 1 0;
+}
+
+.brand-mark {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 800;
+    -fx-background-color: linear-gradient(to right, #8b5cf6, #ec4899);
+    -fx-background-radius: 10;
+    -fx-padding: 6 8 6 8;
+}
+
+.brand-text {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: 800;
+}
+
+.nav-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10;
+    -fx-text-fill: #c7d2fe;
+    -fx-font-size: 13px;
+    -fx-padding: 8 14 8 14;
+    -fx-cursor: hand;
+}
+
+.nav-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-text-fill: white;
+}
+
+.nav-btn-active {
+    -fx-background-color: linear-gradient(to right, #8b5cf6, #ec4899);
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+}
+
+.avatar-label {
+    -fx-background-color: linear-gradient(to right, #8b5cf6, #ec4899);
+    -fx-background-radius: 100;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: 800;
+}
+
+.dashboard-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.dashboard-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.dashboard-shell {
+    -fx-background-color: transparent;
+}
+
+.page-title {
+    -fx-text-fill: #1e293b;
+    -fx-font-size: 34px;
+    -fx-font-weight: 800;
+}
+
+.page-subtitle {
+    -fx-text-fill: #8b8fa8;
+    -fx-font-size: 14px;
+}
+
+.summary-card {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-border-color: #e6e8f5;
+    -fx-border-radius: 18;
+    -fx-effect: dropshadow(gaussian, rgba(109, 40, 217, 0.08), 16, 0.2, 0, 4);
+    -fx-alignment: center;
+    -fx-padding: 16 18 16 18;
+}
+
+.summary-icon {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.summary-value {
+    -fx-text-fill: #1e293b;
+    -fx-font-size: 26px;
+    -fx-font-weight: 800;
+}
+
+.summary-label {
+    -fx-text-fill: #7c849d;
+    -fx-font-size: 12px;
+}
+
+.summary-trend {
+    -fx-text-fill: #10b981;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+.panel-card {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-border-color: #e6e8f5;
+    -fx-border-radius: 18;
+    -fx-effect: dropshadow(gaussian, rgba(15, 23, 42, 0.06), 14, 0.18, 0, 4);
+}
+
+.panel-header {
+    -fx-padding: 14 14 10 14;
+    -fx-border-color: transparent transparent #edf0fa transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.panel-title {
+    -fx-text-fill: #24324a;
+    -fx-font-size: 18px;
+    -fx-font-weight: 800;
+}
+
+.table-header {
+    -fx-padding: 10 14 8 14;
+    -fx-border-color: transparent transparent #edf0fa transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.header-label {
+    -fx-text-fill: #97a0b5;
+    -fx-font-size: 11px;
+    -fx-font-weight: 700;
+}
+
+.panel-row {
+    -fx-alignment: center-left;
+    -fx-border-color: transparent transparent #eef1fb transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.panel-row:last-child {
+    -fx-border-color: transparent;
+}
+
+.panel-cell {
+    -fx-text-fill: #475569;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+}
+
+.user-name-cell,
+.question-title-cell {
+    -fx-text-fill: #334155;
+    -fx-font-weight: 700;
+}
+
+.accent-cell {
+    -fx-text-fill: #10b981;
+    -fx-font-weight: 800;
+}
+
+.mini-badge {
+    -fx-background-radius: 999;
+    -fx-padding: 5 10 5 10;
+    -fx-alignment: center;
+    -fx-font-size: 11px;
+    -fx-font-weight: 800;
+}
+
+.role-user {
+    -fx-background-color: #efe7ff;
+    -fx-text-fill: #7c3aed;
+}
+
+.role-contributor {
+    -fx-background-color: #fff2d8;
+    -fx-text-fill: #c66a12;
+}
+
+.role-admin {
+    -fx-background-color: #ffe2e2;
+    -fx-text-fill: #dc2626;
+}
+
+.badge-easy {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #15803d;
+}
+
+.badge-medium {
+    -fx-background-color: #fef3c7;
+    -fx-text-fill: #b45309;
+}
+
+.badge-hard {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #dc2626;
+}
+
+.badge-neutral {
+    -fx-background-color: #e5e7eb;
+    -fx-text-fill: #475569;
+}
+
+.action-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 8;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-cursor: hand;
+    -fx-padding: 4 8 4 8;
+}
+
+.primary-action {
+    -fx-text-fill: #7c3aed;
+}
+
+.primary-action:hover {
+    -fx-background-color: #f3e8ff;
+}
+
+.danger-action {
+    -fx-text-fill: #ef4444;
+}
+
+.danger-action:hover {
+    -fx-background-color: #fee2e2;
+}
+
+.footer-note {
+    -fx-background-color: rgba(255, 255, 255, 0.7);
+    -fx-background-radius: 14;
+    -fx-border-color: #e6e8f5;
+    -fx-border-radius: 14;
+    -fx-padding: 12 14 12 14;
+}
+
+.footer-note .label {
+    -fx-text-fill: #64748b;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+.footer-accent {
+    -fx-text-fill: #1e293b;
+    -fx-font-weight: 800;
+}
+
+.action-message {
+    -fx-text-fill: #8b5cf6;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
