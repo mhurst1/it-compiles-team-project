@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<HBox prefHeight="660.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.SignupController">
+
+   <children>
+
+      <!-- LEFT SIDE -->
+      <VBox fx:id="leftPanel" prefWidth="340" spacing="14.0" HBox.hgrow="SOMETIMES">
+         <padding><Insets bottom="40" left="52" right="32" top="90" /></padding>
+         <children>
+            <Text fx:id="joinTitle1" text="Join the" />
+            <Text fx:id="joinTitle2" text="Community." />
+            <Text fx:id="joinSubtitle" text="Create your account and start preparing for interviews today." wrappingWidth="240" />
+            <Label fx:id="bullet1" text="✅  Daily Challenges" />
+            <Label fx:id="bullet2" text="✅  Track topic progression" />
+            <Label fx:id="bullet3" text="✅  Peer solution discussions" />
+            <Label fx:id="bullet4" text="✅  Vote on others solutions" />
+         </children>
+      </VBox>
+
+      <!-- RIGHT SIDE -->
+      <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
+         <padding><Insets bottom="40" left="40" right="40" top="40" /></padding>
+         <children>
+         <VBox fx:id="loginCard" maxWidth="480.0" spacing="10.0">
+         <padding><Insets bottom="32" left="36" right="36" top="32" /></padding>
+         <children>
+
+            <!-- ADD ACTUAL LOGO HERE AND REPLACE OCTOGON -->
+            <Label fx:id="codeBoardName" text="⬡  CodeBoard" />
+            <Text fx:id="createTitle" text="Create your account" />
+            <Text fx:id="createSub" text="Fill in the details below to get started." />
+
+            <!-- First Name + Last Name -->
+            <HBox spacing="12.0">
+               <children>
+                  <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="firstNameLabel" text="First Name" />
+                        <TextField fx:id="txt_firstName" promptText="First name" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="lastNameLabel" text="Last Name" />
+                        <TextField fx:id="txt_lastName" promptText="Last name" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+
+            <!-- Email -->
+            <VBox spacing="4.0">
+               <children>
+                  <Label fx:id="emailLabel" text="Email Address" />
+                  <TextField fx:id="txt_email" promptText="example@email.sc.edu" />
+               </children>
+            </VBox>
+
+            <!-- Username -->
+            <VBox spacing="4.0">
+               <children>
+                  <Label fx:id="usernameTitle" text="Username" />
+                  <TextField fx:id="txt_username" promptText="Choose a username" />
+               </children>
+            </VBox>
+
+            <!-- USC ID + Expected Graduation Year -->
+            <HBox spacing="12.0">
+               <children>
+                  <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="uscIdLabel" text="USC ID" />
+                        <TextField fx:id="txt_uscId" promptText="USC ID" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="gradYearLabel" text="Expected Graduation Year" />
+                        <TextField fx:id="txt_gradYear" promptText="YYYY" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+
+            <!-- Password + Confirm Password -->
+            <HBox spacing="12.0">
+               <children>
+                  <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="passwordTitle" text="Password" />
+                        <TextField fx:id="txt_password" promptText="Create password" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="confirmLabel" text="Confirm Password" />
+                        <TextField fx:id="txt_confirmPassword" promptText="Confirm password" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+
+            <!-- Create Account button -->
+            <Button fx:id="createBtn" maxWidth="Infinity" onAction="#signup" text="Create Account" />
+
+            <!-- Back to Login Page -->
+            <HBox alignment="CENTER" spacing="4.0">
+               <children>
+                  <Text fx:id="alreadyText" text="Already have an account?" />
+                  <Button fx:id="loginButton" onAction="#goToLogin" text="Log In" />
+               </children>
+            </HBox>
+
+            <Label fx:id="errorLabel" text="" />
+
+         </children>
+      </VBox>
+         </children>
+      </VBox>
+
+   </children>
+
+   <stylesheets>
+      <URL value="@login.css" />
+   </stylesheets>
+
+</HBox>

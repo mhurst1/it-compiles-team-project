@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -10,219 +11,142 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<BorderPane prefHeight="700.0" prefWidth="1100.0" stylesheets="@dashboard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.DashboardController">
+<BorderPane prefHeight="700.0" prefWidth="1100.0" stylesheets="@dashboard.css" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.DashboardController">
 
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="16" styleClass="navbar">
+        <HBox fx:id="navbar" alignment="CENTER_LEFT" spacing="16" styleClass="navbar">
             <padding><Insets bottom="12" left="24" right="24" top="12" /></padding>
 
-            <Label styleClass="nav-logo" text="⬡  CodeBoard" />
+            <Label fx:id="navLogo" styleClass="nav-logo" text="⬡  CodeBoard" />
 
             <Region prefWidth="40" />
 
-            <Button mnemonicParsing="false" styleClass="nav-btn" text="Home" />
-            <Button mnemonicParsing="false" styleClass="nav-btn, nav-btn-active" text="Questions" />
-            <Button mnemonicParsing="false" styleClass="nav-btn" text="Community" />
+            <Button fx:id="navHomeBtn" mnemonicParsing="false" styleClass="nav-btn" text="Home" />
+            <Button fx:id="navQuestionsBtn" mnemonicParsing="false" styleClass="nav-btn, nav-btn-active" text="Questions" />
+            <Button fx:id="navCommunityBtn" mnemonicParsing="false" styleClass="nav-btn" text="Community" />
 
             <Region prefHeight="34.0" prefWidth="447.0" HBox.hgrow="ALWAYS" />
 
-            <!-- fx:id kept so DashboardController can update it -->
             <Label fx:id="welcomeLabel" styleClass="nav-username" text="Name" />
-            <Circle radius="16" styleClass="nav-avatar" />
+            <Circle fx:id="navAvatar" radius="16" styleClass="nav-avatar" />
         </HBox>
     </top>
 
     <center>
         <HBox>
 
-            <VBox prefWidth="210" spacing="2" styleClass="left-sidebar">
+            <VBox fx:id="leftSidebar" prefWidth="210" spacing="2" styleClass="left-sidebar">
                 <padding><Insets bottom="20" left="16" right="16" top="20" /></padding>
 
-                <Label styleClass="sidebar-section-title" text="SECTIONS" />
+                <Label fx:id="sectionsSidebarTitle" styleClass="sidebar-section-title" text="SECTIONS" />
 
-                <!-- Each sidebar item: content = category name, graphic = count badge -->
-                <HBox alignment="CENTER_LEFT" styleClass="sidebar-item, sidebar-item-active">
-                    <Label styleClass="sidebar-item-label" text="All Questions" HBox.hgrow="ALWAYS" />
-                    <Label styleClass="sidebar-count" text="0" />
+                <HBox fx:id="sidebarAllQuestions" alignment="CENTER_LEFT" styleClass="sidebar-item, sidebar-item-active">
+                    <Label fx:id="sidebarAllQuestionsLabel" styleClass="sidebar-item-label" text="All Questions" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="sidebarAllQuestionsCount" styleClass="sidebar-count" text="0" />
                 </HBox>
-                <HBox alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label styleClass="sidebar-item-label" text="Arrays &amp; Strings" HBox.hgrow="ALWAYS" />
-                    <Label styleClass="sidebar-count" text="0" />
+                <HBox fx:id="sidebarArrays" alignment="CENTER_LEFT" styleClass="sidebar-item">
+                    <Label fx:id="sidebarArraysLabel" styleClass="sidebar-item-label" text="Arrays &amp; Strings" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="sidebarArraysCount" styleClass="sidebar-count" text="0" />
                 </HBox>
-                <HBox alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label styleClass="sidebar-item-label" text="Trees &amp; Graphs" HBox.hgrow="ALWAYS" />
-                    <Label styleClass="sidebar-count" text="0" />
+                <HBox fx:id="sidebarTrees" alignment="CENTER_LEFT" styleClass="sidebar-item">
+                    <Label fx:id="sidebarTreesLabel" styleClass="sidebar-item-label" text="Trees &amp; Graphs" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="sidebarTreesCount" styleClass="sidebar-count" text="0" />
                 </HBox>
-                <HBox alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label styleClass="sidebar-item-label" text="Dynamic Programming" HBox.hgrow="ALWAYS" />
-                    <Label styleClass="sidebar-count" text="0" />
+                <HBox fx:id="sidebarDP" alignment="CENTER_LEFT" styleClass="sidebar-item">
+                    <Label fx:id="sidebarDPLabel" styleClass="sidebar-item-label" text="Dynamic Programming" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="sidebarDPCount" styleClass="sidebar-count" text="0" />
                 </HBox>
-                <HBox alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label styleClass="sidebar-item-label" text="Searching &amp; Sorting" HBox.hgrow="ALWAYS" />
-                    <Label styleClass="sidebar-count" text="0" />
+                <HBox fx:id="sidebarSearchSort" alignment="CENTER_LEFT" styleClass="sidebar-item">
+                    <Label fx:id="sidebarSearchSortLabel" styleClass="sidebar-item-label" text="Searching &amp; Sorting" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="sidebarSearchSortCount" styleClass="sidebar-count" text="0" />
                 </HBox>
-                <HBox alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label styleClass="sidebar-item-label" text="Stacks &amp; Queues" HBox.hgrow="ALWAYS" />
-                    <Label styleClass="sidebar-count" text="0" />
+                <HBox fx:id="sidebarStacks" alignment="CENTER_LEFT" styleClass="sidebar-item">
+                    <Label fx:id="sidebarStacksLabel" styleClass="sidebar-item-label" text="Stacks &amp; Queues" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="sidebarStacksCount" styleClass="sidebar-count" text="0" />
                 </HBox>
-                <HBox alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label styleClass="sidebar-item-label" text="Linked Lists" HBox.hgrow="ALWAYS" />
-                    <Label styleClass="sidebar-count" text="0" />
+                <HBox fx:id="sidebarLinkedLists" alignment="CENTER_LEFT" styleClass="sidebar-item">
+                    <Label fx:id="sidebarLinkedListsLabel" styleClass="sidebar-item-label" text="Linked Lists" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="sidebarLinkedListsCount" styleClass="sidebar-count" text="0" />
                 </HBox>
-                <HBox alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label styleClass="sidebar-item-label" text="System Design" HBox.hgrow="ALWAYS" />
-                    <Label styleClass="sidebar-count" text="0" />
+                <HBox fx:id="sidebarSystemDesign" alignment="CENTER_LEFT" styleClass="sidebar-item">
+                    <Label fx:id="sidebarSystemDesignLabel" styleClass="sidebar-item-label" text="System Design" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="sidebarSystemDesignCount" styleClass="sidebar-count" text="0" />
                 </HBox>
-                <HBox alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label styleClass="sidebar-item-label" text="OOP Concepts" HBox.hgrow="ALWAYS" />
-                    <Label styleClass="sidebar-count" text="0" />
+                <HBox fx:id="sidebarOOP" alignment="CENTER_LEFT" styleClass="sidebar-item">
+                    <Label fx:id="sidebarOOPLabel" styleClass="sidebar-item-label" text="OOP Concepts" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="sidebarOOPCount" styleClass="sidebar-count" text="0" />
                 </HBox>
-                <HBox alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label styleClass="sidebar-item-label" text="Databases" HBox.hgrow="ALWAYS" />
-                    <Label styleClass="sidebar-count" text="0" />
+                <HBox fx:id="sidebarDatabases" alignment="CENTER_LEFT" styleClass="sidebar-item">
+                    <Label fx:id="sidebarDatabasesLabel" styleClass="sidebar-item-label" text="Databases" HBox.hgrow="ALWAYS" />
+                    <Label fx:id="sidebarDatabasesCount" styleClass="sidebar-count" text="0" />
                 </HBox>
             </VBox>
 
-            <VBox spacing="14" styleClass="main-content" HBox.hgrow="ALWAYS">
+            <VBox fx:id="mainContent" spacing="14" styleClass="main-content" HBox.hgrow="ALWAYS">
                 <padding><Insets bottom="20" left="24" right="24" top="20" /></padding>
 
                 <TextField fx:id="searchField" promptText="Search questions..." styleClass="search-field" />
 
-                <Label fx:id="welcomeGreeting" styleClass="welcome-greeting"/>
+                <Label fx:id="welcomeGreeting" styleClass="welcome-greeting" />
 
-                <HBox alignment="CENTER_LEFT" spacing="10">
-                    <VBox spacing="2">
-                        <Label styleClass="content-title" text="All Questions" />
-                        <Label styleClass="content-subtitle" text="128 questions across all topics" />
+                <HBox fx:id="filterBar" alignment="CENTER_LEFT" spacing="10">
+                    <VBox fx:id="questionListHeader" spacing="2">
+                        <Label fx:id="contentTitle" styleClass="content-title" text="All Questions" />
+                        <Label fx:id="contentSubtitle" styleClass="content-subtitle" text="0 questions across all topics" />
                     </VBox>
                     <Region HBox.hgrow="ALWAYS" />
-                    <Button mnemonicParsing="false" styleClass="filter-btn, filter-btn-active" text="All" />
-                    <Button mnemonicParsing="false" styleClass="filter-btn" text="Easy" />
-                    <Button mnemonicParsing="false" styleClass="filter-btn" text="Medium" />
-                    <Button mnemonicParsing="false" styleClass="filter-btn" text="Hard" />
-                    <Button mnemonicParsing="false" styleClass="add-btn" text="+" />
+                    <Button fx:id="filterAllBtn" mnemonicParsing="false" onAction="#filterAll" styleClass="filter-btn, filter-btn-active" text="All" />
+                    <Button fx:id="filterEasyBtn" mnemonicParsing="false" onAction="#filterEasy" styleClass="filter-btn" text="Easy" />
+                    <Button fx:id="filterMediumBtn" mnemonicParsing="false" onAction="#filterMedium" styleClass="filter-btn" text="Medium" />
+                    <Button fx:id="filterHardBtn" mnemonicParsing="false" onAction="#filterHard" styleClass="filter-btn" text="Hard" />
+                    <Button fx:id="addQuestionBtn" mnemonicParsing="false" styleClass="add-btn" text="+" />
                 </HBox>
 
-                <VBox spacing="8" VBox.vgrow="ALWAYS">
+                <ScrollPane fx:id="cardScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS">
+                    <VBox fx:id="questionCardList" spacing="8">
+                        <padding><Insets bottom="4" left="0" right="0" top="4" /></padding>
+                    </VBox>
+                </ScrollPane>
 
-                    <HBox alignment="CENTER_LEFT" spacing="12" styleClass="question-card">
-                        <padding><Insets bottom="12" left="14" right="14" top="12" /></padding>
-                        <Circle radius="5" styleClass="dot-solved" />
-                        <Label styleClass="question-number" text="0" />
-                        <VBox spacing="2" HBox.hgrow="ALWAYS">
-                            <Label styleClass="question-title" text="Two Sum" />
-                            <Label styleClass="question-category" text="Arrays &amp; Strings" />
-                        </VBox>
-                        <Label styleClass="badge, badge-easy" text="Easy" />
-                        <Label styleClass="vote-count" text="↑ 0" />
-                        <Label styleClass="arrow" text="›" />
-                    </HBox>
-
-                    <HBox alignment="CENTER_LEFT" spacing="12" styleClass="question-card">
-                        <padding><Insets bottom="12" left="14" right="14" top="12" /></padding>
-                        <Circle radius="5" styleClass="dot-solved" />
-                        <Label styleClass="question-number" text="0" />
-                        <VBox spacing="2" HBox.hgrow="ALWAYS">
-                            <Label styleClass="question-title" text="Binary Tree Level Order Traversal" />
-                            <Label styleClass="question-category" text="Trees &amp; Graphs" />
-                        </VBox>
-                        <Label styleClass="badge, badge-medium" text="Medium" />
-                        <Label styleClass="vote-count" text="↑ 0" />
-                        <Label styleClass="arrow" text="›" />
-                    </HBox>
-
-                    <HBox alignment="CENTER_LEFT" spacing="12" styleClass="question-card">
-                        <padding><Insets bottom="12" left="14" right="14" top="12" /></padding>
-                        <Circle radius="5" styleClass="dot-unsolved" />
-                        <Label styleClass="question-number" text="0" />
-                        <VBox spacing="2" HBox.hgrow="ALWAYS">
-                            <Label styleClass="question-title" text="Longest Increasing Subsequence" />
-                            <Label styleClass="question-category" text="Dynamic Programming" />
-                        </VBox>
-                        <Label styleClass="badge, badge-hard" text="Hard" />
-                        <Label styleClass="vote-count" text="↑ 0" />
-                        <Label styleClass="arrow" text="›" />
-                    </HBox>
-
-                    <HBox alignment="CENTER_LEFT" spacing="12" styleClass="question-card">
-                        <padding><Insets bottom="12" left="14" right="14" top="12" /></padding>
-                        <Circle radius="5" styleClass="dot-unsolved" />
-                        <Label styleClass="question-number" text="0" />
-                        <VBox spacing="2" HBox.hgrow="ALWAYS">
-                            <Label styleClass="question-title" text="Merge K Sorted Lists" />
-                            <Label styleClass="question-category" text="Linked Lists" />
-                        </VBox>
-                        <Label styleClass="badge, badge-hard" text="Hard" />
-                        <Label styleClass="vote-count" text="↑ 0" />
-                        <Label styleClass="arrow" text="›" />
-                    </HBox>
-
-                    <HBox alignment="CENTER_LEFT" spacing="12" styleClass="question-card">
-                        <padding><Insets bottom="12" left="14" right="14" top="12" /></padding>
-                        <Circle radius="5" styleClass="dot-unsolved" />
-                        <Label styleClass="question-number" text="0" />
-                        <VBox spacing="2" HBox.hgrow="ALWAYS">
-                            <Label styleClass="question-title" text="Design a URL Shortener" />
-                            <Label styleClass="question-category" text="System Design" />
-                        </VBox>
-                        <Label styleClass="badge, badge-medium" text="Medium" />
-                        <Label styleClass="vote-count" text="↑ 0" />
-                        <Label styleClass="arrow" text="›" />
-                    </HBox>
-
-                    <HBox alignment="CENTER_LEFT" spacing="12" styleClass="question-card">
-                        <padding><Insets bottom="12" left="14" right="14" top="12" /></padding>
-                        <Circle radius="5" styleClass="dot-solved" />
-                        <Label styleClass="question-number" text="0" />
-                        <VBox spacing="2" HBox.hgrow="ALWAYS">
-                            <Label styleClass="question-title" text="Valid Parentheses" />
-                            <Label styleClass="question-category" text="Stacks &amp; Queues" />
-                        </VBox>
-                        <Label styleClass="badge, badge-easy" text="Easy" />
-                        <Label styleClass="vote-count" text="↑ 0" />
-                        <Label styleClass="arrow" text="›" />
-                    </HBox>
-
-                </VBox>
             </VBox>
 
-            <VBox prefWidth="230" spacing="10" styleClass="right-sidebar">
+            <VBox fx:id="rightSidebar" prefWidth="230" spacing="10" styleClass="right-sidebar">
                 <padding><Insets bottom="20" left="16" right="16" top="20" /></padding>
 
-                <Label styleClass="sidebar-section-title" text="QUICK STATS" />
+                <Label fx:id="quickStatsTitle" styleClass="sidebar-section-title" text="QUICK STATS" />
 
-                <VBox spacing="4" styleClass="stat-card">
-                    <Label styleClass="stat-label" text="Questions Solved" />
-                    <Label styleClass="stat-value" text="0" />
+                <VBox fx:id="statCardSolved" spacing="4" styleClass="stat-card">
+                    <Label fx:id="statSolvedLabel" styleClass="stat-label" text="Questions Solved" />
+                    <Label fx:id="statSolvedValue" styleClass="stat-value" text="0" />
                 </VBox>
 
-                <VBox spacing="4" styleClass="stat-card">
-                    <Label styleClass="stat-label" text="Current Streak" />
-                    <Label styleClass="stat-value, stat-streak" text="0 days" />
+                <VBox fx:id="statCardStreak" spacing="4" styleClass="stat-card">
+                    <Label fx:id="statStreakLabel" styleClass="stat-label" text="Current Streak" />
+                    <Label fx:id="statStreakValue" styleClass="stat-value, stat-streak" text="0 days" />
                 </VBox>
 
-                <VBox spacing="4" styleClass="stat-card">
-                    <Label styleClass="stat-label" text="Rank" />
-                    <Label styleClass="stat-value, stat-rank" text="#N/A" />
+                <VBox fx:id="statCardRank" spacing="4" styleClass="stat-card">
+                    <Label fx:id="statRankLabel" styleClass="stat-label" text="Rank" />
+                    <Label fx:id="statRankValue" styleClass="stat-value, stat-rank" text="#N/A" />
                 </VBox>
 
-                <VBox spacing="4" styleClass="stat-card">
-                    <Label styleClass="stat-label" text="Total Upvotes" />
-                    <Label styleClass="stat-value, stat-upvote" text="↑ 0" />
+                <VBox fx:id="statCardUpvotes" spacing="4" styleClass="stat-card">
+                    <Label fx:id="statUpvoteLabel" styleClass="stat-label" text="Total Upvotes" />
+                    <Label fx:id="statUpvoteValue" styleClass="stat-value, stat-upvote" text="↑ 0" />
                 </VBox>
 
-                <VBox spacing="4" styleClass="stat-card">
-                    <Label styleClass="stat-label" text="Total Downvotes" />
-                    <Label styleClass="stat-value, stat-downvote" text="↓ 0" />
+                <VBox fx:id="statCardDownvotes" spacing="4" styleClass="stat-card">
+                    <Label fx:id="statDownvoteLabel" styleClass="stat-label" text="Total Downvotes" />
+                    <Label fx:id="statDownvoteValue" styleClass="stat-value, stat-downvote" text="↓ 0" />
                 </VBox>
 
-                <VBox spacing="6" styleClass="stat-card">
-                    <Label styleClass="sidebar-section-title" text="RECENT ACTIVITY" />
-                    <Label styleClass="activity-item" text="✅ Solved Two Sum" />
-                    <Label styleClass="activity-item" text="💬 Commented on Merge K..." />
-                    <Label styleClass="activity-item" text="👁️ Viewed LIS Problem" />
-                    <Label styleClass="activity-item" text="✅ Solved BT Level Order" />
-                    <Label styleClass="activity-item" text="Started URL Shortener" />
+                <VBox fx:id="recentActivityCard" spacing="6" styleClass="stat-card">
+                    <Label fx:id="recentActivityTitle" styleClass="sidebar-section-title" text="RECENT ACTIVITY" />
+                    <Label fx:id="activityItem1" styleClass="activity-item" text="✅ Solved Two Sum" />
+                    <Label fx:id="activityItem2" styleClass="activity-item" text="💬 Commented on Merge K..." />
+                    <Label fx:id="activityItem3" styleClass="activity-item" text="👁️ Viewed LIS Problem" />
+                    <Label fx:id="activityItem4" styleClass="activity-item" text="✅ Solved BT Level Order" />
+                    <Label fx:id="activityItem5" styleClass="activity-item" text="Started URL Shortener" />
                 </VBox>
 
             </VBox>

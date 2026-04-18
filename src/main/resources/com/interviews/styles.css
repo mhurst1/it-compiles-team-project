@@ -76,7 +76,7 @@
 }
 
 /* Login button */
-#homeButton {
+#loginButton {
     -fx-background-color: linear-gradient(to right, #6a0dad, #ff6ec7);
     -fx-text-fill: white;
     -fx-font-weight: bold;
@@ -84,7 +84,7 @@
     -fx-padding: 10 20 10 20;
 }
 
-#homeButton:hover {
+#loginButton:hover {
     -fx-opacity: 0.9;
 }
 

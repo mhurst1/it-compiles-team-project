@@ -189,6 +189,26 @@
     -fx-opacity: 0.88;
 }
 
+/* ScrollPane outer styling */
+#cardScrollPane {
+    -fx-background-color: transparent;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: #ebebf2;
+    -fx-border-width: 1;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+#cardScrollPane > .viewport {
+    -fx-background-color: transparent;
+    -fx-background-radius: 20;
+}
+
+#cardScrollPane:focused {
+    -fx-border-color: #ebebf2;
+}
+
 .question-card {
     -fx-background-color: white;
     -fx-background-radius: 10;

@@ -142,6 +142,41 @@
     -fx-opacity: 0.75;
 }
 
+/* Forgot Password link */
+#forgotPasswordBtn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #7734ED;
+    -fx-font-size: 12px;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+#forgotPasswordBtn:hover {
+    -fx-opacity: 0.75;
+}
+
+/* Or separator label */
+#orLabel {
+    -fx-text-fill: #999;
+    -fx-font-size: 12px;
+}
+
+/* Continue without logging in */
+#continueBtn {
+    -fx-background-color: #f0f0f5;
+    -fx-text-fill: #888;
+    -fx-font-size: 13px;
+    -fx-background-radius: 10;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+#continueBtn:hover {
+    -fx-background-color: #e4e4ec;
+}
+
 /* Error For Email / Other Possible Messages */
 #errorLabel {
     -fx-text-fill: #e53935;

@@ -12,14 +12,31 @@ import com.interviews.App;
 import com.interviews.User;
 import com.interviews.UserList;
 
-public class LoginController {
-
+public class SignupController {
 
     @FXML
     private Button loginButton;
 
     @FXML
+    private TextField txt_firstName;
+
+    @FXML
+    private TextField txt_lastName;
+
+    @FXML
+    private TextField txt_email;
+
+    @FXML
+    private TextField txt_uscId;
+
+    @FXML
+    private TextField txt_gradYear;
+
+    @FXML
     private TextField txt_password;
+
+    @FXML
+    private TextField txt_confirmPassword;
 
     @FXML
     private TextField txt_username;
@@ -28,7 +45,12 @@ public class LoginController {
     private Label errorLabel;
 
     @FXML
-    void login(ActionEvent event) throws IOException {
+    void goToLogin(ActionEvent event) throws IOException {
+        App.setRoot("login");
+    }
+
+    @FXML
+    void signup(ActionEvent event) throws IOException {
         String username = txt_username.getText();
         String password = txt_password.getText();
 
@@ -37,22 +59,7 @@ public class LoginController {
             App.currentUser = user;
             App.setRoot("dashboard");
         } else {
-            errorLabel.setText("Invalid username or password. Please try again.");
+            errorLabel.setText("Please fill out all required feilds.");
         }
-    }
-
-    @FXML
-    private void goToSignup() throws IOException {
-        App.setRoot("signup");
-    }
-
-    @FXML
-    private void continueWithoutLogin() throws IOException {
-        App.setRoot("dashboard");
-    }
-
-    @FXML
-    private void forgotPassword() {
-
     }
 }
