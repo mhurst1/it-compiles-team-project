@@ -37,7 +37,7 @@
                     <padding><Insets bottom="32" left="28" right="28" top="20" /></padding>
 
                     <Button mnemonicParsing="false" styleClass="back-link"
-                            text="&lt; Back to Questions" onAction="#goBack" />
+                            text="Back to Questions" onAction="#goBack" />
 
                     <Label fx:id="questionTitle" styleClass="question-page-title" text="" wrapText="true" />
 
