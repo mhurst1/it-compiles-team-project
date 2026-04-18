@@ -84,6 +84,15 @@ public class UserList {
     }
 
     /**
+     * Adds a new user to the in-memory list.
+     *
+     * @param user the user to add
+     */
+    public void addUser(User user) {
+        users.add(user);
+    }
+
+    /**
      * Removes a user from the in-memory list.
      *
      * @param user the current user

@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import com.interviews.App;
@@ -19,7 +20,7 @@ public class LoginController {
     private Button loginButton;
 
     @FXML
-    private TextField txt_password;
+    private PasswordField txt_password;
 
     @FXML
     private TextField txt_username;

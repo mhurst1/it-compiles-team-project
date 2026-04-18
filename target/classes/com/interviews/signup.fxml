@@ -4,12 +4,14 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox prefHeight="660.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.SignupController">
+<HBox prefHeight="660.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.SignupController">
 
    <children>
 
@@ -62,6 +64,11 @@
             <VBox spacing="4.0">
                <children>
                   <Label fx:id="emailLabel" text="Email Address" />
+                        <Label fx:id="uscIdHint2" text="Email must contain an @ symbol (e.g user@example.com)">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
                   <TextField fx:id="txt_email" promptText="example@email.sc.edu" />
                </children>
             </VBox>
@@ -80,12 +87,21 @@
                   <VBox spacing="4.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="uscIdLabel" text="USC ID" />
+                        <Label fx:id="uscIdHint" text="1 letter followed by 8 numbers (e.g. M12345678)">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font></Label>
                         <TextField fx:id="txt_uscId" promptText="USC ID" />
                      </children>
                   </VBox>
                   <VBox spacing="4.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="gradYearLabel" text="Expected Graduation Year" />
+                              <Label fx:id="uscIdHint1" text="Enter a valid year (e.g 2026)">
+                                 <font>
+                                    <Font size="10.0" />
+                                 </font>
+                              </Label>
                         <TextField fx:id="txt_gradYear" promptText="YYYY" />
                      </children>
                   </VBox>
@@ -98,13 +114,13 @@
                   <VBox spacing="4.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="passwordTitle" text="Password" />
-                        <TextField fx:id="txt_password" promptText="Create password" />
+                        <PasswordField fx:id="txt_password" promptText="Create password" />
                      </children>
                   </VBox>
                   <VBox spacing="4.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="confirmLabel" text="Confirm Password" />
-                        <TextField fx:id="txt_confirmPassword" promptText="Confirm password" />
+                        <PasswordField fx:id="txt_confirmPassword" promptText="Confirm password" />
                      </children>
                   </VBox>
                </children>
