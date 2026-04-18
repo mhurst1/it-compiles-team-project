@@ -1,0 +1,227 @@
+package com.controllers;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
+
+import com.interviews.App;
+import com.interviews.DataLoader;
+import com.interviews.Difficulty;
+import com.interviews.Question;
+import com.interviews.Section;
+import com.interviews.UserSolution;
+
+public class BrowseSolutions {
+
+    @FXML private Label navUsername;
+    @FXML private Label questionTitle;
+    @FXML private Label categoryBadge;
+    @FXML private Label difficultyBadge;
+    @FXML private Label answersLabel;
+    @FXML private Label questionDescription;
+    @FXML private TextArea solutionInput;
+    @FXML private VBox solutionsContainer;
+
+    @FXML
+    public void initialize() {
+        if (App.currentUser != null) {
+            navUsername.setText(App.currentUser.getFirstName());
+        }
+
+        Question q = App.currentQuestion;
+        if (q == null || q.getSolutionList() == null || q.getSolutionList().isEmpty()) {
+            for (Question candidate : DataLoader.getQuestions()) {
+                ArrayList<UserSolution> sols = candidate.getSolutionList();
+                if (sols != null && !sols.isEmpty()) {
+                    q = candidate;
+                    App.currentQuestion = q;
+                    break;
+                }
+            }
+        }
+
+        if (q == null) {
+            questionTitle.setText("No question selected");
+            questionDescription.setText("");
+            answersLabel.setText("0 Answers");
+            updateDifficultyBadge(null);
+            return;
+        }
+
+        questionTitle.setText(q.getTitle() != null ? q.getTitle() : "");
+        questionDescription.setText(buildDescriptionText(q));
+        updateDifficultyBadge(q.getDifficulty());
+        if (App.currentCategory != null && !App.currentCategory.isBlank()) {
+            categoryBadge.setText(App.currentCategory);
+        }
+
+        ArrayList<UserSolution> solutions = q.getSolutionList();
+        int count = (solutions == null) ? 0 : solutions.size();
+        answersLabel.setText(count + (count == 1 ? " Answer" : " Answers"));
+
+        populateSolutions(q);
+    }
+
+    private String buildDescriptionText(Question q) {
+        StringBuilder sb = new StringBuilder();
+        if (q.getDescription() != null && !q.getDescription().isBlank()) {
+            sb.append(q.getDescription());
+        }
+        ArrayList<Section> sections = q.getQuestionContent();
+        if (sections != null) {
+            for (Section s : sections) {
+                if (s.getSectionTitle() != null && !s.getSectionTitle().isBlank()) {
+                    sb.append("\n\n").append(s.getSectionTitle());
+                }
+                if (s.getSectionText() != null && !s.getSectionText().isBlank()) {
+                    sb.append("\n").append(s.getSectionText());
+                }
+                if (s.getSectionContent() != null) {
+                    for (String line : s.getSectionContent()) {
+                        sb.append("\n").append(line);
+                    }
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    private void updateDifficultyBadge(Difficulty difficulty) {
+        if (difficulty == null) {
+            difficultyBadge.setText("N/A");
+            difficultyBadge.getStyleClass().setAll("diff-badge");
+            return;
+        }
+        switch (difficulty) {
+            case EASY:
+                difficultyBadge.setText("Easy");
+                difficultyBadge.getStyleClass().setAll("diff-badge", "diff-easy");
+                break;
+            case MEDIUM:
+                difficultyBadge.setText("Medium");
+                difficultyBadge.getStyleClass().setAll("diff-badge", "diff-medium");
+                break;
+            case DIFFICULT:
+                difficultyBadge.setText("Hard");
+                difficultyBadge.getStyleClass().setAll("diff-badge", "diff-hard");
+                break;
+            default:
+                difficultyBadge.setText("N/A");
+                difficultyBadge.getStyleClass().setAll("diff-badge");
+        }
+    }
+
+    private void populateSolutions(Question q) {
+        solutionsContainer.getChildren().clear();
+
+        ArrayList<UserSolution> solutions = q.getSolutionList();
+        if (solutions == null || solutions.isEmpty()) {
+            Label empty = new Label("No community solutions yet. Be the first to post one!");
+            empty.getStyleClass().add("no-solutions-label");
+            empty.setWrapText(true);
+            solutionsContainer.getChildren().add(empty);
+            return;
+        }
+
+        for (UserSolution solution : solutions) {
+            solutionsContainer.getChildren().add(buildSolutionCard(solution));
+        }
+    }
+
+    private VBox buildSolutionCard(UserSolution solution) {
+        VBox card = new VBox(0);
+        card.getStyleClass().add("solution-card");
+
+        VBox codeBox = new VBox();
+        codeBox.getStyleClass().add("solution-code-box");
+        codeBox.setPadding(new Insets(14, 16, 14, 16));
+        Label codeLabel = new Label(solution.getDescription() != null ? solution.getDescription() : "");
+        codeLabel.setWrapText(true);
+        codeLabel.getStyleClass().add("solution-code-text");
+        codeBox.getChildren().add(codeLabel);
+
+        VBox bottom = new VBox(10);
+        bottom.setPadding(new Insets(12, 14, 12, 14));
+
+        String authorName = (solution.getUser() != null
+                && solution.getUser().getUsername() != null
+                && !solution.getUser().getUsername().isBlank())
+                ? solution.getUser().getUsername() : "Anonymous";
+
+        HBox userRow = new HBox(10);
+        userRow.setAlignment(Pos.CENTER_LEFT);
+        Circle avatar = new Circle(14);
+        avatar.getStyleClass().add("nav-avatar");
+        Label usernameLabel = new Label(authorName);
+        usernameLabel.getStyleClass().add("solution-username");
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Button thumbUp = new Button("▲  " + solution.getTotalVote());
+        thumbUp.getStyleClass().add("vote-btn");
+        thumbUp.setOnAction(e -> {
+            solution.totalVote++;
+            thumbUp.setText("▲  " + solution.getTotalVote());
+        });
+        Button thumbDown = new Button("▼");
+        thumbDown.getStyleClass().add("vote-btn");
+        thumbDown.setOnAction(e -> {
+            if (solution.totalVote > 0) {
+                solution.totalVote--;
+                thumbUp.setText("▲  " + solution.getTotalVote());
+            }
+        });
+        userRow.getChildren().addAll(avatar, usernameLabel, spacer, thumbUp, thumbDown);
+
+        HBox replyRow = new HBox(8);
+        replyRow.setAlignment(Pos.CENTER_LEFT);
+        TextField replyField = new TextField();
+        replyField.setPromptText("Reply to " + authorName + "'s solution...");
+        replyField.getStyleClass().add("reply-field");
+        HBox.setHgrow(replyField, Priority.ALWAYS);
+        Button replyBtn = new Button("Post");
+        replyBtn.getStyleClass().add("reply-btn");
+        replyBtn.setOnAction(e -> replyField.clear());
+        replyRow.getChildren().addAll(replyField, replyBtn);
+
+        bottom.getChildren().addAll(userRow, replyRow);
+        card.getChildren().addAll(codeBox, bottom);
+        return card;
+    }
+
+    @FXML
+    private void postSolution() {
+        String text = (solutionInput == null) ? "" : solutionInput.getText().trim();
+        if (text.isEmpty() || App.currentQuestion == null) return;
+
+        UserSolution newSolution = new UserSolution(App.currentUser, text);
+        App.currentQuestion.getSolutionList().add(newSolution);
+
+        solutionInput.clear();
+
+        int count = App.currentQuestion.getSolutionList().size();
+        answersLabel.setText(count + (count == 1 ? " Answer" : " Answers"));
+        populateSolutions(App.currentQuestion);
+    }
+
+    @FXML
+    private void goBack() {
+        try {
+            App.setRoot("dashboard");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+}

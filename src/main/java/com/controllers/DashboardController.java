@@ -1,5 +1,6 @@
 package com.controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -103,6 +104,15 @@ public class DashboardController {
         filterMediumBtn.getStyleClass().remove("filter-btn-active");
         filterHardBtn.getStyleClass().remove("filter-btn-active");
         active.getStyleClass().add("filter-btn-active");
+    }
+
+    @FXML
+    private void goToAddQuestion() {
+        try {
+            App.setRoot("addquestion");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadCards(ArrayList<Question> list) {
