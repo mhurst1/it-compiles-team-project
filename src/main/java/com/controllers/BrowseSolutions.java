@@ -2,6 +2,8 @@ package com.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -20,6 +22,7 @@ import com.interviews.App;
 import com.interviews.DataLoader;
 import com.interviews.Difficulty;
 import com.interviews.Question;
+import com.interviews.QuestionList;
 import com.interviews.Section;
 import com.interviews.UserSolution;
 
@@ -33,6 +36,8 @@ public class BrowseSolutions {
     @FXML private Label questionDescription;
     @FXML private TextArea solutionInput;
     @FXML private VBox solutionsContainer;
+
+    private final HashMap<UUID, Integer> voteState = new HashMap<>();
 
     @FXML
     public void initialize() {
@@ -141,6 +146,9 @@ public class BrowseSolutions {
     }
 
     private VBox buildSolutionCard(UserSolution solution) {
+        UUID solId = solution.getSoulutionId();
+        voteState.putIfAbsent(solId, 0);
+
         VBox card = new VBox(0);
         card.getStyleClass().add("solution-card");
 
@@ -171,18 +179,50 @@ public class BrowseSolutions {
 
         Button thumbUp = new Button("▲  " + solution.getTotalVote());
         thumbUp.getStyleClass().add("vote-btn");
-        thumbUp.setOnAction(e -> {
-            solution.totalVote++;
-            thumbUp.setText("▲  " + solution.getTotalVote());
-        });
+
         Button thumbDown = new Button("▼");
         thumbDown.getStyleClass().add("vote-btn");
-        thumbDown.setOnAction(e -> {
-            if (solution.totalVote > 0) {
+
+        if (voteState.get(solId) == 1) {
+            thumbUp.getStyleClass().add("vote-btn-active");
+        } else if (voteState.get(solId) == -1) {
+            thumbDown.getStyleClass().add("vote-btn-active");
+        }
+
+        thumbUp.setOnAction(e -> {
+            int current = voteState.get(solId);
+            if (current == 0) {
+                solution.totalVote++;
+                voteState.put(solId, 1);
+            } else if (current == 1) {
                 solution.totalVote--;
-                thumbUp.setText("▲  " + solution.getTotalVote());
+                voteState.put(solId, 0);
+            } else {
+                solution.totalVote += 2;
+                voteState.put(solId, 1);
             }
+            thumbUp.setText("▲  " + solution.getTotalVote());
+            refreshVoteStyles(thumbUp, thumbDown, voteState.get(solId));
+            QuestionList.getInstance().saveAll();
         });
+
+        thumbDown.setOnAction(e -> {
+            int current = voteState.get(solId);
+            if (current == 0) {
+                solution.totalVote--;
+                voteState.put(solId, -1);
+            } else if (current == -1) {
+                solution.totalVote++;
+                voteState.put(solId, 0);
+            } else {
+                solution.totalVote -= 2;
+                voteState.put(solId, -1);
+            }
+            thumbUp.setText("▲  " + solution.getTotalVote());
+            refreshVoteStyles(thumbUp, thumbDown, voteState.get(solId));
+            QuestionList.getInstance().saveAll();
+        });
+
         userRow.getChildren().addAll(avatar, usernameLabel, spacer, thumbUp, thumbDown);
 
         HBox replyRow = new HBox(8);
@@ -199,6 +239,13 @@ public class BrowseSolutions {
         bottom.getChildren().addAll(userRow, replyRow);
         card.getChildren().addAll(codeBox, bottom);
         return card;
+    }
+
+    private void refreshVoteStyles(Button thumbUp, Button thumbDown, int state) {
+        thumbUp.getStyleClass().remove("vote-btn-active");
+        thumbDown.getStyleClass().remove("vote-btn-active");
+        if (state == 1) thumbUp.getStyleClass().add("vote-btn-active");
+        else if (state == -1) thumbDown.getStyleClass().add("vote-btn-active");
     }
 
     @FXML

@@ -28,7 +28,9 @@
          <HBox fx:id="breadcrumbBar" spacing="6.0" alignment="CENTER_LEFT">
             <padding><Insets bottom="10.0" left="24.0" right="24.0" top="10.0" /></padding>
             <children>
-               <Label fx:id="breadcrumbHome" text="Admin Dashboard" styleClass="breadcrumb-link" onMouseClicked="#goToDashboard" />
+               <Button fx:id="backBtn" text="← Back" styleClass="btn-back" onAction="#goToDashboard" />
+               <Region HBox.hgrow="ALWAYS" />
+               <Label fx:id="breadcrumbHome" text="Dashboard" styleClass="breadcrumb-link" onMouseClicked="#goToDashboard" />
                <Label text="›" styleClass="breadcrumb-sep" />
                <Label text="Add Question" styleClass="breadcrumb-current" />
             </children>
@@ -84,7 +86,7 @@
                                  <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                                     <children>
                                        <Label text="Section / Topic" styleClass="field-label" />
-                                       <TextField fx:id="txt_section" promptText="e.g. Linked Lists, Trees..." styleClass="field-input" maxWidth="Infinity" />
+                                       <ComboBox fx:id="cb_section" promptText="Select a topic" maxWidth="Infinity" />
                                     </children>
                                  </VBox>
                                  <VBox spacing="5.0" HBox.hgrow="ALWAYS">
@@ -134,8 +136,7 @@
                               </children>
                            </VBox>
 
-                           <!-- Add Answer -->
-                           <Button fx:id="addAnswerBtn" text="+ Add Answer" styleClass="btn-ghost" onAction="#addAnswer" maxWidth="Infinity" />
+                           <Button fx:id="addAnswerBtn" text="+ Add Solution" styleClass="btn-ghost" onAction="#addAnswer" maxWidth="Infinity" />
 
                            <Label fx:id="feedbackLabel" text="" styleClass="feedback-label" />
 

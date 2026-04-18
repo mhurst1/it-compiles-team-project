@@ -211,6 +211,11 @@
     -fx-border-color: #7734ED;
     -fx-text-fill: #7734ED;
 }
+.vote-btn-active {
+    -fx-background-color: #7734ED;
+    -fx-text-fill: white;
+    -fx-border-color: #7734ED;
+}
 .reply-field {
     -fx-background-color: #f8f8fc;
     -fx-background-radius: 6;

@@ -1,13 +1,18 @@
 package com.controllers;
 
+import java.io.IOException;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+import com.interviews.App;
 
 public class AddQuestionController {
 
     @FXML private TextField txt_title;
-    @FXML private TextField txt_section;
+    @FXML private ComboBox<String> cb_section;
     @FXML private ComboBox<String> cb_difficulty;
     @FXML private TextArea txt_description;
     @FXML private TextField txt_hint1;
@@ -22,13 +27,33 @@ public class AddQuestionController {
     @FXML private TableColumn<?, ?> col_status;
     @FXML private TableColumn<?, ?> col_actions;
     @FXML private Label feedbackLabel;
+    @FXML private VBox formCard;
+    @FXML private Button saveDraftBtn;
+    @FXML private Button submitBtn;
 
     // tracks how many hint rows are currently visible (1 or 2 are always shown)
     private int visibleHints = 2;
 
     @FXML
     public void initialize() {
+        cb_section.getItems().addAll(
+            "Arrays & Strings",
+            "Trees & Graphs",
+            "Dynamic Programming",
+            "Searching & Sorting",
+            "Stacks & Queues",
+            "Linked Lists",
+            "System Design",
+            "OOP Concepts",
+            "Databases"
+        );
         cb_difficulty.getItems().addAll("Easy", "Medium", "Hard");
+
+        if (App.currentUser == null || !App.currentUser.canModifyQuestions()) {
+            formCard.setDisable(true);
+            feedbackLabel.setText("Access denied: only contributors can add questions.");
+            feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");
+        }
     }
 
     @FXML
@@ -64,12 +89,22 @@ public class AddQuestionController {
 
     @FXML
     private void saveDraft() {
+        if (App.currentUser == null || !App.currentUser.canModifyQuestions()) {
+            feedbackLabel.setText("Access denied: only contributors can add questions.");
+            feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");
+            return;
+        }
         feedbackLabel.setText("Draft saved.");
         feedbackLabel.setStyle("-fx-text-fill: #7734ED;");
     }
 
     @FXML
     private void submitQuestion() {
+        if (App.currentUser == null || !App.currentUser.canModifyQuestions()) {
+            feedbackLabel.setText("Access denied: only contributors can add questions.");
+            feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");
+            return;
+        }
         if (txt_title.getText().isBlank()) {
             feedbackLabel.setText("Question title is required.");
             feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");
@@ -91,6 +126,10 @@ public class AddQuestionController {
 
     @FXML
     private void goToDashboard() {
-        // TODO: navigate back to admin dashboard
+        try {
+            App.setRoot("dashboard");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
