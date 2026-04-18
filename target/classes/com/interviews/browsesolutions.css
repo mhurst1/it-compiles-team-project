@@ -1,0 +1,244 @@
+.root {
+    -fx-font-family: "Segoe UI";
+    -fx-background-color: #f0f2f5;
+}
+
+.navbar {
+    -fx-background-color: #12112a;
+}
+.nav-logo {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+.nav-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #b0b0c8;
+    -fx-font-size: 13px;
+    -fx-background-radius: 6;
+    -fx-padding: 6 14 6 14;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+.nav-btn:hover {
+    -fx-text-fill: white;
+    -fx-background-color: rgba(255,255,255,0.08);
+}
+.nav-btn-active {
+    -fx-background-color: linear-gradient(to top right, #7734ED, #ff6ec7);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.nav-btn-active:hover { -fx-opacity: 0.88; }
+.nav-username {
+    -fx-text-fill: #d0cfe8;
+    -fx-font-size: 13px;
+}
+.nav-avatar {
+    -fx-fill: linear-gradient(to top right, #7734ED, #ff6ec7);
+    -fx-stroke: #ff6ec7;
+    -fx-stroke-width: 2;
+}
+
+.left-scroll {
+    -fx-background-color: white;
+    -fx-border-color: transparent #e8e8ec transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+.left-scroll > .viewport {
+    -fx-background-color: white;
+}
+.left-panel {
+    -fx-background-color: white;
+}
+
+.back-link {
+    -fx-background-color: transparent;
+    -fx-text-fill: #7734ED;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+.back-link:hover {
+    -fx-text-fill: #5a20c8;
+}
+
+.question-page-title {
+    -fx-text-fill: #1a1a2e;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.cat-badge {
+    -fx-background-color: #ede9fe;
+    -fx-text-fill: #7734ED;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 3 10 3 10;
+}
+.diff-badge {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 3 10 3 10;
+}
+.diff-easy    { -fx-background-color: #dcfce7; -fx-text-fill: #16a34a; }
+.diff-medium  { -fx-background-color: #fff7ed; -fx-text-fill: #ea580c; }
+.diff-hard    { -fx-background-color: #fef2f2; -fx-text-fill: #dc2626; }
+
+.answers-label {
+    -fx-text-fill: #9090a8;
+    -fx-font-size: 12px;
+}
+
+.description-box {
+    -fx-background-color: #1a1a2e;
+    -fx-background-radius: 10;
+}
+.description-text {
+    -fx-text-fill: #c8c8e0;
+    -fx-font-size: 13px;
+    -fx-font-family: "Consolas";
+}
+
+.submit-heading {
+    -fx-text-fill: #1a1a2e;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+.code-editor {
+    -fx-background-color: #1a1a2e;
+    -fx-background-radius: 10;
+    -fx-text-fill: #c8c8e0;
+    -fx-font-family: "Consolas";
+    -fx-font-size: 13px;
+    -fx-border-color: #2e2e4e;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-control-inner-background: #1a1a2e;
+    -fx-highlight-fill: #7734ED;
+    -fx-prompt-text-fill: #5a5a7a;
+}
+.code-editor .content {
+    -fx-background-color: #1a1a2e;
+    -fx-background-radius: 8;
+}
+.post-solution-btn {
+    -fx-background-color: linear-gradient(to right, #7734ED, #ff6ec7);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-border-color: transparent;
+    -fx-padding: 12 0 12 0;
+    -fx-cursor: hand;
+}
+.post-solution-btn:hover { -fx-opacity: 0.88; }
+
+.right-panel {
+    -fx-background-color: #f0f2f5;
+}
+.community-heading {
+    -fx-text-fill: #1a1a2e;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 8 0;
+}
+.solutions-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.solutions-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.solution-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #ebebf2;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 6, 0, 0, 2);
+}
+.solution-code-box {
+    -fx-background-color: #12112a;
+    -fx-background-radius: 8 8 0 0;
+}
+.solution-code-text {
+    -fx-text-fill: #c8c8e0;
+    -fx-font-family: "Consolas";
+    -fx-font-size: 12px;
+    -fx-line-spacing: 2;
+}
+
+.solution-code {
+    -fx-background-color: #1a1a2e;
+    -fx-control-inner-background: #1a1a2e;
+    -fx-text-fill: #c8c8e0;
+    -fx-font-family: "Consolas";
+    -fx-font-size: 12px;
+    -fx-background-radius: 8;
+    -fx-border-color: #2e2e4e;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-highlight-fill: #7734ED;
+}
+.solution-code .content {
+    -fx-background-color: #1a1a2e;
+    -fx-background-radius: 6;
+}
+.solution-username {
+    -fx-text-fill: #333348;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+.vote-btn {
+    -fx-background-color: #f0f2f5;
+    -fx-text-fill: #555570;
+    -fx-font-size: 12px;
+    -fx-background-radius: 6;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-padding: 4 10 4 10;
+    -fx-cursor: hand;
+}
+.vote-btn:hover {
+    -fx-background-color: #ede9fe;
+    -fx-border-color: #7734ED;
+    -fx-text-fill: #7734ED;
+}
+.reply-field {
+    -fx-background-color: #f8f8fc;
+    -fx-background-radius: 6;
+    -fx-border-color: #e0e0ea;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-font-size: 12px;
+    -fx-text-fill: #333;
+    -fx-prompt-text-fill: #aaa;
+    -fx-padding: 6 10 6 10;
+}
+.reply-field:focused {
+    -fx-border-color: #7734ED;
+}
+.reply-btn {
+    -fx-background-color: linear-gradient(to right, #7734ED, #ff6ec7);
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-border-color: transparent;
+    -fx-padding: 6 14 6 14;
+    -fx-cursor: hand;
+}
+.reply-btn:hover { -fx-opacity: 0.88; }
+
+.no-solutions-label {
+    -fx-text-fill: #9090a8;
+    -fx-font-size: 13px;
+    -fx-padding: 20 0 0 4;
+}

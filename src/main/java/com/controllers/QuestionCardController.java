@@ -1,5 +1,8 @@
 package com.controllers;
 
+import java.io.IOException;
+
+import com.interviews.App;
 import com.interviews.Difficulty;
 import com.interviews.Question;
 import com.interviews.UserSolution;
@@ -47,6 +50,16 @@ public class QuestionCardController {
         card.getStyleClass().add("question-card");
         card.setAlignment(Pos.CENTER_LEFT);
         card.setPadding(new Insets(12, 14, 12, 14));
+
+        card.setOnMouseClicked(e -> {
+            App.currentQuestion = question;
+            App.currentCategory = difficultyText(question.getDifficulty()); // placeholder until Question has a category field
+            try {
+                App.setRoot("browsesolutions");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
 
         return card;
     }
