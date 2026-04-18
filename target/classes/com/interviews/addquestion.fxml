@@ -24,7 +24,6 @@
    <content>
       <VBox fx:id="pageRoot" spacing="0.0">
 
-         <!-- ── Breadcrumb bar ───────────────────────────────── -->
          <HBox fx:id="breadcrumbBar" spacing="6.0" alignment="CENTER_LEFT">
             <padding><Insets bottom="10.0" left="24.0" right="24.0" top="10.0" /></padding>
             <children>
@@ -36,12 +35,10 @@
             </children>
          </HBox>
 
-         <!-- ── Main content area ───────────────────────────── -->
          <HBox spacing="20.0" VBox.vgrow="ALWAYS">
             <padding><Insets bottom="24.0" left="24.0" right="24.0" top="20.0" /></padding>
             <children>
 
-               <!-- Left sidebar: My Questions list -->
                <VBox fx:id="sidebarCard" spacing="12.0" minWidth="200.0" maxWidth="220.0">
                   <padding><Insets bottom="16.0" left="16.0" right="16.0" top="16.0" /></padding>
                   <children>
@@ -51,16 +48,13 @@
                   </children>
                </VBox>
 
-               <!-- Center: Add New Question form -->
                <VBox HBox.hgrow="ALWAYS" spacing="16.0">
                   <children>
 
-                     <!-- Card -->
                      <VBox fx:id="formCard" spacing="16.0">
                         <padding><Insets bottom="24.0" left="24.0" right="24.0" top="20.0" /></padding>
                         <children>
 
-                           <!-- Card header row -->
                            <HBox alignment="CENTER_LEFT" spacing="10.0">
                               <children>
                                  <Label fx:id="formTitle" text="Add New Question" styleClass="form-title" />
@@ -72,7 +66,6 @@
 
                            <Separator />
 
-                           <!-- Question Title -->
                            <VBox spacing="5.0">
                               <children>
                                  <Label text="Question Title" styleClass="field-label" />
@@ -80,7 +73,6 @@
                               </children>
                            </VBox>
 
-                           <!-- Section/Topic + Difficulty -->
                            <HBox spacing="16.0">
                               <children>
                                  <VBox spacing="5.0" HBox.hgrow="ALWAYS">
@@ -98,7 +90,6 @@
                               </children>
                            </HBox>
 
-                           <!-- Problem Description -->
                            <VBox spacing="5.0">
                               <children>
                                  <Label text="Problem Description" styleClass="field-label" />
@@ -110,7 +101,6 @@
                               </children>
                            </VBox>
 
-                           <!-- Add Hints -->
                            <VBox spacing="8.0">
                               <children>
                                  <Label text="Add Hints" styleClass="field-label" />
@@ -136,14 +126,15 @@
                               </children>
                            </VBox>
 
-                           <Button fx:id="addAnswerBtn" text="+ Add Solution" styleClass="btn-ghost" onAction="#addAnswer" maxWidth="Infinity" />
+                           <Button fx:id="addAttachmentBtn" text="+ Add Attachment" styleClass="btn-ghost" onAction="#addAttachment" maxWidth="Infinity" />
+
+                           <Label fx:id="attachmentLabel" text="" styleClass="attachment-label" />
 
                            <Label fx:id="feedbackLabel" text="" styleClass="feedback-label" />
 
                         </children>
                      </VBox>
 
-                     <!-- Published Questions Table -->
                      <VBox fx:id="publishedCard" spacing="12.0">
                         <padding><Insets bottom="20.0" left="24.0" right="24.0" top="20.0" /></padding>
                         <children>

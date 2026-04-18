@@ -1,11 +1,14 @@
 package com.controllers;
 
+import java.io.File;
 import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 import com.interviews.App;
 
@@ -27,11 +30,13 @@ public class AddQuestionController {
     @FXML private TableColumn<?, ?> col_status;
     @FXML private TableColumn<?, ?> col_actions;
     @FXML private Label feedbackLabel;
+    @FXML private Label attachmentLabel;
     @FXML private VBox formCard;
     @FXML private Button saveDraftBtn;
     @FXML private Button submitBtn;
 
-    // tracks how many hint rows are currently visible (1 or 2 are always shown)
+    private File selectedAttachment;
+
     private int visibleHints = 2;
 
     @FXML
@@ -120,8 +125,18 @@ public class AddQuestionController {
     }
 
     @FXML
-    private void addAnswer() {
-        // TODO: open answer entry panel
+    private void addAttachment() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Attachment");
+        fileChooser.getExtensionFilters().add(
+            new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+        File file = fileChooser.showOpenDialog(formCard.getScene().getWindow());
+        if (file != null) {
+            selectedAttachment = file;
+            attachmentLabel.setText(file.getName());
+            attachmentLabel.setStyle("-fx-text-fill: #7734ED;");
+        }
     }
 
     @FXML

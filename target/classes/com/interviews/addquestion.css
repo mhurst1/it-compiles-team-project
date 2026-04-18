@@ -284,6 +284,11 @@
 }
 
 /* ── Feedback label ───────────────────────────────────────── */
+.attachment-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #7734ED;
+}
+
 .feedback-label {
     -fx-font-size: 12px;
 }
