@@ -31,6 +31,7 @@ public class AddQuestionController {
     @FXML private TableColumn<?, ?> col_actions;
     @FXML private Label feedbackLabel;
     @FXML private Label attachmentLabel;
+    @FXML private Label welcomeLabel;
     @FXML private VBox formCard;
     @FXML private Button saveDraftBtn;
     @FXML private Button submitBtn;
@@ -53,6 +54,10 @@ public class AddQuestionController {
             "Databases"
         );
         cb_difficulty.getItems().addAll("Easy", "Medium", "Hard");
+
+        if (App.currentUser != null) {
+            welcomeLabel.setText(App.currentUser.getFirstName());
+        }
 
         if (App.currentUser == null || !App.currentUser.canModifyQuestions()) {
             formCard.setDisable(true);
@@ -136,6 +141,33 @@ public class AddQuestionController {
             selectedAttachment = file;
             attachmentLabel.setText(file.getName());
             attachmentLabel.setStyle("-fx-text-fill: #7734ED;");
+        }
+    }
+
+    @FXML
+    private void goToHome() {
+        try {
+            App.setRoot("dashboard");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToQuestions() {
+        try {
+            App.setRoot("dashboard");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToCommunity() {
+        try {
+            App.setRoot("leaderboard");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

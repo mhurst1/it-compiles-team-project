@@ -21,9 +21,9 @@
 
             <Region prefWidth="40" />
 
-            <Button fx:id="navHomeBtn" mnemonicParsing="false" styleClass="nav-btn" text="Home" />
-            <Button fx:id="navQuestionsBtn" mnemonicParsing="false" styleClass="nav-btn, nav-btn-active" text="Questions" />
-            <Button fx:id="navCommunityBtn" mnemonicParsing="false" styleClass="nav-btn" text="Community" />
+            <Button fx:id="navHomeBtn" mnemonicParsing="false" onAction="#goToHome" styleClass="nav-btn" text="Home" />
+            <Button fx:id="navQuestionsBtn" mnemonicParsing="false" onAction="#goToQuestions" styleClass="nav-btn, nav-btn-active" text="Questions" />
+            <Button fx:id="navCommunityBtn" mnemonicParsing="false" onAction="#goToCommunity" styleClass="nav-btn" text="Community" />
 
             <Region prefHeight="34.0" prefWidth="447.0" HBox.hgrow="ALWAYS" />
 

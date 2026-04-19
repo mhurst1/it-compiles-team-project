@@ -11,33 +11,52 @@
     -fx-min-height: 700px;
 }
 
-/* ── Breadcrumb bar ───────────────────────────────────────── */
-#breadcrumbBar {
-    -fx-background-color: rgba(0, 0, 0, 0.25);
-    -fx-border-color: rgba(255, 255, 255, 0.12);
-    -fx-border-width: 0 0 1 0;
+/* Navbar */
+.navbar {
+    -fx-background-color: #12112a;
 }
 
-.breadcrumb-link {
-    -fx-text-fill: rgba(255, 255, 255, 0.75);
-    -fx-font-size: 13px;
-    -fx-cursor: hand;
-}
-
-.breadcrumb-link:hover {
+.nav-logo {
     -fx-text-fill: white;
-    -fx-underline: true;
-}
-
-.breadcrumb-sep {
-    -fx-text-fill: rgba(255, 255, 255, 0.4);
-    -fx-font-size: 13px;
-}
-
-.breadcrumb-current {
-    -fx-text-fill: white;
-    -fx-font-size: 13px;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
+}
+
+.nav-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #b0b0c8;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-padding: 6 14 6 14;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+}
+
+.nav-btn:hover {
+    -fx-text-fill: white;
+    -fx-background-color: rgba(255,255,255,0.08);
+}
+
+.nav-btn-active {
+    -fx-background-color: linear-gradient(to top right, #7734ED, #ff6ec7);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.nav-btn-active:hover {
+    -fx-opacity: 0.88;
+}
+
+.nav-username {
+    -fx-text-fill: #d0cfe8;
+    -fx-font-size: 13px;
+}
+
+.nav-avatar {
+    -fx-fill: linear-gradient(to top right, #7734ED, #ff6ec7);
+    -fx-stroke: #ff6ec7;
+    -fx-stroke-width: 2;
 }
 
 /* ── Sidebar card ─────────────────────────────────────────── */

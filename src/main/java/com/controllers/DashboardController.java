@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import com.interviews.App;
@@ -35,10 +36,14 @@ public class DashboardController {
     @FXML 
     private Button filterMediumBtn;
     
-    @FXML 
+    @FXML
     private Button filterHardBtn;
 
+    @FXML
+    private TextField searchField;
+
     private ArrayList<Question> questions;
+    private Difficulty activeFilter = null;
 
     @FXML
     private void initialize() {
@@ -55,37 +60,52 @@ public class DashboardController {
 
         contentSubtitle.setText(questions.size() + " questions across all topics");
         loadCards(questions);
+
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> applyFilters());
     }
 
     @FXML
     private void filterAll() {
         setActiveFilter(filterAllBtn);
-        contentSubtitle.setText(questions.size() + " questions across all topics");
-        loadCards(questions);
+        activeFilter = null;
+        applyFilters();
     }
 
     @FXML
     private void filterEasy() {
         setActiveFilter(filterEasyBtn);
-        ArrayList<Question> filtered = filterByDifficulty(Difficulty.EASY);
-        contentSubtitle.setText(filtered.size() + " easy questions");
-        loadCards(filtered);
+        activeFilter = Difficulty.EASY;
+        applyFilters();
     }
 
     @FXML
     private void filterMedium() {
         setActiveFilter(filterMediumBtn);
-        ArrayList<Question> filtered = filterByDifficulty(Difficulty.MEDIUM);
-        contentSubtitle.setText(filtered.size() + " medium questions");
-        loadCards(filtered);
+        activeFilter = Difficulty.MEDIUM;
+        applyFilters();
     }
 
     @FXML
     private void filterHard() {
         setActiveFilter(filterHardBtn);
-        ArrayList<Question> filtered = filterByDifficulty(Difficulty.DIFFICULT);
-        contentSubtitle.setText(filtered.size() + " hard questions");
-        loadCards(filtered);
+        activeFilter = Difficulty.DIFFICULT;
+        applyFilters();
+    }
+
+    private void applyFilters() {
+        String query = searchField.getText().trim().toLowerCase();
+        ArrayList<Question> result = activeFilter == null ? questions : filterByDifficulty(activeFilter);
+        if (!query.isEmpty()) {
+            ArrayList<Question> searched = new ArrayList<>();
+            for (Question q : result) {
+                if (q.getTitle().toLowerCase().contains(query)) {
+                    searched.add(q);
+                }
+            }
+            result = searched;
+        }
+        contentSubtitle.setText(result.size() + " question" + (result.size() == 1 ? "" : "s") + " found");
+        loadCards(result);
     }
 
     private ArrayList<Question> filterByDifficulty(Difficulty difficulty) {
@@ -104,6 +124,33 @@ public class DashboardController {
         filterMediumBtn.getStyleClass().remove("filter-btn-active");
         filterHardBtn.getStyleClass().remove("filter-btn-active");
         active.getStyleClass().add("filter-btn-active");
+    }
+
+    @FXML
+    private void goToHome() {
+        try {
+            App.setRoot("dashboard");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToQuestions() {
+        try {
+            App.setRoot("dashboard");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToCommunity() {
+        try {
+            App.setRoot("leaderboard");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
