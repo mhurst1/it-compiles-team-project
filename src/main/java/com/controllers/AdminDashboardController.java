@@ -67,9 +67,6 @@ public class AdminDashboardController {
     private VBox leaderboardRows;
 
     @FXML
-    private VBox pendingReviewRows;
-
-    @FXML
     private Label actionMessage;
 
     private List<User> users;
@@ -78,16 +75,15 @@ public class AdminDashboardController {
 
     @FXML
     private void initialize() {
-        users = dedupeUsers(DataLoader.getUsers());
+        users = DataLoader.getUsers();
         questions = DataLoader.getQuestions();
-        metricsByUser = buildUserMetrics(users, questions);
+        metricsByUser = buildUserMetrics(dedupeUsers(users), questions);
 
         configureWelcomeState();
         populateStatCards();
         populateUserManagement();
         populateQuestionManagement();
         populateLeaderboard();
-        populatePendingReviews();
     }
 
     @FXML
@@ -143,37 +139,34 @@ public class AdminDashboardController {
         }
 
         totalUsersValue.setText(formatNumber(users.size()));
-        totalUsersTrend.setText(users.size() + " active profiles loaded");
+        totalUsersTrend.setText("Loaded from users.json");
 
         totalQuestionsValue.setText(formatNumber(questions.size()));
-        totalQuestionsTrend.setText(questionsWithSolutions + " questions already answered");
+        totalQuestionsTrend.setText("Loaded from question.json");
 
         totalUpvotesValue.setText(formatNumber(totalVotes));
         totalUpvotesTrend.setText(totalSolutions == 0 ? "No upvotes yet" : totalSolutions + " solution votes tracked");
 
         totalSolutionsValue.setText(formatNumber(totalSolutions));
-        totalSolutionsTrend.setText(pendingReviews + " questions still pending review");
+        totalSolutionsTrend.setText(questionsWithSolutions + " questions with solutions");
     }
 
     private void populateUserManagement() {
         userManagementRows.getChildren().clear();
 
-        List<UserMetrics> rankedUsers = new ArrayList<>(metricsByUser.values());
-        rankedUsers.sort(Comparator.comparingInt(UserMetrics::getVoteTotal).reversed()
-                .thenComparingInt(UserMetrics::getSolvedCount).reversed()
-                .thenComparing(UserMetrics::getUsername, String.CASE_INSENSITIVE_ORDER));
+        List<User> sortedUsers = new ArrayList<>(users);
+        sortedUsers.sort(Comparator.comparing(this::resolveUsername, String.CASE_INSENSITIVE_ORDER));
 
-        int limit = Math.min(5, rankedUsers.size());
-        for (int i = 0; i < limit; i++) {
-            UserMetrics metrics = rankedUsers.get(i);
+        for (User user : sortedUsers) {
+            UserMetrics metrics = metricsByUser.get(resolveUsername(user));
             HBox row = createPanelRow();
             row.getChildren().addAll(
-                    textCell(metrics.getUsername(), "panel-cell user-name-cell", 150),
-                    badgeCell(roleLabel(metrics.getStatus()), roleClass(metrics.getStatus()), 95),
-                    textCell(String.valueOf(metrics.getSolvedCount()), "panel-cell", 70),
-                    accentCell(String.valueOf(metrics.getVoteTotal()), 70),
+                    textCell(resolveUsername(user), "panel-cell user-name-cell", 150),
+                    badgeCell(roleLabel(user.getStatus()), roleClass(user.getStatus()), 95),
+                    textCell(String.valueOf(metrics != null ? metrics.getSolvedCount() : 0), "panel-cell", 70),
+                    accentCell(String.valueOf(metrics != null ? metrics.getVoteTotal() : 0), 70),
                     actionButton("Edit", "action-btn primary-action",
-                            "Edit user flow for @" + metrics.getUsername() + " is ready to connect.")
+                            "Edit user flow for @" + resolveUsername(user) + " is ready to connect.")
             );
             userManagementRows.getChildren().add(row);
         }
@@ -183,12 +176,9 @@ public class AdminDashboardController {
         questionManagementRows.getChildren().clear();
 
         List<QuestionSnapshot> rankedQuestions = buildQuestionSnapshots();
-        rankedQuestions.sort(Comparator.comparingInt(QuestionSnapshot::getVoteTotal).reversed()
-                .thenComparing(QuestionSnapshot::getTitle, String.CASE_INSENSITIVE_ORDER));
+        rankedQuestions.sort(Comparator.comparing(QuestionSnapshot::getTitle, String.CASE_INSENSITIVE_ORDER));
 
-        int limit = Math.min(5, rankedQuestions.size());
-        for (int i = 0; i < limit; i++) {
-            QuestionSnapshot snapshot = rankedQuestions.get(i);
+        for (QuestionSnapshot snapshot : rankedQuestions) {
             HBox row = createPanelRow();
             row.getChildren().addAll(
                     textCell(snapshot.getTitle(), "panel-cell question-title-cell", 220),
@@ -222,29 +212,6 @@ public class AdminDashboardController {
                     accentCell(String.valueOf(metrics.getVoteTotal()), 70)
             );
             leaderboardRows.getChildren().add(row);
-        }
-    }
-
-    private void populatePendingReviews() {
-        pendingReviewRows.getChildren().clear();
-
-        List<QuestionSnapshot> pending = buildQuestionSnapshots();
-        pending.removeIf(snapshot -> snapshot.getSolutionCount() > 0);
-        pending.sort(Comparator.comparing(QuestionSnapshot::getTitle, String.CASE_INSENSITIVE_ORDER));
-
-        int limit = Math.min(5, pending.size());
-        for (int i = 0; i < limit; i++) {
-            QuestionSnapshot snapshot = pending.get(i);
-            HBox row = createPanelRow();
-            row.getChildren().addAll(
-                    textCell(snapshot.getTitle(), "panel-cell question-title-cell", 220),
-                    textCell(snapshot.getAuthor(), "panel-cell by-cell", 120),
-                    actionButton("Approve", "action-btn primary-action",
-                            "Approve flow for \"" + snapshot.getTitle() + "\" is ready to connect."),
-                    actionButton("Reject", "action-btn danger-action",
-                            "Reject flow for \"" + snapshot.getTitle() + "\" is ready to connect.")
-            );
-            pendingReviewRows.getChildren().add(row);
         }
     }
 
