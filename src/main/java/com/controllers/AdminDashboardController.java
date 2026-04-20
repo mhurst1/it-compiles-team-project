@@ -88,17 +88,29 @@ public class AdminDashboardController {
 
     @FXML
     private void goHome() {
-        showActionMessage("Home navigation is ready for wiring.");
+        try {
+            App.setRoot("dashboard");
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void openQuestions() {
-        showActionMessage("Question management section is open.");
+        try {
+            App.setRoot("dashboard");
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void openCommunity() {
-        showActionMessage("Community tools can be connected here next.");
+        try {
+            App.setRoot("leaderboard");
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void configureWelcomeState() {

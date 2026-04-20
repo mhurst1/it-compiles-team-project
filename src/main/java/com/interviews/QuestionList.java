@@ -1,6 +1,14 @@
 package com.interviews;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * A class to manage a list of questions.
@@ -127,5 +135,107 @@ public class QuestionList {
      */
     public void save() {
         DataWriter.saveQuestions(questions);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void saveAll() {
+        JSONArray array = new JSONArray();
+        for (Question q : questions) {
+            JSONObject obj = new JSONObject();
+            obj.put("id", q.getId() != null ? q.getId().toString() : "");
+            obj.put("title", q.getTitle() != null ? q.getTitle() : "");
+            obj.put("user", q.getUser() != null ? q.getUser().getId().toString() : "");
+            obj.put("description", q.getDescription() != null ? q.getDescription() : "");
+            obj.put("question-content", buildSectionArray(q.getQuestionContent()));
+            obj.put("hints", buildStringArray(q.getHints()));
+            obj.put("difficulty", buildEnumArray(q.getDifficulty()));
+            obj.put("question-language", buildEnumArray(q.getLanguage()));
+            obj.put("solution-list", buildSolutionArray(q.getSolutionList(), q.getId()));
+            array.add(obj);
+        }
+        Path path = resolveDataFile("question.json");
+        try {
+            Files.createDirectories(path.getParent());
+            try (FileWriter writer = new FileWriter(path.toFile())) {
+                array.writeJSONString(writer);
+            }
+        } catch (IOException e) {
+            System.err.println("QuestionList: could not save questions: " + e.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private JSONArray buildSectionArray(ArrayList<Section> sections) {
+        JSONArray arr = new JSONArray();
+        if (sections == null) return arr;
+        for (Section s : sections) {
+            JSONObject obj = new JSONObject();
+            obj.put("section-title", s.getSectionTitle() != null ? s.getSectionTitle() : "");
+            obj.put("section-content", buildStringArray(s.getSectionContent()));
+            obj.put("section-text", s.getSectionText() != null ? s.getSectionText() : "");
+            obj.put("fileName", s.getFileName() != null ? s.getFileName() : "");
+            arr.add(obj);
+        }
+        return arr;
+    }
+
+    @SuppressWarnings("unchecked")
+    private JSONArray buildSolutionArray(ArrayList<UserSolution> solutions, java.util.UUID questionId) {
+        JSONArray arr = new JSONArray();
+        if (solutions == null) return arr;
+        for (UserSolution us : solutions) {
+            JSONObject obj = new JSONObject();
+            obj.put("id", us.getSoulutionId() != null ? us.getSoulutionId().toString() : "");
+            obj.put("question-id", questionId != null ? questionId.toString() : "");
+            obj.put("user", us.getUser() != null ? us.getUser().getId().toString() : "");
+            obj.put("description", us.getDescription() != null ? us.getDescription() : "");
+            obj.put("thread", buildCommentArray(us.getReplies()));
+            obj.put("user-vote", us.getUserVote());
+            obj.put("total-vote", (long) us.getTotalVote());
+            arr.add(obj);
+        }
+        return arr;
+    }
+
+    @SuppressWarnings("unchecked")
+    private JSONArray buildCommentArray(ArrayList<Comment> comments) {
+        JSONArray arr = new JSONArray();
+        if (comments == null) return arr;
+        for (Comment c : comments) {
+            JSONObject obj = new JSONObject();
+            obj.put("user", c.getUser() != null ? c.getUser().getId().toString() : "");
+            obj.put("comment", c.getComment() != null ? c.getComment() : "");
+            obj.put("replies", buildCommentArray(c.getReplies()));
+            arr.add(obj);
+        }
+        return arr;
+    }
+
+    @SuppressWarnings("unchecked")
+    private JSONArray buildStringArray(ArrayList<String> list) {
+        JSONArray arr = new JSONArray();
+        if (list == null) return arr;
+        for (String s : list) arr.add(s != null ? s : "");
+        return arr;
+    }
+
+    @SuppressWarnings("unchecked")
+    private JSONArray buildEnumArray(Enum<?> e) {
+        JSONArray arr = new JSONArray();
+        if (e != null) arr.add(e.name());
+        return arr;
+    }
+
+    private static final String PROJECT_DIR = "it-compiles-team-project";
+
+    private static Path resolveDataFile(String fileName) {
+        Path start = Paths.get("").toAbsolutePath().normalize();
+        for (Path cur = start; cur != null; cur = cur.getParent()) {
+            Path direct = cur.resolve("json").resolve(fileName);
+            if (direct.toFile().exists()) return direct;
+            Path project = cur.resolve(PROJECT_DIR).resolve("json").resolve(fileName);
+            if (project.toFile().exists()) return project;
+        }
+        return start.resolve("json").resolve(fileName);
     }
 }

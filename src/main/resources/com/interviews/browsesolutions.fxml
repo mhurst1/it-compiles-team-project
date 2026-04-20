@@ -20,9 +20,9 @@
             <padding><Insets bottom="12" left="24" right="24" top="12" /></padding>
             <Label styleClass="nav-logo" text="⬡  CodeBoard" />
             <Region prefWidth="40" />
-            <Button mnemonicParsing="false" styleClass="nav-btn" text="Home" />
-            <Button mnemonicParsing="false" styleClass="nav-btn, nav-btn-active" text="Questions" />
-            <Button mnemonicParsing="false" styleClass="nav-btn" text="Community" />
+            <Button mnemonicParsing="false" onAction="#goBack" styleClass="nav-btn" text="Home" />
+            <Button mnemonicParsing="false" onAction="#goBack" styleClass="nav-btn, nav-btn-active" text="Questions" />
+            <Button mnemonicParsing="false" onAction="#goToCommunity" styleClass="nav-btn" text="Community" />
             <Region HBox.hgrow="ALWAYS" />
             <Label fx:id="navUsername" styleClass="nav-username" text="" />
             <Circle radius="16" styleClass="nav-avatar" />
@@ -37,7 +37,7 @@
                     <padding><Insets bottom="32" left="28" right="28" top="20" /></padding>
 
                     <Button mnemonicParsing="false" styleClass="back-link"
-                            text="&lt; Back to Questions" onAction="#goBack" />
+                            text="Back to Questions" onAction="#goBack" />
 
                     <Label fx:id="questionTitle" styleClass="question-page-title" text="" wrapText="true" />
 

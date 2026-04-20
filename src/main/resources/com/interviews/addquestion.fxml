@@ -11,164 +11,169 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Circle?>
 
-<ScrollPane fitToWidth="true" prefHeight="700.0" prefWidth="960.0"
+<BorderPane prefHeight="700.0" prefWidth="1100.0"
             xmlns="http://javafx.com/javafx/13"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.controllers.AddQuestionController">
 
-   <content>
-      <VBox fx:id="pageRoot" spacing="0.0">
+   <top>
+      <HBox alignment="CENTER_LEFT" spacing="16" styleClass="navbar">
+         <padding><Insets bottom="12" left="24" right="24" top="12" /></padding>
+         <Label styleClass="nav-logo" text="⬡  CodeBoard" />
+         <Region prefWidth="40" />
+         <Button mnemonicParsing="false" onAction="#goToHome" styleClass="nav-btn" text="Home" />
+         <Button mnemonicParsing="false" onAction="#goToQuestions" styleClass="nav-btn, nav-btn-active" text="Questions" />
+         <Button mnemonicParsing="false" onAction="#goToCommunity" styleClass="nav-btn" text="Community" />
+         <Region HBox.hgrow="ALWAYS" />
+         <Label fx:id="welcomeLabel" styleClass="nav-username" text="" />
+         <Circle fx:id="navAvatar" radius="16" styleClass="nav-avatar" />
+      </HBox>
+   </top>
 
-         <!-- ── Breadcrumb bar ───────────────────────────────── -->
-         <HBox fx:id="breadcrumbBar" spacing="6.0" alignment="CENTER_LEFT">
-            <padding><Insets bottom="10.0" left="24.0" right="24.0" top="10.0" /></padding>
-            <children>
-               <Label fx:id="breadcrumbHome" text="Admin Dashboard" styleClass="breadcrumb-link" onMouseClicked="#goToDashboard" />
-               <Label text="›" styleClass="breadcrumb-sep" />
-               <Label text="Add Question" styleClass="breadcrumb-current" />
-            </children>
-         </HBox>
+   <center>
+      <ScrollPane fitToWidth="true">
+         <content>
+            <VBox fx:id="pageRoot" spacing="0.0">
 
-         <!-- ── Main content area ───────────────────────────── -->
-         <HBox spacing="20.0" VBox.vgrow="ALWAYS">
-            <padding><Insets bottom="24.0" left="24.0" right="24.0" top="20.0" /></padding>
-            <children>
+               <HBox alignment="CENTER_LEFT">
+                  <padding><Insets bottom="0.0" left="24.0" right="24.0" top="16.0" /></padding>
+                  <Button text="← Back" styleClass="btn-back" onAction="#goToDashboard" />
+               </HBox>
 
-               <!-- Left sidebar: My Questions list -->
-               <VBox fx:id="sidebarCard" spacing="12.0" minWidth="200.0" maxWidth="220.0">
-                  <padding><Insets bottom="16.0" left="16.0" right="16.0" top="16.0" /></padding>
-                  <children>
-                     <Label fx:id="myQuestionsLabel" text="My Questions (0)" styleClass="sidebar-title" />
-                     <Separator />
-                     <Label fx:id="emptyQLabel" text="No drafts yet." styleClass="sidebar-empty" wrapText="true" />
-                  </children>
-               </VBox>
-
-               <!-- Center: Add New Question form -->
-               <VBox HBox.hgrow="ALWAYS" spacing="16.0">
+               <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                  <padding><Insets bottom="24.0" left="24.0" right="24.0" top="12.0" /></padding>
                   <children>
 
-                     <!-- Card -->
-                     <VBox fx:id="formCard" spacing="16.0">
-                        <padding><Insets bottom="24.0" left="24.0" right="24.0" top="20.0" /></padding>
+                     <VBox fx:id="sidebarCard" spacing="12.0" minWidth="200.0" maxWidth="220.0">
+                        <padding><Insets bottom="16.0" left="16.0" right="16.0" top="16.0" /></padding>
                         <children>
-
-                           <!-- Card header row -->
-                           <HBox alignment="CENTER_LEFT" spacing="10.0">
-                              <children>
-                                 <Label fx:id="formTitle" text="Add New Question" styleClass="form-title" />
-                                 <Region HBox.hgrow="ALWAYS" />
-                                 <Button fx:id="saveDraftBtn" text="Save Draft" styleClass="btn-outline" onAction="#saveDraft" />
-                                 <Button fx:id="submitBtn" text="Submit" styleClass="btn-submit" onAction="#submitQuestion" />
-                              </children>
-                           </HBox>
-
+                           <Label fx:id="myQuestionsLabel" text="My Questions (0)" styleClass="sidebar-title" />
                            <Separator />
-
-                           <!-- Question Title -->
-                           <VBox spacing="5.0">
-                              <children>
-                                 <Label text="Question Title" styleClass="field-label" />
-                                 <TextField fx:id="txt_title" promptText="e.g. Design a Linked List" styleClass="field-input" />
-                              </children>
-                           </VBox>
-
-                           <!-- Section/Topic + Difficulty -->
-                           <HBox spacing="16.0">
-                              <children>
-                                 <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                       <Label text="Section / Topic" styleClass="field-label" />
-                                       <TextField fx:id="txt_section" promptText="e.g. Linked Lists, Trees..." styleClass="field-input" maxWidth="Infinity" />
-                                    </children>
-                                 </VBox>
-                                 <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                       <Label text="Difficulty" styleClass="field-label" />
-                                       <ComboBox fx:id="cb_difficulty" promptText="Select difficulty" maxWidth="Infinity" />
-                                    </children>
-                                 </VBox>
-                              </children>
-                           </HBox>
-
-                           <!-- Problem Description -->
-                           <VBox spacing="5.0">
-                              <children>
-                                 <Label text="Problem Description" styleClass="field-label" />
-                                 <TextArea fx:id="txt_description"
-                                           promptText="Description, hints, examples, etc."
-                                           prefRowCount="5"
-                                           wrapText="true"
-                                           styleClass="field-textarea" />
-                              </children>
-                           </VBox>
-
-                           <!-- Add Hints -->
-                           <VBox spacing="8.0">
-                              <children>
-                                 <Label text="Add Hints" styleClass="field-label" />
-                                 <HBox spacing="8.0" alignment="CENTER_LEFT">
-                                    <children>
-                                       <TextField fx:id="txt_hint1" promptText="Hint 1" HBox.hgrow="ALWAYS" styleClass="field-input" />
-                                       <Button fx:id="removeHint1Btn" text="✕" styleClass="btn-remove-hint" onAction="#removeHint1" />
-                                    </children>
-                                 </HBox>
-                                 <HBox spacing="8.0" alignment="CENTER_LEFT">
-                                    <children>
-                                       <TextField fx:id="txt_hint2" promptText="Hint 2" HBox.hgrow="ALWAYS" styleClass="field-input" />
-                                       <Button fx:id="removeHint2Btn" text="✕" styleClass="btn-remove-hint" onAction="#removeHint2" />
-                                    </children>
-                                 </HBox>
-                                 <HBox fx:id="hint3Row" spacing="8.0" alignment="CENTER_LEFT" managed="false" visible="false">
-                                    <children>
-                                       <TextField fx:id="txt_hint3" promptText="Hint 3" HBox.hgrow="ALWAYS" styleClass="field-input" />
-                                       <Button fx:id="removeHint3Btn" text="✕" styleClass="btn-remove-hint" onAction="#removeHint3" />
-                                    </children>
-                                 </HBox>
-                                 <Button fx:id="addHintBtn" text="+ Add Hint" styleClass="btn-ghost" onAction="#addHint" />
-                              </children>
-                           </VBox>
-
-                           <!-- Add Answer -->
-                           <Button fx:id="addAnswerBtn" text="+ Add Answer" styleClass="btn-ghost" onAction="#addAnswer" maxWidth="Infinity" />
-
-                           <Label fx:id="feedbackLabel" text="" styleClass="feedback-label" />
-
+                           <Label fx:id="emptyQLabel" text="No drafts yet." styleClass="sidebar-empty" wrapText="true" />
                         </children>
                      </VBox>
 
-                     <!-- Published Questions Table -->
-                     <VBox fx:id="publishedCard" spacing="12.0">
-                        <padding><Insets bottom="20.0" left="24.0" right="24.0" top="20.0" /></padding>
+                     <VBox HBox.hgrow="ALWAYS" spacing="16.0">
                         <children>
-                           <Label text="My Published Questions:" styleClass="section-heading" />
-                           <TableView fx:id="publishedTable" prefHeight="180.0" VBox.vgrow="ALWAYS">
-                              <columns>
-                                 <TableColumn fx:id="col_title" text="Question" prefWidth="340.0" />
-                                 <TableColumn fx:id="col_section" text="Section" prefWidth="160.0" />
-                                 <TableColumn fx:id="col_difficulty" text="Difficulty" prefWidth="100.0" />
-                                 <TableColumn fx:id="col_status" text="Status" prefWidth="100.0" />
-                                 <TableColumn fx:id="col_actions" text="" prefWidth="80.0" />
-                              </columns>
-                           </TableView>
+
+                           <VBox fx:id="formCard" spacing="16.0">
+                              <padding><Insets bottom="24.0" left="24.0" right="24.0" top="20.0" /></padding>
+                              <children>
+
+                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                    <children>
+                                       <Label fx:id="formTitle" text="Add New Question" styleClass="form-title" />
+                                       <Region HBox.hgrow="ALWAYS" />
+                                       <Button fx:id="saveDraftBtn" text="Save Draft" styleClass="btn-outline" onAction="#saveDraft" />
+                                       <Button fx:id="submitBtn" text="Submit" styleClass="btn-submit" onAction="#submitQuestion" />
+                                    </children>
+                                 </HBox>
+
+                                 <Separator />
+
+                                 <VBox spacing="5.0">
+                                    <children>
+                                       <Label text="Question Title" styleClass="field-label" />
+                                       <TextField fx:id="txt_title" promptText="e.g. Design a Linked List" styleClass="field-input" />
+                                    </children>
+                                 </VBox>
+
+                                 <HBox spacing="16.0">
+                                    <children>
+                                       <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                          <children>
+                                             <Label text="Section / Topic" styleClass="field-label" />
+                                             <ComboBox fx:id="cb_section" promptText="Select a topic" maxWidth="Infinity" />
+                                          </children>
+                                       </VBox>
+                                       <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                                          <children>
+                                             <Label text="Difficulty" styleClass="field-label" />
+                                             <ComboBox fx:id="cb_difficulty" promptText="Select difficulty" maxWidth="Infinity" />
+                                          </children>
+                                       </VBox>
+                                    </children>
+                                 </HBox>
+
+                                 <VBox spacing="5.0">
+                                    <children>
+                                       <Label text="Problem Description" styleClass="field-label" />
+                                       <TextArea fx:id="txt_description"
+                                                 promptText="Description, hints, examples, etc."
+                                                 prefRowCount="5"
+                                                 wrapText="true"
+                                                 styleClass="field-textarea" />
+                                    </children>
+                                 </VBox>
+
+                                 <VBox spacing="8.0">
+                                    <children>
+                                       <Label text="Add Hints" styleClass="field-label" />
+                                       <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                          <children>
+                                             <TextField fx:id="txt_hint1" promptText="Hint 1" HBox.hgrow="ALWAYS" styleClass="field-input" />
+                                             <Button fx:id="removeHint1Btn" text="✕" styleClass="btn-remove-hint" onAction="#removeHint1" />
+                                          </children>
+                                       </HBox>
+                                       <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                          <children>
+                                             <TextField fx:id="txt_hint2" promptText="Hint 2" HBox.hgrow="ALWAYS" styleClass="field-input" />
+                                             <Button fx:id="removeHint2Btn" text="✕" styleClass="btn-remove-hint" onAction="#removeHint2" />
+                                          </children>
+                                       </HBox>
+                                       <HBox fx:id="hint3Row" spacing="8.0" alignment="CENTER_LEFT" managed="false" visible="false">
+                                          <children>
+                                             <TextField fx:id="txt_hint3" promptText="Hint 3" HBox.hgrow="ALWAYS" styleClass="field-input" />
+                                             <Button fx:id="removeHint3Btn" text="✕" styleClass="btn-remove-hint" onAction="#removeHint3" />
+                                          </children>
+                                       </HBox>
+                                       <Button fx:id="addHintBtn" text="+ Add Hint" styleClass="btn-ghost" onAction="#addHint" />
+                                    </children>
+                                 </VBox>
+
+                                 <Button fx:id="addAttachmentBtn" text="+ Add Attachment" styleClass="btn-ghost" onAction="#addAttachment" maxWidth="Infinity" />
+
+                                 <Label fx:id="attachmentLabel" text="" styleClass="attachment-label" />
+
+                                 <Label fx:id="feedbackLabel" text="" styleClass="feedback-label" />
+
+                              </children>
+                           </VBox>
+
+                           <VBox fx:id="publishedCard" spacing="12.0">
+                              <padding><Insets bottom="20.0" left="24.0" right="24.0" top="20.0" /></padding>
+                              <children>
+                                 <Label text="My Published Questions:" styleClass="section-heading" />
+                                 <TableView fx:id="publishedTable" prefHeight="180.0" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                       <TableColumn fx:id="col_title" text="Question" prefWidth="340.0" />
+                                       <TableColumn fx:id="col_section" text="Section" prefWidth="160.0" />
+                                       <TableColumn fx:id="col_difficulty" text="Difficulty" prefWidth="100.0" />
+                                       <TableColumn fx:id="col_status" text="Status" prefWidth="100.0" />
+                                       <TableColumn fx:id="col_actions" text="" prefWidth="80.0" />
+                                    </columns>
+                                 </TableView>
+                              </children>
+                           </VBox>
+
                         </children>
                      </VBox>
 
                   </children>
-               </VBox>
-
-            </children>
-         </HBox>
-      </VBox>
-   </content>
+               </HBox>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </center>
 
    <stylesheets>
       <URL value="@addquestion.css" />
    </stylesheets>
 
-</ScrollPane>
+</BorderPane>

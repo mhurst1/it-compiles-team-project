@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane prefHeight="700.0" prefWidth="1100.0" stylesheets="@leaderboard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.LeaderboardController">
+
+    <!-- Navbar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="16" styleClass="navbar">
+            <padding><Insets bottom="12" left="24" right="24" top="12" /></padding>
+            <Label styleClass="nav-logo" text="⬡  CodeBoard" />
+            <Region prefWidth="40" />
+            <Button mnemonicParsing="false" onAction="#goToHome" styleClass="nav-btn" text="Home" />
+            <Button mnemonicParsing="false" onAction="#goToQuestions" styleClass="nav-btn" text="Questions" />
+            <Button mnemonicParsing="false" styleClass="nav-btn, nav-btn-active" text="Community" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="welcomeLabel" styleClass="nav-username" text="Name" />
+            <Circle radius="16" styleClass="nav-avatar" />
+        </HBox>
+    </top>
+
+    <!-- Page content -->
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-background: transparent;">
+            <content>
+                <VBox spacing="20" styleClass="lb-page">
+                    <padding><Insets bottom="36" left="36" right="36" top="32" /></padding>
+
+                    <!-- Header -->
+                    <VBox spacing="4">
+                        <Label fx:id="welcomeGreeting" styleClass="lb-heading" text="🏆 Leaderboard" />
+                        <Label fx:id="contentSubtitle" styleClass="lb-subtitle" text="See how you stack up against the community." />
+                    </VBox>
+
+                    <!-- Filter buttons and search -->
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Button fx:id="filterAllBtn" mnemonicParsing="false" onAction="#filterAll" styleClass="filter-btn, filter-btn-active" text="All" />
+                        <Button fx:id="filterEasyBtn" mnemonicParsing="false" onAction="#filterEasy" styleClass="filter-btn" text="Users" />
+                        <Button fx:id="filterMediumBtn" mnemonicParsing="false" onAction="#filterMedium" styleClass="filter-btn" text="Contributors" />
+                        <Button fx:id="filterHardBtn" mnemonicParsing="false" onAction="#filterHard" styleClass="filter-btn" text="Admins" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="searchField" promptText="Search users..." styleClass="lb-search" />
+                    </HBox>
+
+                    <!-- Podium: 2nd | 1st | 3rd -->
+                    <HBox alignment="BOTTOM_CENTER" spacing="16">
+                        <VBox fx:id="secondPlaceCard" alignment="CENTER" prefWidth="200" spacing="10" styleClass="lb-card-silver" />
+                        <VBox fx:id="firstPlaceCard" alignment="CENTER" prefWidth="220" spacing="10" styleClass="lb-card-gold" />
+                        <VBox fx:id="thirdPlaceCard" alignment="CENTER" prefWidth="200" spacing="10" styleClass="lb-card-bronze" />
+                    </HBox>
+
+                    <!-- Rankings table -->
+                    <VBox styleClass="lb-table">
+
+                        <Label styleClass="lb-table-title" text="Full Rankings" />
+
+                        <!-- Column headers -->
+                        <HBox spacing="0" styleClass="lb-table-header">
+                            <Label minWidth="70" styleClass="lb-col-header" text="Rank" />
+                            <Label minWidth="120" styleClass="lb-col-header" text="User" />
+                            <Label minWidth="130" styleClass="lb-col-header" text="Role" />
+                            <Label minWidth="145" styleClass="lb-col-header" text="Questions Solved" />
+                            <Label minWidth="95" styleClass="lb-col-header" text="Upvotes" />
+                            <Label minWidth="95" styleClass="lb-col-header" text="Downvotes" />
+                            <Label minWidth="90" styleClass="lb-col-header" text="Streak" />
+                            <Label styleClass="lb-col-header" text="Actions" />
+                        </HBox>
+
+                        <VBox fx:id="questionCardList" />
+                    </VBox>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>
