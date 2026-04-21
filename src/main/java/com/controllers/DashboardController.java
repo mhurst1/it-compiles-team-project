@@ -129,7 +129,7 @@ public class DashboardController {
     @FXML
     private void goToHome() {
         try {
-            App.setRoot("dashboard");
+            App.setRoot("userpage");
         } catch (IOException e) {
             e.printStackTrace();
         }

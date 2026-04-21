@@ -293,7 +293,7 @@ public class LeaderboardController {
 
     @FXML
     private void goToHome() throws IOException {
-        App.setRoot("dashboard");
+        App.setRoot("userpage");
     }
 
     @FXML

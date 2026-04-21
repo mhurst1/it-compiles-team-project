@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane prefHeight="700.0" prefWidth="1100.0" stylesheets="@userpage.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.UserPageController">
+
+    <!-- Navbar-->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="16" styleClass="navbar">
+            <padding><Insets bottom="12" left="24" right="24" top="12" />
+            </padding>
+                <Label fx:id="navlogo" styleClass="navlogo" text="⬡  CodeBoard" />
+                <Region prefWidth="40" />
+                <Button mnemonicParsing="false" onAction="#goToHome" styleClass="nav-btn, nav-btn-active" text="Home" />
+                <Button mnemonicParsing="false" onAction="#goToQuestions" styleClass="nav-btn" text="Questions" />
+                <Button mnemonicParsing="false" onAction="#goToCommunity" styleClass="nav-btn" text="Community" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="navUserLabel" styleClass="nav-username" text="Name" />
+                <Circle radius="16" styleClass="nav-avatar" />
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToHeight="true" fitToWidth="true">
+            <content>
+                <VBox prefHeight="196.0" prefWidth="1098.0" spacing="20.0">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                    </padding>
+
+                    <HBox fx:id="userbanner" styleClass="userbanner" spacing="20.0">
+                        <children>
+                            <StackPane prefHeight="80.0" prefWidth="80.0">
+                                <children>
+                                    <Label fx:id="avatarLabel" text="J" />
+                                </children>
+                            </StackPane>
+
+                            <VBox spacing="4.0">
+                                <children>
+                                    <Text fx:id="profileName" text="Jimmy Crickets" />
+                                    <Text fx:id="profileHandle" text="@jcricket6" />
+                                    <Label fx:id="profileRole" text="USER" />
+                                </children>
+                            </VBox>
+
+                            <VBox spacing="10.0" HBox.hgrow="ALWAYS" />
+                        </children>
+                    </HBox>
+
+                      <!--Stat Boxes-->
+
+                <HBox spacing="16.0" styleClass="stats-container">
+                    <children>
+
+                        <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="stat-box">
+                            <children>
+                                <Label text="Questions Solved" styleClass="stat-title"/>
+                                <Label fx:id="questionsSolved" text="0" styleClass="stat-value"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="stat-box">
+                            <children>
+                                <Label text="Current Streak" styleClass="stat-title"/>
+                                <Label fx:id="currentStreak" text="0 days" styleClass="stat-value"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="stat-box">
+                            <children>
+                                <Label text="Rank" styleClass="stat-title"/>
+                                <Label fx:id="rankLabel" text="#0" styleClass="stat-value"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="stat-box">
+                            <children>
+                                <Label text="Upvotes Received" styleClass="stat-title"/>
+                                <Label fx:id="upvotesReceived" text="0" styleClass="stat-value"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="stat-box">
+                            <children>
+                                <Label text="Downvotes Received" styleClass="stat-title"/>
+                                <Label fx:id="downvotesReceived" text="0" styleClass="stat-value"/>
+                            </children>
+                        </VBox>
+
+                    </children>
+                </HBox>
+
+                    <Separator />
+
+
+
+
+              <HBox spacing="20.0">
+
+    <!-- QUESTIONS SOLVED -->
+    <VBox spacing="10.0" HBox.hgrow="ALWAYS" styleClass="content-panel">
+        <children>
+            <Label text="Questions Solved" styleClass="panel-title"/>
+
+            <ScrollPane fitToWidth="true" prefHeight="300.0">
+                <content>
+                    <VBox fx:id="questionsSolvedBox" spacing="10.0" styleClass="list-box">
+                        <padding>
+                            <Insets top="5" right="5" bottom="5" left="5"/>
+                        </padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+        </children>
+    </VBox>
+
+    <!-- MY SOLUTIONS -->
+    <VBox spacing="10.0" HBox.hgrow="ALWAYS" styleClass="content-panel">
+        <children>
+            <Label text="My Solutions" styleClass="panel-title"/>
+
+            <ScrollPane fitToWidth="true" prefHeight="300.0">
+                <content>
+                    <VBox fx:id="mySolutionsBox" spacing="10.0" styleClass="list-box">
+                        <padding>
+                            <Insets top="5" right="5" bottom="5" left="5"/>
+                        </padding>
+                    </VBox>
+                </content>
+            </ScrollPane>
+        </children>
+    </VBox>
+
+</HBox>
+
+                    <Separator />
+
+                    <VBox spacing="10.0">
+                        <children>
+                            <Label text="Recent Activity" />
+                            <ScrollPane fitToWidth="true" prefHeight="180.0">
+                                <content>
+                                    <VBox fx:id="recentActivityBox" spacing="8.0">
+                                        <padding>
+                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                        </padding>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </children>
+                    </VBox>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

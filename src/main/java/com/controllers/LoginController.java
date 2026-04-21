@@ -36,7 +36,7 @@ public class LoginController {
         User user = UserList.getInstance().getUser(username, password);
         if (user != null) {
             App.currentUser = user;
-            App.setRoot("dashboard");
+            App.setRoot("userpage");
         } else {
             errorLabel.setText("Invalid username or password. Please try again.");
         }
