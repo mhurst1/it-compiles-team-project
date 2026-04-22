@@ -300,4 +300,14 @@ public class LeaderboardController {
     private void goToQuestions() throws IOException {
         App.setRoot("dashboard");
     }
+
+    @FXML
+    private void goToCommunity() throws IOException {
+        App.setRoot("community");
+    }
+
+     @FXML
+    private void goToProfile() throws IOException {
+        App.setRoot("profile");
+    }
 }

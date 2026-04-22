@@ -29,14 +29,22 @@ import com.interviews.UserSolution;
 
 public class BrowseSolutions {
 
-    @FXML private Label navUsername;
-    @FXML private Label questionTitle;
-    @FXML private Label categoryBadge;
-    @FXML private Label difficultyBadge;
-    @FXML private Label answersLabel;
-    @FXML private Label questionDescription;
-    @FXML private TextArea solutionInput;
-    @FXML private VBox solutionsContainer;
+    @FXML
+    private Label navUsername;
+    @FXML
+    private Label questionTitle;
+    @FXML
+    private Label categoryBadge;
+    @FXML
+    private Label difficultyBadge;
+    @FXML
+    private Label answersLabel;
+    @FXML
+    private Label questionDescription;
+    @FXML
+    private TextArea solutionInput;
+    @FXML
+    private VBox solutionsContainer;
 
     private final HashMap<UUID, Integer> voteState = new HashMap<>();
 
@@ -167,7 +175,8 @@ public class BrowseSolutions {
         String authorName = (solution.getUser() != null
                 && solution.getUser().getUsername() != null
                 && !solution.getUser().getUsername().isBlank())
-                ? solution.getUser().getUsername() : "Anonymous";
+                        ? solution.getUser().getUsername()
+                        : "Anonymous";
 
         HBox userRow = new HBox(10);
         userRow.setAlignment(Pos.CENTER_LEFT);
@@ -241,7 +250,8 @@ public class BrowseSolutions {
 
         replyBtn.setOnAction(e -> {
             String text = replyField.getText().trim();
-            if (text.isEmpty() || App.currentUser == null) return;
+            if (text.isEmpty() || App.currentUser == null)
+                return;
             solution.getReplies().add(new Comment(App.currentUser, text));
             QuestionList.getInstance().saveAll();
             replyField.clear();
@@ -258,7 +268,8 @@ public class BrowseSolutions {
     private void buildCommentsList(UserSolution solution, VBox commentsSection) {
         commentsSection.getChildren().clear();
         ArrayList<Comment> replies = solution.getReplies();
-        if (replies == null || replies.isEmpty()) return;
+        if (replies == null || replies.isEmpty())
+            return;
         for (Comment comment : new ArrayList<>(replies)) {
             commentsSection.getChildren().add(buildCommentRow(comment, solution, commentsSection));
         }
@@ -273,7 +284,8 @@ public class BrowseSolutions {
         avatar.getStyleClass().add("nav-avatar");
 
         String username = (comment.getUser() != null && comment.getUser().getUsername() != null)
-                ? comment.getUser().getUsername() : "Anonymous";
+                ? comment.getUser().getUsername()
+                : "Anonymous";
 
         VBox textBox = new VBox(2);
         HBox.setHgrow(textBox, Priority.ALWAYS);
@@ -308,14 +320,17 @@ public class BrowseSolutions {
     private void refreshVoteStyles(Button thumbUp, Button thumbDown, int state) {
         thumbUp.getStyleClass().remove("vote-btn-active");
         thumbDown.getStyleClass().remove("vote-btn-active");
-        if (state == 1) thumbUp.getStyleClass().add("vote-btn-active");
-        else if (state == -1) thumbDown.getStyleClass().add("vote-btn-active");
+        if (state == 1)
+            thumbUp.getStyleClass().add("vote-btn-active");
+        else if (state == -1)
+            thumbDown.getStyleClass().add("vote-btn-active");
     }
 
     @FXML
     private void postSolution() {
         String text = (solutionInput == null) ? "" : solutionInput.getText().trim();
-        if (text.isEmpty() || App.currentQuestion == null) return;
+        if (text.isEmpty() || App.currentQuestion == null)
+            return;
 
         UserSolution newSolution = new UserSolution(App.currentUser, text);
         App.currentQuestion.getSolutionList().add(newSolution);
@@ -340,6 +355,29 @@ public class BrowseSolutions {
     private void goToCommunity() {
         try {
             App.setRoot("leaderboard");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToQuestions() throws IOException {
+        App.setRoot("dashboard");
+    }
+
+    @FXML
+    private void goToHome() {
+        try {
+            App.setRoot("userpage");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToProfile() {
+        try {
+            App.setRoot("profile");
         } catch (IOException ex) {
             ex.printStackTrace();
         }

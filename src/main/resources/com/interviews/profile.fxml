@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane prefHeight="700.0" prefWidth="1100.0"
+            stylesheets="@profile.css"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.controllers.ProfileController">
+
+    <!-- NAVBAR -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="16" styleClass="navbar">
+            <padding>
+                <Insets top="12" right="24" bottom="12" left="24"/>
+            </padding>
+
+            <children>
+                <Label fx:id="navlogo" styleClass="navlogo" text="⬡  CodeBoard"/>
+
+                <Region prefWidth="40"/>
+
+                <Button text="Home" onAction="#goToHome" styleClass="nav-btn"/>
+                <Button text="Questions" onAction="#goToQuestions" styleClass="nav-btn"/>
+                <Button text="Community" onAction="#goToCommunity" styleClass="nav-btn"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label fx:id="navUserLabel" text="Name" styleClass="nav-username"/>
+
+                <Button onAction="#goToProfile" styleClass="nav-btn">
+                    <graphic>
+                        <StackPane alignment="CENTER">
+                            <children>
+                                <Circle radius="16" styleClass="nav-avatar"/>
+                            </children>
+                        </StackPane>
+                    </graphic>
+                </Button>
+            </children>
+        </HBox>
+    </top>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <content>
+                <VBox spacing="20.0">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+
+                    <!-- USER BANNER -->
+                    <HBox fx:id="userbanner" styleClass="userbanner" spacing="20.0">
+                        <children>
+                            <StackPane prefHeight="80.0" prefWidth="80.0">
+                                <children>
+                                    <Label fx:id="avatarLabel"/>
+                                </children>
+                            </StackPane>
+
+                            <VBox spacing="4.0">
+                                <children>
+                                    <Text fx:id="profileName"/>
+                                    <Text fx:id="profileHandle"/>
+                                    <Label fx:id="profileRole"/>
+                                </children>
+                            </VBox>
+
+                            <VBox HBox.hgrow="ALWAYS"/>
+                        </children>
+                    </HBox>
+
+                    <!-- PROFILE SUMMARY -->
+                    <VBox spacing="8.0">
+                        <children>
+                            <Label fx:id="sectionTitle" text="Profile Summary" styleClass="sectiontitle"/>
+                            <Label fx:id="sectionSubtitle" text="View and edit account details" styleClass="sectionsubtitle"/>
+
+                            <HBox fx:id="profilecard" spacing="24.0" style="profilecard">
+                                <padding>
+                                    <Insets top="22" right="22" bottom="22" left="22"/>
+                                </padding>
+
+                                <children>
+                                    <!-- LEFT: AVATAR -->
+                                    <VBox alignment="CENTER" spacing="14.0">
+                                        <children>
+                                            <StackPane prefHeight="150.0" prefWidth="150.0">
+                                                <children>
+                                                    <Circle radius="75" styleClass="profileavatar"/>
+                                                    <Label fx:id="profileAvatarLabel" styleClass="profileavatarletter"/>
+                                                </children>
+                                            </StackPane>
+
+                                            <Button text="Upload Photo" onAction="#uploadPhoto" styleClass="upload-btn"/>
+                                        </children>
+                                    </VBox>
+
+                                    <!-- RIGHT: INFO -->
+                                    <VBox spacing="14.0" HBox.hgrow="ALWAYS">
+                                        <children>
+                                            <HBox spacing="16.0">
+                                                <children>
+                                                    <Label text="Name" styleClass="field-label"/>
+                                                    <Label fx:id="nameLabel" styleClass="field-value"/>
+                                                </children>
+                                            </HBox>
+
+                                            <HBox spacing="16.0">
+                                                <children>
+                                                    <Label text="Username" styleClass="field-label"/>
+                                                    <Label fx:id="usernameLabel" styleClass="field-value"/>
+                                                </children>
+                                            </HBox>
+
+                                            <HBox spacing="16.0">
+                                                <children>
+                                                    <Label text="Email" styleClass="field-label"/>
+                                                    <Label fx:id="emailLabel" styleClass="field-value"/>
+                                                </children>
+                                            </HBox>
+
+                                            <HBox spacing="16.0">
+                                                <children>
+                                                    <Label text="Graduation Year" styleClass="field-label"/>
+                                                    <Label fx:id="gradYearLabel" styleClass="field-value"/>
+                                                </children>
+                                            </HBox>
+
+                                            <HBox spacing="16.0">
+                                                <children>
+                                                    <Label text="Member Since" styleClass="field-label"/>
+                                                    <Label fx:id="memberSinceLabel" styleClass="field-value"/>
+                                                </children>
+                                            </HBox>
+
+                                            <HBox spacing="12.0">
+                                                <children>
+                                                    <Button text="Edit Information" onAction="#editInformation" styleClass="secondary-btn"/>
+                                                    <Button text="Change Password" onAction="#changePassword" styleClass="secondary-btn"/>
+                                                </children>
+                                            </HBox>
+
+
+                                        
+
+
+                                        </children>
+
+
+                                    </VBox>
+                                </children>
+                            </HBox>
+
+                             <HBox alignment="CENTER">
+                                <Button text="Logout" onAction="#handleLogout" styleClass="logout-btn"/>
+                            </HBox>
+                        </children>
+                    </VBox>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

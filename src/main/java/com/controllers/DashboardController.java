@@ -154,6 +154,15 @@ public class DashboardController {
     }
 
     @FXML
+    private void goToProfile() {
+        try {
+            App.setRoot("profile");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void goToAddQuestion() {
         try {
             App.setRoot("addquestion");

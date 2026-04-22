@@ -10,25 +10,41 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Text?>
 
 <BorderPane prefHeight="700.0" prefWidth="1100.0" stylesheets="@dashboard.css" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.DashboardController">
 
+    <!-- NAVBAR -->
     <top>
-        <HBox fx:id="navbar" alignment="CENTER_LEFT" spacing="16" styleClass="navbar">
-            <padding><Insets bottom="12" left="24" right="24" top="12" /></padding>
+        <HBox alignment="CENTER_LEFT" spacing="16" styleClass="navbar">
+            <padding>
+                <Insets top="12" right="24" bottom="12" left="24"/>
+            </padding>
 
-            <Label fx:id="navLogo" styleClass="nav-logo" text="⬡  CodeBoard" />
+            <children>
+                <Label fx:id="navlogo" styleClass="navlogo" text="⬡  CodeBoard"/>
 
-            <Region prefWidth="40" />
+                <Region prefWidth="40"/>
 
-            <Button fx:id="navHomeBtn" mnemonicParsing="false" onAction="#goToHome" styleClass="nav-btn" text="Home" />
-            <Button fx:id="navQuestionsBtn" mnemonicParsing="false" onAction="#goToQuestions" styleClass="nav-btn, nav-btn-active" text="Questions" />
-            <Button fx:id="navCommunityBtn" mnemonicParsing="false" onAction="#goToCommunity" styleClass="nav-btn" text="Community" />
+                <Button text="Home" onAction="#goToHome" styleClass="nav-btn"/>
+                <Button text="Questions" onAction="#goToQuestions" styleClass="nav-btn, nav-btn-active"/>
+                <Button text="Community" onAction="#goToCommunity" styleClass="nav-btn"/>
 
-            <Region prefHeight="34.0" prefWidth="447.0" HBox.hgrow="ALWAYS" />
+                <Region HBox.hgrow="ALWAYS"/>
 
-            <Label fx:id="welcomeLabel" styleClass="nav-username" text="Name" />
-            <Circle fx:id="navAvatar" radius="16" styleClass="nav-avatar" />
+                <Label fx:id="welcomeLabel" text="Name" styleClass="nav-username"/>
+
+                <Button onAction="#goToProfile" styleClass="nav-btn">
+                    <graphic>
+                        <StackPane alignment="CENTER">
+                            <children>
+                                <Circle radius="16" styleClass="nav-avatar"/>
+                            </children>
+                        </StackPane>
+                    </graphic>
+                </Button>
+            </children>
         </HBox>
     </top>
 

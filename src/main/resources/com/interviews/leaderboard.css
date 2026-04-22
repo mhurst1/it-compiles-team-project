@@ -1,3 +1,4 @@
+
 .root {
     -fx-font-family: "Segoe UI";
 }
@@ -6,7 +7,7 @@
 .navbar {
     -fx-background-color: #12112a;
 }
-.nav-logo {
+.navlogo {
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-font-weight: bold;

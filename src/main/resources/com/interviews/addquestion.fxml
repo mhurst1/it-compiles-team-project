@@ -16,25 +16,46 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Text?>
 
 <BorderPane prefHeight="700.0" prefWidth="1100.0"
             xmlns="http://javafx.com/javafx/13"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.controllers.AddQuestionController">
 
-   <top>
-      <HBox alignment="CENTER_LEFT" spacing="16" styleClass="navbar">
-         <padding><Insets bottom="12" left="24" right="24" top="12" /></padding>
-         <Label styleClass="nav-logo" text="⬡  CodeBoard" />
-         <Region prefWidth="40" />
-         <Button mnemonicParsing="false" onAction="#goToHome" styleClass="nav-btn" text="Home" />
-         <Button mnemonicParsing="false" onAction="#goToQuestions" styleClass="nav-btn, nav-btn-active" text="Questions" />
-         <Button mnemonicParsing="false" onAction="#goToCommunity" styleClass="nav-btn" text="Community" />
-         <Region HBox.hgrow="ALWAYS" />
-         <Label fx:id="welcomeLabel" styleClass="nav-username" text="" />
-         <Circle fx:id="navAvatar" radius="16" styleClass="nav-avatar" />
-      </HBox>
-   </top>
+    <!-- NAVBAR -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="16" styleClass="navbar">
+            <padding>
+                <Insets top="12" right="24" bottom="12" left="24"/>
+            </padding>
+
+            <children>
+                <Label fx:id="navlogo" styleClass="navlogo" text="⬡  CodeBoard"/>
+
+                <Region prefWidth="40"/>
+
+                <Button text="Home" onAction="#goToHome" styleClass="nav-btn"/>
+                <Button text="Questions" onAction="#goToQuestions" styleClass="nav-btn"/>
+                <Button text="Community" onAction="#goToCommunity" styleClass="nav-btn"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label fx:id="navUserLabel" text="Name" styleClass="nav-username"/>
+
+                <Button onAction="#goToProfile" styleClass="nav-btn">
+                    <graphic>
+                        <StackPane alignment="CENTER">
+                            <children>
+                                <Circle radius="16" styleClass="nav-avatar"/>
+                            </children>
+                        </StackPane>
+                    </graphic>
+                </Button>
+            </children>
+        </HBox>
+    </top>
 
    <center>
       <ScrollPane fitToWidth="true">

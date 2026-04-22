@@ -179,4 +179,13 @@ public class AddQuestionController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void goToProfile() {
+        try {
+            App.setRoot("profile");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
