@@ -26,7 +26,7 @@
                 <Button mnemonicParsing="false" onAction="#goToQuestions" styleClass="nav-btn" text="Questions" />
                 <Button mnemonicParsing="false" onAction="#goToCommunity" styleClass="nav-btn, nav-btn-active" text="Community" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Label fx:id="navUserLabel" styleClass="nav-username" text="Name" />
+                <Label fx:id="welcomeLabel" styleClass="nav-username" text="Name" />
 
                 <Button mnemonicParsing="false" onAction="#goToProfile" styleClass="nav-btn">
 

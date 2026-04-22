@@ -35,7 +35,7 @@
 
                 <Region HBox.hgrow="ALWAYS"/>
 
-                <Label fx:id="navUserLabel" text="Name" styleClass="nav-username"/>
+                <Label fx:id="navUsername" text="Name" styleClass="nav-username"/>
 
                 <Button onAction="#goToProfile" styleClass="nav-btn">
                     <graphic>
