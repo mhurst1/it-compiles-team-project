@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.PasswordField?>
 
 <BorderPane prefHeight="700.0" prefWidth="1100.0"
             stylesheets="@profile.css"
@@ -104,7 +105,6 @@
                                                 </children>
                                             </StackPane>
 
-                                            <Button text="Upload Photo" onAction="#uploadPhoto" styleClass="upload-btn"/>
                                         </children>
                                     </VBox>
 
@@ -114,7 +114,7 @@
 
                                             <HBox spacing="16.0">
                                                 <children>
-                                                    <Label text="Name" styleClass="field-label"/>
+                                                    <Label text="Name" styleClass="field-label" prefWidth="140"/>
                                                     <Label fx:id="nameLabel" styleClass="field-value"/>
                                                     <TextField fx:id="nameField"
                                                                visible="false" managed="false"
@@ -124,7 +124,7 @@
 
                                             <HBox spacing="16.0">
                                                 <children>
-                                                    <Label text="Username" styleClass="field-label"/>
+                                                    <Label text="Username" styleClass="field-label" prefWidth="140"/>
                                                     <Label fx:id="usernameLabel" styleClass="field-value"/>
                                                     <TextField fx:id="usernameField"
                                                                visible="false" managed="false"
@@ -134,7 +134,7 @@
 
                                             <HBox spacing="16.0">
                                                 <children>
-                                                    <Label text="Email" styleClass="field-label"/>
+                                                    <Label text="Email" styleClass="field-label" prefWidth="140"/>
                                                     <Label fx:id="emailLabel" styleClass="field-value"/>
                                                     <TextField fx:id="emailField"
                                                                visible="false" managed="false"
@@ -144,17 +144,18 @@
 
                                             <HBox spacing="16.0">
                                                 <children>
-                                                    <Label text="Phone" styleClass="field-label"/>
-                                                    <Label fx:id="phoneLabel" styleClass="field-value"/>
-                                                    <TextField fx:id="phoneField"
-                                                               visible="false" managed="false"
-                                                               prefWidth="260.0"/>
+                                                    <Label text="Password" styleClass="field-label" prefWidth="120  "/>
+                                                    
+                                                    <PasswordField fx:id="passwordField"
+                                                                   visible="false" managed="false"
+                                                                   prefWidth="260.0"/>
                                                 </children>
                                             </HBox>
 
+
                                             <HBox spacing="16.0">
                                                 <children>
-                                                    <Label text="Graduation Year" styleClass="field-label"/>
+                                                    <Label text="Graduation Year" styleClass="field-label" prefWidth="140"  />
                                                     <Label fx:id="gradYearLabel" styleClass="field-value"/>
                                                     <TextField fx:id="gradYearField"
                                                                visible="false" managed="false"
@@ -164,7 +165,7 @@
 
                                             <HBox spacing="16.0">
                                                 <children>
-                                                    <Label text="Member Since" styleClass="field-label"/>
+                                                    <Label text="Member Since" styleClass="field-label" prefWidth="140"/>
                                                     <Label fx:id="memberSinceLabel" styleClass="field-value"/>
                                                 </children>
                                             </HBox>
@@ -175,9 +176,7 @@
                                                             text="Edit Information"
                                                             onAction="#editInformation"
                                                             styleClass="secondary-btn"/>
-                                                    <Button text="Change Password"
-                                                            onAction="#changePassword"
-                                                            styleClass="secondary-btn"/>
+                            
                                                 </children>
                                             </HBox>
 

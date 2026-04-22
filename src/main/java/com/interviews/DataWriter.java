@@ -39,7 +39,8 @@ public class DataWriter {
      */
     @SuppressWarnings("unchecked")
     public static boolean saveUsers(ArrayList<User> users) {
-        Map<UUID, User> userMap = new HashMap<>();
+        /*COMMENTED OUT BY NICOLE TO FIX JSON SAVING ISSUE, otherwise skips updating any user with existing UUID */
+       /* Map<UUID, User> userMap = new HashMap<>();
         for (User u : DataLoader.getUsers()) {
             userMap.put(u.getId(), u);
         }
@@ -50,9 +51,10 @@ public class DataWriter {
                 userMap.put(u.getId(), u);
             }
         }
+            */
 
         JSONArray array = new JSONArray();
-        for (User u : userMap.values()) {
+        for (User u : users) {
             JSONObject obj = new JSONObject();
             obj.put("id", u.getId().toString());
             obj.put("first-name", u.getFirstName());

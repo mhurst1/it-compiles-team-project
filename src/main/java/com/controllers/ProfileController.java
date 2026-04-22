@@ -10,31 +10,50 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.PasswordField;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
 
 public class ProfileController {
 
-    @FXML private Label navUserLabel;
-    @FXML private Label avatarLabel;
-    @FXML private Text profileName;
-    @FXML private Text profileHandle;
-    @FXML private Label profileRole;
+    @FXML
+    private Label navUserLabel;
+    @FXML
+    private Label avatarLabel;
+    @FXML
+    private Text profileName;
+    @FXML
+    private Text profileHandle;
+    @FXML
+    private Label profileRole;
 
-    @FXML private Label profileAvatarLabel;
-    @FXML private Label nameLabel;
-    @FXML private Label usernameLabel;
-    @FXML private Label emailLabel;
-    @FXML private Label gradYearLabel;
-    @FXML private Label memberSinceLabel;
+    @FXML
+    private Label profileAvatarLabel;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private Label usernameLabel;
+    @FXML
+    private Label emailLabel;
+    @FXML
+    private Label gradYearLabel;
+    @FXML
+    private Label memberSinceLabel;
 
-    @FXML private TextField nameField;
-    @FXML private TextField usernameField;
-    @FXML private TextField emailField;
-    @FXML private TextField gradYearField;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private TextField gradYearField;
+    @FXML
+    private PasswordField passwordField;
 
-    @FXML private Button editInfoButton;
+    @FXML
+    private Button editInfoButton;
 
     private boolean editing = false;
 
@@ -94,15 +113,7 @@ public class ProfileController {
         saveEdits();
     }
 
-    @FXML
-    private void changePassword() {
-        // You can wire this up later in a separate dialog or page.
-    }
 
-    @FXML
-    private void uploadPhoto() {
-        // You can wire this up later if you add image storage.
-    }
 
     private void saveEdits() {
         User user = App.currentUser;
@@ -110,9 +121,16 @@ public class ProfileController {
         String fullName = safe(nameField.getText()).trim();
         String username = safe(usernameField.getText()).trim();
         String email = safe(emailField.getText()).trim();
+        String password = safe(passwordField.getText()).trim();
         String gradYearText = safe(gradYearField.getText()).trim();
 
         if (fullName.isBlank() || username.isBlank() || email.isBlank() || gradYearText.isBlank()) {
+            showError("Please fill out all editable fields.");
+            return;
+        }
+
+        if (fullName.isBlank() || username.isBlank() || email.isBlank() || gradYearText.isBlank()
+                || password.isBlank()) {
             showError("Please fill out all editable fields.");
             return;
         }
@@ -143,6 +161,7 @@ public class ProfileController {
         user.setLastName(lastName);
         user.setUsername(username);
         user.setEmail(email);
+        user.setPassword(password);
         user.setGraduationYear(graduationYear);
 
         boolean saved = DataWriter.saveUsers(UserList.getInstance().getUsers());
@@ -180,6 +199,7 @@ public class ProfileController {
         nameLabel.setText(fullName.isBlank() ? "Unknown User" : fullName);
         usernameLabel.setText(safe(user.getUsername()));
         emailLabel.setText(safe(user.getEmail()));
+        passwordField.setText(safe(user.getPassword()));
         gradYearLabel.setText(String.valueOf(user.getGraduationYear()));
         memberSinceLabel.setText("April 2026");
     }
@@ -202,6 +222,8 @@ public class ProfileController {
         usernameField.setManaged(isEditing);
         emailField.setVisible(isEditing);
         emailField.setManaged(isEditing);
+        passwordField.setVisible(isEditing);
+        passwordField.setManaged(isEditing);
         gradYearField.setVisible(isEditing);
         gradYearField.setManaged(isEditing);
 
@@ -222,12 +244,12 @@ public class ProfileController {
     private String[] splitFullName(String fullName) {
         String cleaned = fullName.trim();
         if (cleaned.isBlank()) {
-            return new String[]{"unknown", "unknown"};
+            return new String[] { "unknown", "unknown" };
         }
 
         String[] parts = cleaned.split("\\s+");
         if (parts.length == 1) {
-            return new String[]{parts[0], ""};
+            return new String[] { parts[0], "" };
         }
 
         String firstName = parts[0];
@@ -238,22 +260,33 @@ public class ProfileController {
             }
             lastName.append(parts[i]);
         }
-        return new String[]{firstName, lastName.toString()};
+        return new String[] { firstName, lastName.toString() };
     }
 
     private void setEmptyState() {
-        if (navUserLabel != null) navUserLabel.setText("User");
-        if (avatarLabel != null) avatarLabel.setText("U");
-        if (profileName != null) profileName.setText("Unknown User");
-        if (profileHandle != null) profileHandle.setText("@unknown");
-        if (profileRole != null) profileRole.setText("USER");
+        if (navUserLabel != null)
+            navUserLabel.setText("User");
+        if (avatarLabel != null)
+            avatarLabel.setText("U");
+        if (profileName != null)
+            profileName.setText("Unknown User");
+        if (profileHandle != null)
+            profileHandle.setText("@unknown");
+        if (profileRole != null)
+            profileRole.setText("USER");
 
-        if (profileAvatarLabel != null) profileAvatarLabel.setText("U");
-        if (nameLabel != null) nameLabel.setText("Unknown User");
-        if (usernameLabel != null) usernameLabel.setText("unknown");
-        if (emailLabel != null) emailLabel.setText("unknown@example.com");
-        if (gradYearLabel != null) gradYearLabel.setText("");
-        if (memberSinceLabel != null) memberSinceLabel.setText("April 2026");
+        if (profileAvatarLabel != null)
+            profileAvatarLabel.setText("U");
+        if (nameLabel != null)
+            nameLabel.setText("Unknown User");
+        if (usernameLabel != null)
+            usernameLabel.setText("unknown");
+        if (emailLabel != null)
+            emailLabel.setText("unknown@example.com");
+        if (gradYearLabel != null)
+            gradYearLabel.setText("");
+        if (memberSinceLabel != null)
+            memberSinceLabel.setText("April 2026");
     }
 
     private String getInitial(String value) {
