@@ -11,21 +11,7 @@
         "starred-questions": [],
         "last-name": "B",
         "username": "bob",
-        "status": "USER"
-    },
-    {
-        "answered-questions": [],
-        "password": "pass2",
-        "achievements": [],
-        "graduation-year": 2026,
-        "id-usc": "USC002",
-        "id": "a9335079-9998-4160-8907-1dd2fc0777a5",
-        "first-name": "Bob",
-        "email": "bob@test.com",
-        "starred-questions": [],
-        "last-name": "B",
-        "username": "bob",
-        "status": "USER"
+        "status": "CONTRIBUTOR"
     },
     {
         "answered-questions": [],
@@ -41,20 +27,7 @@
         "username": "alice",
         "status": "USER"
     },
-    {
-        "answered-questions": [],
-        "password": "pass2",
-        "achievements": [],
-        "graduation-year": 2026,
-        "id-usc": "USC002",
-        "id": "452bb028-295b-467b-94ab-1e3575253e50",
-        "first-name": "Bob",
-        "email": "bob@test.com",
-        "starred-questions": [],
-        "last-name": "B",
-        "username": "bob",
-        "status": "USER"
-    },
+
     {
         "answered-questions": [],
         "password": "pass3",
@@ -83,34 +56,7 @@
         "username": "newuser",
         "status": "USER"
     },
-    {
-        "answered-questions": [],
-        "password": "pass1",
-        "achievements": [],
-        "graduation-year": 2025,
-        "id-usc": "USC001",
-        "id": "df9656f5-1668-4c23-b267-9db96fa70dc2",
-        "first-name": "Alice",
-        "email": "alice@test.com",
-        "starred-questions": [],
-        "last-name": "A",
-        "username": "alice",
-        "status": "USER"
-    },
-    {
-        "answered-questions": [],
-        "password": "pass1",
-        "achievements": [],
-        "graduation-year": 2025,
-        "id-usc": "USC010",
-        "id": "a2e02fec-28e4-461a-bf6b-a18f8a880d8d",
-        "first-name": "First",
-        "email": "",
-        "starred-questions": [],
-        "last-name": "Last",
-        "username": "newuser",
-        "status": "USER"
-    },
+
     {
         "answered-questions": [],
         "password": "Password!",
@@ -125,20 +71,7 @@
         "username": "Nrottmann",
         "status": "USER"
     },
-    {
-        "answered-questions": [],
-        "password": "pass2",
-        "achievements": [],
-        "graduation-year": 2026,
-        "id-usc": "USC002",
-        "id": "3743a3ab-ef05-4858-b3b6-3b8f905eb149",
-        "first-name": "Bob",
-        "email": "bob@test.com",
-        "starred-questions": [],
-        "last-name": "B",
-        "username": "bob",
-        "status": "USER"
-    },
+
     {
         "answered-questions": [],
         "password": "",
@@ -181,62 +114,7 @@
         "username": "sallysparrow",
         "status": "USER"
     },
-    {
-        "answered-questions": [],
-        "password": "J!123matt",
-        "achievements": [],
-        "graduation-year": 2000,
-        "id-usc": "M44412345",
-        "id": "15212e41-e61b-4d77-b801-e3c60310fc39",
-        "first-name": "Matt",
-        "email": "r.matthewhurst@gmail.com",
-        "starred-questions": [],
-        "last-name": "Hurst",
-        "username": "mhurst1",
-        "status": "USER"
-    },
-    {
-        "answered-questions": [],
-        "password": "pass2",
-        "achievements": [],
-        "graduation-year": 2026,
-        "id-usc": "USC002",
-        "id": "40943964-6245-4a3f-995c-fe727bb8bc78",
-        "first-name": "Bob",
-        "email": "bob@test.com",
-        "starred-questions": [],
-        "last-name": "B",
-        "username": "bob",
-        "status": "USER"
-    },
-    {
-        "answered-questions": [],
-        "password": "pass1",
-        "achievements": [],
-        "graduation-year": 2025,
-        "id-usc": "USC001",
-        "id": "fa6eb152-6867-4b0a-b679-4f0fc6526cd1",
-        "first-name": "Alice",
-        "email": "alice@test.com",
-        "starred-questions": [],
-        "last-name": "A",
-        "username": "alice",
-        "status": "USER"
-    },
-    {
-        "answered-questions": [],
-        "password": "pass1",
-        "achievements": [],
-        "graduation-year": 2025,
-        "id-usc": "USC001",
-        "id": "d5f95b09-0c60-4fb4-b833-a5f33303de02",
-        "first-name": "Alice",
-        "email": "alice@test.com",
-        "starred-questions": [],
-        "last-name": "A",
-        "username": "alice",
-        "status": "USER"
-    },
+
     {
         "answered-questions": [],
         "password": "",
@@ -251,20 +129,7 @@
         "username": "sjohnson2",
         "status": "USER"
     },
-    {
-        "answered-questions": [],
-        "password": "pass1",
-        "achievements": [],
-        "graduation-year": 2025,
-        "id-usc": "USC001",
-        "id": "6719264b-06b7-4d71-ab20-d1da460c58c8",
-        "first-name": "Alice",
-        "email": "alice@test.com",
-        "starred-questions": [],
-        "last-name": "A",
-        "username": "alice",
-        "status": "USER"
-    },
+
     {
         "answered-questions": [],
         "password": "",
@@ -279,34 +144,8 @@
         "username": "landerson",
         "status": "USER"
     },
-    {
-        "answered-questions": [],
-        "password": "",
-        "achievements": [],
-        "graduation-year": 2025,
-        "id-usc": "USC010",
-        "id": "a488f304-b659-4df2-86ff-d4967cae964c",
-        "first-name": "First",
-        "email": "new@test.com",
-        "starred-questions": [],
-        "last-name": "Last",
-        "username": "newuser",
-        "status": "USER"
-    },
-    {
-        "answered-questions": [],
-        "password": "pass1",
-        "achievements": [],
-        "graduation-year": 2025,
-        "id-usc": "USC010",
-        "id": "7414da6d-72a6-4e1a-b8f4-1e6172779016",
-        "first-name": "First",
-        "email": "new@test.com",
-        "starred-questions": [],
-        "last-name": "Last",
-        "username": "",
-        "status": "USER"
-    },
+
+
     {
         "answered-questions": [],
         "password": "",
@@ -321,20 +160,7 @@
         "username": "mhurst1",
         "status": "USER"
     },
-    {
-        "answered-questions": [],
-        "password": "pass2",
-        "achievements": [],
-        "graduation-year": 2026,
-        "id-usc": "USC002",
-        "id": "c144b203-105f-4a75-9202-357eb308742a",
-        "first-name": "Bob",
-        "email": "bob@test.com",
-        "starred-questions": [],
-        "last-name": "B",
-        "username": "bob",
-        "status": "USER"
-    },
+
     {
         "answered-questions": ["60d5e6d1-280b-4e86-a4cc-63eb577ad43b"],
         "password": "ilovecrickets3",
@@ -355,103 +181,6 @@
         "last-name": "Crickets",
         "username": "jcricket6",
         "status": "USER"
-    },
-    {
-        "answered-questions": [],
-        "password": "pass2",
-        "achievements": [],
-        "graduation-year": 2026,
-        "id-usc": "USC002",
-        "id": "abffe52f-1bd1-4acc-bdf4-276424d56ffe",
-        "first-name": "Bob",
-        "email": "bob@test.com",
-        "starred-questions": [],
-        "last-name": "B",
-        "username": "bob",
-        "status": "USER"
-    },
-    {
-        "answered-questions": [],
-        "password": "pass1",
-        "achievements": [],
-        "graduation-year": 2025,
-        "id-usc": "USC001",
-        "id": "474bff1c-1552-4d3e-b208-0b5588ff4caf",
-        "first-name": "Alice",
-        "email": "alice@test.com",
-        "starred-questions": [],
-        "last-name": "A",
-        "username": "alice",
-        "status": "USER"
-    },
-    {
-        "answered-questions": [],
-        "password": "pass1",
-        "achievements": [],
-        "graduation-year": 2025,
-        "id-usc": "USC001",
-        "id": "1daee840-c02b-41d6-a884-50e25593f490",
-        "first-name": "Alice",
-        "email": "alice@test.com",
-        "starred-questions": [],
-        "last-name": "A",
-        "username": "alice",
-        "status": "USER"
-    },
-    {
-        "answered-questions": [],
-        "password": "pass1",
-        "achievements": [],
-        "graduation-year": 2025,
-        "id-usc": "USC010",
-        "id": "404540b4-f275-4b9e-a63e-d07a4d964c31",
-        "first-name": "First",
-        "email": "new@test.com",
-        "starred-questions": [],
-        "last-name": "Last",
-        "username": "",
-        "status": "USER"
-    },
-    {
-        "answered-questions": [],
-        "password": "pass1",
-        "achievements": [],
-        "graduation-year": 2025,
-        "id-usc": "USC001",
-        "id": "42374f0f-30de-432d-bc60-e80420db6d0a",
-        "first-name": "Alice",
-        "email": "alice@test.com",
-        "starred-questions": [],
-        "last-name": "A",
-        "username": "alice",
-        "status": "USER"
-    },
-    {
-        "answered-questions": [],
-        "password": "pass3",
-        "achievements": [],
-        "graduation-year": 2027,
-        "id-usc": "USC003",
-        "id": "1c2c7dd2-f629-4e90-925d-9e4c1530c299",
-        "first-name": "Carol",
-        "email": "carol@test.com",
-        "starred-questions": [],
-        "last-name": "C",
-        "username": "carol",
-        "status": "USER"
-    },
-    {
-        "answered-questions": [],
-        "password": "pass2",
-        "achievements": [],
-        "graduation-year": 2026,
-        "id-usc": "USC002",
-        "id": "28552867-9b78-435a-b5cb-dc859d1c8dfd",
-        "first-name": "Bob",
-        "email": "bob@test.com",
-        "starred-questions": [],
-        "last-name": "B",
-        "username": "bob",
-        "status": "USER"
     }
+
 ]
