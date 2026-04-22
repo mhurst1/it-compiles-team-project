@@ -1,10 +1,15 @@
 package com.controllers;
 
 import com.interviews.App;
+import com.interviews.DataWriter;
 import com.interviews.User;
+import com.interviews.UserList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -21,9 +26,17 @@ public class ProfileController {
     @FXML private Label nameLabel;
     @FXML private Label usernameLabel;
     @FXML private Label emailLabel;
-    @FXML private Label phoneLabel;
     @FXML private Label gradYearLabel;
     @FXML private Label memberSinceLabel;
+
+    @FXML private TextField nameField;
+    @FXML private TextField usernameField;
+    @FXML private TextField emailField;
+    @FXML private TextField gradYearField;
+
+    @FXML private Button editInfoButton;
+
+    private boolean editing = false;
 
     @FXML
     private void initialize() {
@@ -34,23 +47,8 @@ public class ProfileController {
             return;
         }
 
-        String firstName = safe(user.getFirstName());
-        String lastName = safe(user.getLastName());
-        String fullName = (firstName + " " + lastName).trim();
-
-        navUserLabel.setText(safe(user.getUsername()));
-        avatarLabel.setText(getInitial(firstName));
-
-        profileName.setText(fullName.isBlank() ? "Unknown User" : fullName);
-        profileHandle.setText("@" + safe(user.getUsername()));
-        profileRole.setText(user.getStatus() != null ? user.getStatus().name() : "USER");
-
-        profileAvatarLabel.setText(getInitial(firstName));
-        nameLabel.setText(fullName.isBlank() ? "Unknown User" : fullName);
-        usernameLabel.setText(safe(user.getUsername()));
-        emailLabel.setText(safe(user.getEmail()));
-        gradYearLabel.setText(String.valueOf(user.getGraduationYear()));
-        memberSinceLabel.setText("April 2026");
+        updateDisplay(user);
+        setEditMode(false);
     }
 
     @FXML
@@ -81,14 +79,166 @@ public class ProfileController {
 
     @FXML
     private void editInformation() {
+        User user = App.currentUser;
+        if (user == null) {
+            showError("No user is currently logged in.");
+            return;
+        }
+
+        if (!editing) {
+            populateFields(user);
+            setEditMode(true);
+            return;
+        }
+
+        saveEdits();
     }
 
     @FXML
     private void changePassword() {
+        // You can wire this up later in a separate dialog or page.
     }
 
     @FXML
     private void uploadPhoto() {
+        // You can wire this up later if you add image storage.
+    }
+
+    private void saveEdits() {
+        User user = App.currentUser;
+
+        String fullName = safe(nameField.getText()).trim();
+        String username = safe(usernameField.getText()).trim();
+        String email = safe(emailField.getText()).trim();
+        String gradYearText = safe(gradYearField.getText()).trim();
+
+        if (fullName.isBlank() || username.isBlank() || email.isBlank() || gradYearText.isBlank()) {
+            showError("Please fill out all editable fields.");
+            return;
+        }
+
+        int graduationYear;
+        try {
+            graduationYear = Integer.parseInt(gradYearText);
+        } catch (NumberFormatException e) {
+            showError("Graduation year must be a number.");
+            return;
+        }
+
+        if (graduationYear < 2000 || graduationYear > 2099) {
+            showError("Graduation year must be between 2000 and 2099.");
+            return;
+        }
+
+        if (isDuplicateUsername(username, user)) {
+            showError("That username is already taken.");
+            return;
+        }
+
+        String[] nameParts = splitFullName(fullName);
+        String firstName = nameParts[0];
+        String lastName = nameParts[1];
+
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setGraduationYear(graduationYear);
+
+        boolean saved = DataWriter.saveUsers(UserList.getInstance().getUsers());
+        if (!saved) {
+            showError("Profile changes were made in memory, but could not be saved to JSON.");
+            return;
+        }
+
+        updateDisplay(user);
+        setEditMode(false);
+    }
+
+    private void populateFields(User user) {
+        String fullName = (safe(user.getFirstName()) + " " + safe(user.getLastName())).trim();
+
+        nameField.setText(fullName);
+        usernameField.setText(safe(user.getUsername()));
+        emailField.setText(safe(user.getEmail()));
+        gradYearField.setText(String.valueOf(user.getGraduationYear()));
+    }
+
+    private void updateDisplay(User user) {
+        String firstName = safe(user.getFirstName());
+        String lastName = safe(user.getLastName());
+        String fullName = (firstName + " " + lastName).trim();
+
+        navUserLabel.setText(safe(user.getUsername()));
+        avatarLabel.setText(getInitial(firstName));
+
+        profileName.setText(fullName.isBlank() ? "Unknown User" : fullName);
+        profileHandle.setText("@" + safe(user.getUsername()));
+        profileRole.setText(user.getStatus() != null ? user.getStatus().name() : "USER");
+
+        profileAvatarLabel.setText(getInitial(firstName));
+        nameLabel.setText(fullName.isBlank() ? "Unknown User" : fullName);
+        usernameLabel.setText(safe(user.getUsername()));
+        emailLabel.setText(safe(user.getEmail()));
+        gradYearLabel.setText(String.valueOf(user.getGraduationYear()));
+        memberSinceLabel.setText("April 2026");
+    }
+
+    private void setEditMode(boolean isEditing) {
+        editing = isEditing;
+
+        nameLabel.setVisible(!isEditing);
+        nameLabel.setManaged(!isEditing);
+        usernameLabel.setVisible(!isEditing);
+        usernameLabel.setManaged(!isEditing);
+        emailLabel.setVisible(!isEditing);
+        emailLabel.setManaged(!isEditing);
+        gradYearLabel.setVisible(!isEditing);
+        gradYearLabel.setManaged(!isEditing);
+
+        nameField.setVisible(isEditing);
+        nameField.setManaged(isEditing);
+        usernameField.setVisible(isEditing);
+        usernameField.setManaged(isEditing);
+        emailField.setVisible(isEditing);
+        emailField.setManaged(isEditing);
+        gradYearField.setVisible(isEditing);
+        gradYearField.setManaged(isEditing);
+
+        if (editInfoButton != null) {
+            editInfoButton.setText(isEditing ? "Save" : "Edit Information");
+        }
+    }
+
+    private boolean isDuplicateUsername(String username, User currentUser) {
+        for (User u : UserList.getInstance().getUsers()) {
+            if (u != currentUser && u.getUsername() != null && u.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String[] splitFullName(String fullName) {
+        String cleaned = fullName.trim();
+        if (cleaned.isBlank()) {
+            return new String[]{"unknown", "unknown"};
+        }
+
+        String[] parts = cleaned.split("\\s+");
+        if (parts.length == 1) {
+            return new String[]{parts[0], ""};
+        }
+
+        String firstName = parts[0];
+        StringBuilder lastName = new StringBuilder();
+        for (int i = 1; i < parts.length; i++) {
+            if (i > 1) {
+                lastName.append(" ");
+            }
+            lastName.append(parts[i]);
+        }
+        return new String[]{firstName, lastName.toString()};
     }
 
     private void setEmptyState() {
@@ -115,5 +265,13 @@ public class ProfileController {
 
     private String safe(String value) {
         return value == null ? "" : value;
+    }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Profile Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
