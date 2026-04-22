@@ -49,7 +49,7 @@ public class LoginController {
 
     @FXML
     private void continueWithoutLogin() throws IOException {
-        App.setRoot("dashboard");
+        App.setRoot("userpage");
     }
 
     @FXML

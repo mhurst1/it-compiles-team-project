@@ -186,7 +186,57 @@
     -fx-text-fill: #777777;
 }
 
+/*activity box */
 
+/* RECENT ACTIVITY CARD */
+.activity-panel {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 12;
+    -fx-padding: 16;
+}
+
+/* SECTION TITLE */
+.activity-title {
+    -fx-text-fill: #2c2c2c;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* ACTIVITY LIST CONTAINER */
+.activity-list {
+    -fx-spacing: 8;
+}
+
+/* ONE ACTIVITY ROW */
+.activity-item {
+    -fx-background-color: transparent;
+    -fx-padding: 6 0;
+}
+
+/* ACTIVITY TEXT */
+.activity-text {
+    -fx-text-fill: #4b5563;
+    -fx-font-size: 12px;
+}
+
+/*  STATUS STYLE */
+.activity-icon {
+    -fx-text-fill: #7c3aed;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+/* CLEAN SCROLLPANE */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
 
 /* separators */
 .separator .line {

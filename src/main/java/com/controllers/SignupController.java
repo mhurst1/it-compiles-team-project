@@ -119,6 +119,6 @@ public class SignupController {
         userList.addUser(newUser);
         userList.save();
         App.currentUser = newUser;
-        App.setRoot("dashboard");
+        App.setRoot("userpage");
     }
 }
