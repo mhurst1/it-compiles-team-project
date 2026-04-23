@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="700.0" prefWidth="1100.0"
+<BorderPane prefHeight="800.0" prefWidth="1100.0"
             xmlns="http://javafx.com/javafx/13"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.controllers.AddQuestionController">
@@ -65,7 +65,7 @@
     </top>
 
    <center>
-      <ScrollPane fitToWidth="true">
+      <ScrollPane fitToWidth="true" fitToHeight="true">
          <content>
             <VBox fx:id="pageRoot" spacing="0.0">
 
@@ -78,14 +78,6 @@
                   <padding><Insets bottom="24.0" left="24.0" right="24.0" top="12.0" /></padding>
                   <children>
 
-                     <VBox fx:id="sidebarCard" spacing="12.0" minWidth="200.0" maxWidth="220.0">
-                        <padding><Insets bottom="16.0" left="16.0" right="16.0" top="16.0" /></padding>
-                        <children>
-                           <Label fx:id="myQuestionsLabel" text="My Questions (0)" styleClass="sidebar-title" />
-                           <Separator />
-                           <Label fx:id="emptyQLabel" text="No drafts yet." styleClass="sidebar-empty" wrapText="true" />
-                        </children>
-                     </VBox>
 
                      <VBox HBox.hgrow="ALWAYS" spacing="16.0">
                         <children>
@@ -98,8 +90,6 @@
                                     <children>
                                        <Label fx:id="formTitle" text="Add New Question" styleClass="form-title" />
                                        <Region HBox.hgrow="ALWAYS" />
-                                       <Button fx:id="saveDraftBtn" text="Save Draft" styleClass="btn-outline" onAction="#saveDraft" />
-                                       <Button fx:id="submitBtn" text="Submit" styleClass="btn-submit" onAction="#submitQuestion" />
                                     </children>
                                  </HBox>
 
@@ -116,8 +106,8 @@
                                     <children>
                                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                                           <children>
-                                             <Label text="Section / Topic" styleClass="field-label" />
-                                             <ComboBox fx:id="cb_section" promptText="Select a topic" maxWidth="Infinity" />
+                                             <Label text="LANGUAGE" styleClass="field-label" />
+                                             <ComboBox fx:id="cb_section" promptText="Select a language" maxWidth="Infinity" />
                                           </children>
                                        </VBox>
                                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
@@ -133,7 +123,7 @@
                                     <children>
                                        <Label text="Problem Description" styleClass="field-label" />
                                        <TextArea fx:id="txt_description"
-                                                 promptText="Description, hints, examples, etc."
+                                                 promptText="Description, examples, constraints, etc."
                                                  prefRowCount="5"
                                                  wrapText="true"
                                                  styleClass="field-textarea" />
@@ -171,22 +161,14 @@
 
                                  <Label fx:id="feedbackLabel" text="" styleClass="feedback-label" />
 
-                              </children>
-                           </VBox>
+                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                    <children>
+                                       <Region HBox.hgrow="ALWAYS" />
+                                       <Button fx:id="saveDraftBtn" text="Save Draft" styleClass="btn-outline" onAction="#saveDraft" />
+                                       <Button fx:id="submitBtn" text="Submit" styleClass="btn-submit" onAction="#submitQuestion" />
+                                    </children>
+                                 </HBox>
 
-                           <VBox fx:id="publishedCard" spacing="12.0">
-                              <padding><Insets bottom="20.0" left="24.0" right="24.0" top="20.0" /></padding>
-                              <children>
-                                 <Label text="My Published Questions:" styleClass="section-heading" />
-                                 <TableView fx:id="publishedTable" prefHeight="180.0" VBox.vgrow="ALWAYS">
-                                    <columns>
-                                       <TableColumn fx:id="col_title" text="Question" prefWidth="340.0" />
-                                       <TableColumn fx:id="col_section" text="Section" prefWidth="160.0" />
-                                       <TableColumn fx:id="col_difficulty" text="Difficulty" prefWidth="100.0" />
-                                       <TableColumn fx:id="col_status" text="Status" prefWidth="100.0" />
-                                       <TableColumn fx:id="col_actions" text="" prefWidth="80.0" />
-                                    </columns>
-                                 </TableView>
                               </children>
                            </VBox>
 

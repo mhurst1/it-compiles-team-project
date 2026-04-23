@@ -54,15 +54,13 @@ public class AddQuestionController {
     @FXML
     public void initialize() {
         cb_section.getItems().addAll(
-            "Arrays & Strings",
-            "Trees & Graphs",
-            "Dynamic Programming",
-            "Searching & Sorting",
-            "Stacks & Queues",
-            "Linked Lists",
-            "System Design",
-            "OOP Concepts",
-            "Databases"
+             "JAVA",
+            "JAVASCRIPT",
+            "PYTHON",
+            "HTML",
+            "CSS",
+            "LINUX",
+            "UNKNOWN"
         );
         cb_difficulty.getItems().addAll("Easy", "Medium", "Hard");
 

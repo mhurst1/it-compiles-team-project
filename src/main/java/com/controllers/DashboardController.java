@@ -21,6 +21,7 @@ import com.interviews.Status;
 public class DashboardController {
 
     @FXML private Button adminDashboardButton;
+    @FXML private Button addQuestionBtn;
     @FXML private Label welcomeLabel;
     @FXML private Label welcomeGreeting;
     @FXML private Label contentSubtitle;
@@ -56,6 +57,11 @@ public class DashboardController {
         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
             adminDashboardButton.setVisible(false);
             adminDashboardButton.setManaged(false);
+        }
+
+        if (App.currentUser == null || App.currentUser.getStatus() == Status.USER) {
+            addQuestionBtn.setVisible(false);
+            addQuestionBtn.setManaged(false);
         }
 
         questions = DataLoader.getQuestions();
