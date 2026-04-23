@@ -175,11 +175,16 @@ public class DashboardController {
     @FXML
     private void goToProfile() {
         try {
-            App.setRoot("profile");
+            if (App.currentUser == null) {
+                App.setRoot("login");
+            } else {
+                App.setRoot("profile");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void goToAddQuestion() throws IOException {

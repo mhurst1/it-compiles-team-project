@@ -315,9 +315,17 @@ public class LeaderboardController {
         App.setRoot("community");
     }
 
-     @FXML
-    private void goToProfile() throws IOException {
-        App.setRoot("profile");
+    @FXML
+    private void goToProfile() {
+        try {
+            if (App.currentUser == null) {
+                App.setRoot("login");
+            } else {
+                App.setRoot("profile");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
