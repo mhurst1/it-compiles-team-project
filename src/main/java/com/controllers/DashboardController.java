@@ -2,76 +2,183 @@ package com.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-import com.interviews.App;
-import com.interviews.DataLoader;
-import com.interviews.Difficulty;
-import com.interviews.Question;
-import com.interviews.Status;
-
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import com.interviews.Achievement;
+import com.interviews.App;
+import com.interviews.DataLoader;
+import com.interviews.Difficulty;
+import com.interviews.Language;
+import com.interviews.Question;
 
 public class DashboardController {
-
-    @FXML private Button adminDashboardButton;
-    @FXML private Button addQuestionBtn;
 
     @FXML private Label welcomeLabel;
     @FXML private Label welcomeGreeting;
     @FXML private Label contentSubtitle;
-
     @FXML private VBox questionCardList;
-
     @FXML private Button filterAllBtn;
     @FXML private Button filterEasyBtn;
     @FXML private Button filterMediumBtn;
     @FXML private Button filterHardBtn;
-
     @FXML private TextField searchField;
+
+    // Left sidebar
+    @FXML private HBox sidebarAllQuestions;
+    @FXML private Label sidebarAllQuestionsCount;
+    @FXML private VBox languageSidebarList;
+
+    // Quick stats
+    @FXML private Label statSolvedValue;
+    @FXML private Label statStreakValue;
+    @FXML private Label statRankValue;
+    @FXML private Label statUpvoteValue;
+    @FXML private Label statDownvoteValue;
+
+    // Recent activity
+    @FXML private VBox recentActivityList;
 
     private ArrayList<Question> questions;
     private Difficulty activeFilter = null;
+    private Language activeLanguageFilter = null;
+    private HBox activeSidebarItem;
 
     @FXML
     private void initialize() {
         questions = DataLoader.getQuestions();
-        if (questions == null) {
-            questions = new ArrayList<>();
-        }
 
         if (App.currentUser != null) {
             String name = App.currentUser.getFirstName();
             welcomeLabel.setText(name);
             welcomeGreeting.setText("Welcome, " + name + "!");
         } else {
-            welcomeLabel.setText("Name");
+            welcomeLabel.setText("");
             welcomeGreeting.setText("Welcome!");
         }
-
-        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
-            adminDashboardButton.setVisible(false);
-            adminDashboardButton.setManaged(false);
-        }
-
-        boolean canAddQuestion = canAddQuestion();
-        addQuestionBtn.setVisible(canAddQuestion);
-        addQuestionBtn.setManaged(canAddQuestion);
 
         contentSubtitle.setText(questions.size() + " questions across all topics");
         loadCards(questions);
 
         searchField.textProperty().addListener((obs, oldVal, newVal) -> applyFilters());
+
+        sidebarAllQuestionsCount.setText(String.valueOf(questions.size()));
+        activeSidebarItem = sidebarAllQuestions;
+        sidebarAllQuestions.setOnMouseClicked(e -> {
+            setActiveSidebarItem(sidebarAllQuestions);
+            activeLanguageFilter = null;
+            applyFilters();
+        });
+
+        populateLanguageSidebar();
+        populateQuickStats();
+        populateRecentActivity();
     }
 
-    private boolean canAddQuestion() {
-        return App.currentUser != null &&
-               (App.currentUser.getStatus() == Status.ADMIN ||
-                App.currentUser.getStatus() == Status.CONTRIBUTOR);
+    private void populateLanguageSidebar() {
+        languageSidebarList.getChildren().clear();
+        for (Language lang : Language.values()) {
+            if (lang == Language.UNKNOWN) continue;
+            long count = questions.stream().filter(q -> q.getLanguage() == lang).count();
+
+            HBox item = new HBox();
+            item.setAlignment(Pos.CENTER_LEFT);
+            item.getStyleClass().add("sidebar-item");
+
+            Label nameLabel = new Label(formatLanguageName(lang));
+            nameLabel.getStyleClass().add("sidebar-item-label");
+            HBox.setHgrow(nameLabel, Priority.ALWAYS);
+
+            Label cntLabel = new Label(String.valueOf(count));
+            cntLabel.getStyleClass().add("sidebar-count");
+
+            item.getChildren().addAll(nameLabel, cntLabel);
+
+            final Language filter = lang;
+            item.setOnMouseClicked(e -> {
+                setActiveSidebarItem(item);
+                activeLanguageFilter = filter;
+                applyFilters();
+            });
+
+            languageSidebarList.getChildren().add(item);
+        }
+    }
+
+    private String formatLanguageName(Language lang) {
+        switch (lang) {
+            case JAVASCRIPT: return "JavaScript";
+            case HTML:       return "HTML";
+            case CSS:        return "CSS";
+            case LINUX:      return "Linux";
+            default: {
+                String s = lang.name();
+                return s.charAt(0) + s.substring(1).toLowerCase();
+            }
+        }
+    }
+
+    private void setActiveSidebarItem(HBox item) {
+        if (activeSidebarItem != null) {
+            activeSidebarItem.getStyleClass().remove("sidebar-item-active");
+        }
+        activeSidebarItem = item;
+        item.getStyleClass().add("sidebar-item-active");
+    }
+
+    private void populateQuickStats() {
+        if (App.currentUser != null) {
+            int solved = App.currentUser.getAnsweredQuestions() != null
+                         ? App.currentUser.getAnsweredQuestions().size() : 0;
+            statSolvedValue.setText(String.valueOf(solved));
+
+            ArrayList<Achievement> ach = App.currentUser.getAchievements();
+            if (ach != null && !ach.isEmpty()) {
+                Achievement a = ach.get(ach.size() - 1);
+                statStreakValue.setText(a.getStreak() + " days");
+                statRankValue.setText("#" + a.getLeaderboardPlace());
+                statUpvoteValue.setText("↑ " + a.getAllVotePoints());
+            } else {
+                statStreakValue.setText("0 days");
+                statRankValue.setText("#0");
+                statUpvoteValue.setText("↑ 0");
+            }
+            statDownvoteValue.setText("↓ 0");
+        } else {
+            statSolvedValue.setText("0");
+            statStreakValue.setText("0 days");
+            statRankValue.setText("#0");
+            statUpvoteValue.setText("↑ 0");
+            statDownvoteValue.setText("↓ 0");
+        }
+    }
+
+    private void populateRecentActivity() {
+        recentActivityList.getChildren().clear();
+        if (App.currentUser == null) {
+            Label msg = new Label("Login to view recent activity");
+            msg.getStyleClass().add("activity-item");
+            recentActivityList.getChildren().add(msg);
+            return;
+        }
+        ArrayList<Question> answered = App.currentUser.getAnsweredQuestions();
+        if (answered == null || answered.isEmpty()) {
+            Label msg = new Label("No recent activity");
+            msg.getStyleClass().add("activity-item");
+            recentActivityList.getChildren().add(msg);
+            return;
+        }
+        int start = Math.max(0, answered.size() - 5);
+        for (int i = answered.size() - 1; i >= start; i--) {
+            Label item = new Label("✅ Solved " + answered.get(i).getTitle());
+            item.getStyleClass().add("activity-item");
+            recentActivityList.getChildren().add(item);
+        }
     }
 
     @FXML
@@ -105,17 +212,20 @@ public class DashboardController {
     private void applyFilters() {
         String query = searchField.getText().trim().toLowerCase();
         ArrayList<Question> result = activeFilter == null ? questions : filterByDifficulty(activeFilter);
-
+        if (activeLanguageFilter != null) {
+            ArrayList<Question> byLang = new ArrayList<>();
+            for (Question q : result) {
+                if (q.getLanguage() == activeLanguageFilter) byLang.add(q);
+            }
+            result = byLang;
+        }
         if (!query.isEmpty()) {
             ArrayList<Question> searched = new ArrayList<>();
             for (Question q : result) {
-                if (q.getTitle() != null && q.getTitle().toLowerCase().contains(query)) {
-                    searched.add(q);
-                }
+                if (q.getTitle().toLowerCase().contains(query)) searched.add(q);
             }
             result = searched;
         }
-
         contentSubtitle.setText(result.size() + " question" + (result.size() == 1 ? "" : "s") + " found");
         loadCards(result);
     }
@@ -123,9 +233,7 @@ public class DashboardController {
     private ArrayList<Question> filterByDifficulty(Difficulty difficulty) {
         ArrayList<Question> filtered = new ArrayList<>();
         for (Question q : questions) {
-            if (q.getDifficulty() == difficulty) {
-                filtered.add(q);
-            }
+            if (q.getDifficulty() == difficulty) filtered.add(q);
         }
         return filtered;
     }
@@ -166,13 +274,6 @@ public class DashboardController {
     }
 
     @FXML
-    private void goToAdminDashboard() throws IOException {
-        if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
-            App.setRoot("admindashboard");
-        }
-    }
-
-    @FXML
     private void goToProfile() {
         try {
             if (App.currentUser == null) {
@@ -187,16 +288,17 @@ public class DashboardController {
 
 
     @FXML
-    private void goToAddQuestion() throws IOException {
-        if (canAddQuestion()) {
+    private void goToAddQuestion() {
+        try {
             App.setRoot("addquestion");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     private void loadCards(ArrayList<Question> list) {
         questionCardList.getChildren().clear();
         QuestionCardController cardBuilder = new QuestionCardController();
-
         for (int i = 0; i < list.size(); i++) {
             HBox card = cardBuilder.buildCard(list.get(i), i + 1);
             questionCardList.getChildren().add(card);

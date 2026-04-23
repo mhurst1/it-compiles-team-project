@@ -67,42 +67,7 @@
                     <Label fx:id="sidebarAllQuestionsLabel" styleClass="sidebar-item-label" text="All Questions" HBox.hgrow="ALWAYS" />
                     <Label fx:id="sidebarAllQuestionsCount" styleClass="sidebar-count" text="0" />
                 </HBox>
-                <HBox fx:id="sidebarArrays" alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label fx:id="sidebarArraysLabel" styleClass="sidebar-item-label" text="Arrays &amp; Strings" HBox.hgrow="ALWAYS" />
-                    <Label fx:id="sidebarArraysCount" styleClass="sidebar-count" text="0" />
-                </HBox>
-                <HBox fx:id="sidebarTrees" alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label fx:id="sidebarTreesLabel" styleClass="sidebar-item-label" text="Trees &amp; Graphs" HBox.hgrow="ALWAYS" />
-                    <Label fx:id="sidebarTreesCount" styleClass="sidebar-count" text="0" />
-                </HBox>
-                <HBox fx:id="sidebarDP" alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label fx:id="sidebarDPLabel" styleClass="sidebar-item-label" text="Dynamic Programming" HBox.hgrow="ALWAYS" />
-                    <Label fx:id="sidebarDPCount" styleClass="sidebar-count" text="0" />
-                </HBox>
-                <HBox fx:id="sidebarSearchSort" alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label fx:id="sidebarSearchSortLabel" styleClass="sidebar-item-label" text="Searching &amp; Sorting" HBox.hgrow="ALWAYS" />
-                    <Label fx:id="sidebarSearchSortCount" styleClass="sidebar-count" text="0" />
-                </HBox>
-                <HBox fx:id="sidebarStacks" alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label fx:id="sidebarStacksLabel" styleClass="sidebar-item-label" text="Stacks &amp; Queues" HBox.hgrow="ALWAYS" />
-                    <Label fx:id="sidebarStacksCount" styleClass="sidebar-count" text="0" />
-                </HBox>
-                <HBox fx:id="sidebarLinkedLists" alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label fx:id="sidebarLinkedListsLabel" styleClass="sidebar-item-label" text="Linked Lists" HBox.hgrow="ALWAYS" />
-                    <Label fx:id="sidebarLinkedListsCount" styleClass="sidebar-count" text="0" />
-                </HBox>
-                <HBox fx:id="sidebarSystemDesign" alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label fx:id="sidebarSystemDesignLabel" styleClass="sidebar-item-label" text="System Design" HBox.hgrow="ALWAYS" />
-                    <Label fx:id="sidebarSystemDesignCount" styleClass="sidebar-count" text="0" />
-                </HBox>
-                <HBox fx:id="sidebarOOP" alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label fx:id="sidebarOOPLabel" styleClass="sidebar-item-label" text="OOP Concepts" HBox.hgrow="ALWAYS" />
-                    <Label fx:id="sidebarOOPCount" styleClass="sidebar-count" text="0" />
-                </HBox>
-                <HBox fx:id="sidebarDatabases" alignment="CENTER_LEFT" styleClass="sidebar-item">
-                    <Label fx:id="sidebarDatabasesLabel" styleClass="sidebar-item-label" text="Databases" HBox.hgrow="ALWAYS" />
-                    <Label fx:id="sidebarDatabasesCount" styleClass="sidebar-count" text="0" />
-                </HBox>
+                <VBox fx:id="languageSidebarList" spacing="2" />
             </VBox>
 
             <VBox fx:id="mainContent" spacing="14" styleClass="main-content" HBox.hgrow="ALWAYS">
@@ -165,11 +130,7 @@
 
                 <VBox fx:id="recentActivityCard" spacing="6" styleClass="stat-card">
                     <Label fx:id="recentActivityTitle" styleClass="sidebar-section-title" text="RECENT ACTIVITY" />
-                    <Label fx:id="activityItem1" styleClass="activity-item" text="✅ Solved Two Sum" />
-                    <Label fx:id="activityItem2" styleClass="activity-item" text="💬 Commented on Merge K..." />
-                    <Label fx:id="activityItem3" styleClass="activity-item" text="👁️ Viewed LIS Problem" />
-                    <Label fx:id="activityItem4" styleClass="activity-item" text="✅ Solved BT Level Order" />
-                    <Label fx:id="activityItem5" styleClass="activity-item" text="Started URL Shortener" />
+                    <VBox fx:id="recentActivityList" spacing="4" />
                 </VBox>
 
             </VBox>
