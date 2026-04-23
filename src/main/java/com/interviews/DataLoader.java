@@ -333,8 +333,8 @@ public class DataLoader {
                 return Difficulty.EASY;
             case "MEDIUM":
                 return Difficulty.MEDIUM;
-            case "DIFFICULT":
-                return Difficulty.DIFFICULT;
+            case "HARD":
+                return Difficulty.HARD;
             default:
                 return null;
         }

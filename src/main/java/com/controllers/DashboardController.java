@@ -218,7 +218,7 @@ public class DashboardController {
     @FXML
     private void filterHard() {
         setActiveFilter(filterHardBtn);
-        activeFilter = Difficulty.DIFFICULT;
+        activeFilter = Difficulty.HARD;
         applyFilters();
     }
 

@@ -73,7 +73,7 @@ public class QuestionCardController {
                 return "Easy";
             case MEDIUM:
                 return "Medium";
-            case DIFFICULT:
+            case HARD:
                 return "Hard";
             default:
                 return "Unknown";
@@ -89,7 +89,7 @@ public class QuestionCardController {
                 return "badge-easy";
             case MEDIUM:
                 return "badge-medium";
-            case DIFFICULT:
+            case HARD:
                 return "badge-hard";
             default:
                 return "badge-easy";

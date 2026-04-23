@@ -107,7 +107,7 @@
                                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">
                                           <children>
                                              <Label text="LANGUAGE" styleClass="field-label" />
-                                             <ComboBox fx:id="cb_section" promptText="Select a language" maxWidth="Infinity" />
+                                             <ComboBox fx:id="cb_language" promptText="Select a language" maxWidth="Infinity" />
                                           </children>
                                        </VBox>
                                        <VBox spacing="5.0" HBox.hgrow="ALWAYS">

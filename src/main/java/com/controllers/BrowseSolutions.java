@@ -136,7 +136,7 @@ public class BrowseSolutions {
                 difficultyBadge.setText("Medium");
                 difficultyBadge.getStyleClass().setAll("diff-badge", "diff-medium");
                 break;
-            case DIFFICULT:
+            case HARD:
                 difficultyBadge.setText("Hard");
                 difficultyBadge.getStyleClass().setAll("diff-badge", "diff-hard");
                 break;

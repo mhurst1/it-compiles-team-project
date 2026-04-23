@@ -381,7 +381,7 @@ public class AdminDashboardController {
                 return "Easy";
             case MEDIUM:
                 return "Medium";
-            case DIFFICULT:
+            case HARD:
                 return "Hard";
             default:
                 return "Unknown";
@@ -397,7 +397,7 @@ public class AdminDashboardController {
                 return "badge-easy";
             case MEDIUM:
                 return "badge-medium";
-            case DIFFICULT:
+            case HARD:
                 return "badge-hard";
             default:
                 return "badge-neutral";

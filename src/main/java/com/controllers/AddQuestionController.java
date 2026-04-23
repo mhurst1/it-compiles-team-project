@@ -26,7 +26,7 @@ public class AddQuestionController {
     @FXML private Button adminDashboardButton;
 
     @FXML private TextField txt_title;
-    @FXML private ComboBox<String> cb_section;
+    @FXML private ComboBox<String> cb_language;
     @FXML private ComboBox<String> cb_difficulty;
     @FXML private TextArea txt_description;
     @FXML private TextField txt_hint1;
@@ -53,7 +53,7 @@ public class AddQuestionController {
 
     @FXML
     public void initialize() {
-        cb_section.getItems().addAll(
+        cb_language.getItems().addAll(
              "JAVA",
             "JAVASCRIPT",
             "PYTHON",
@@ -216,8 +216,14 @@ private void submitQuestion() {
         return;
     }
 
+    if (cb_language.getValue() == null) {
+    feedbackLabel.setText("Please select a language.");
+    feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");
+    return;
+}
+
     Difficulty difficulty = Difficulty.valueOf(cb_difficulty.getValue().toUpperCase());
-    Language language = Language.JAVA;
+    Language language = Language.valueOf(cb_language.getValue().toUpperCase());
 
     ArrayList<String> hints = new ArrayList<>();
     if (!txt_hint1.getText().isBlank()) hints.add(txt_hint1.getText().trim());

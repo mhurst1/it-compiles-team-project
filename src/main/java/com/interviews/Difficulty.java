@@ -6,5 +6,5 @@ package com.interviews;
 public enum Difficulty {
     EASY,
     MEDIUM,
-    DIFFICULT
+    HARD
 }
