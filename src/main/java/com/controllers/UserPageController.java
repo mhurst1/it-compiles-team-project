@@ -4,17 +4,22 @@ import com.interviews.Achievement;
 import com.interviews.App;
 import com.interviews.Question;
 import com.interviews.User;
-import com.interviews.UserSolution;
+import com.interviews.Status;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-
-import java.io.IOException;
 import java.util.List;
 
+
+
+import java.io.IOException;
+
+
 public class UserPageController {
+
+    @FXML private Button adminDashboardButton;
 
     @FXML private Label navUserLabel;
     @FXML private Label avatarLabel;
@@ -39,6 +44,11 @@ public class UserPageController {
         if (user == null) {
             setEmptyState();
             return;
+        }
+
+        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
+            adminDashboardButton.setVisible(false);
+            adminDashboardButton.setManaged(false);
         }
 
         String fullName = safe(user.getFirstName()) + " " + safe(user.getLastName());
@@ -87,6 +97,14 @@ public class UserPageController {
     @FXML
     private void goToProfile() throws IOException {
         App.setRoot("profile");
+
+    }
+
+    @FXML
+    private void goToAdminDashboard() throws IOException {
+        if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
+            App.setRoot("admindashboard");
+        }
     }
 
     private void populateSolvedQuestions(List<Question> questions) {

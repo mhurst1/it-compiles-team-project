@@ -4,6 +4,7 @@ import com.interviews.App;
 import com.interviews.DataWriter;
 import com.interviews.User;
 import com.interviews.UserList;
+import com.interviews.Status;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -12,10 +13,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.scene.text.Text;
-
 import java.io.IOException;
 
 public class ProfileController {
+
+    @FXML private Button adminDashboardButton;
 
     @FXML
     private Label navUserLabel;
@@ -68,6 +70,11 @@ public class ProfileController {
 
         updateDisplay(user);
         setEditMode(false);
+
+        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
+            adminDashboardButton.setVisible(false);
+            adminDashboardButton.setManaged(false);
+}
     }
 
     @FXML
@@ -88,6 +95,13 @@ public class ProfileController {
     @FXML
     private void goToProfile() throws IOException {
         App.setRoot("profile");
+    }
+
+    @FXML
+    private void goToAdminDashboard() throws IOException {
+        if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
+            App.setRoot("admindashboard");
+        }
     }
 
     @FXML

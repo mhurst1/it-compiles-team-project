@@ -12,8 +12,11 @@ import com.interviews.App;
 import com.interviews.DataLoader;
 import com.interviews.Difficulty;
 import com.interviews.Question;
+import com.interviews.Status;
 
 public class DashboardController {
+
+    @FXML private Button adminDashboardButton;
 
     @FXML 
     private Label welcomeLabel;
@@ -57,6 +60,11 @@ public class DashboardController {
             welcomeLabel.setText("");
             welcomeGreeting.setText("Welcome!");
         }
+
+        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
+            adminDashboardButton.setVisible(false);
+            adminDashboardButton.setManaged(false);
+}
 
         contentSubtitle.setText(questions.size() + " questions across all topics");
         loadCards(questions);
@@ -152,6 +160,13 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+        private void goToAdminDashboard() throws IOException {
+            if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
+                App.setRoot("admindashboard");
+            }
+        }
 
     @FXML
     private void goToProfile() {

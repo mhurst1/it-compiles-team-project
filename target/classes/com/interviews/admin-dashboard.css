@@ -2,51 +2,45 @@
     -fx-font-family: "Segoe UI";
 }
 
-.admin-root {
-    -fx-background-color: linear-gradient(to bottom, #f7f6ff 0%, #f4f4fc 100%);
+/* Navbar */
+.navbar {
+    -fx-background-color: #12112a;
 }
-
-.topbar {
-    -fx-background-color: #1f293b;
-    -fx-border-color: #121827;
-    -fx-border-width: 0 0 1 0;
-}
-
-.brand-mark {
+.navlogo {
     -fx-text-fill: white;
-    -fx-font-size: 13px;
-    -fx-font-weight: 800;
-    -fx-background-color: linear-gradient(to right, #8b5cf6, #ec4899);
-    -fx-background-radius: 10;
-    -fx-padding: 6 8 6 8;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
 }
-
-.brand-text {
-    -fx-text-fill: white;
-    -fx-font-size: 20px;
-    -fx-font-weight: 800;
-}
-
 .nav-btn {
     -fx-background-color: transparent;
-    -fx-background-radius: 10;
-    -fx-text-fill: #c7d2fe;
+    -fx-text-fill: #b0b0c8;
     -fx-font-size: 13px;
-    -fx-padding: 8 14 8 14;
+    -fx-background-radius: 6;
+    -fx-padding: 6 14 6 14;
     -fx-cursor: hand;
+    -fx-border-color: transparent;
 }
-
 .nav-btn:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.08);
     -fx-text-fill: white;
+    -fx-background-color: rgba(255,255,255,0.08);
 }
-
 .nav-btn-active {
-    -fx-background-color: linear-gradient(to right, #8b5cf6, #ec4899);
+    -fx-background-color: linear-gradient(to top right, #7734ED, #ff6ec7);
     -fx-text-fill: white;
-    -fx-font-weight: 700;
+    -fx-font-weight: bold;
 }
-
+.nav-btn-active:hover {
+    -fx-opacity: 0.88;
+}
+.nav-username {
+    -fx-text-fill: #d0cfe8;
+    -fx-font-size: 13px;
+}
+.nav-avatar {
+    -fx-fill: linear-gradient(to top right, #7734ED, #ff6ec7);
+    -fx-stroke: #ff6ec7;
+    -fx-stroke-width: 2;
+}
 .avatar-label {
     -fx-background-color: linear-gradient(to right, #8b5cf6, #ec4899);
     -fx-background-radius: 100;

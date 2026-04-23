@@ -10,26 +10,48 @@
 <?import javafx.scene.layout.Priority?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.layout.StackPane?>
+
 
 <BorderPane prefHeight="760.0" prefWidth="1080.0" stylesheets="@admin-dashboard.css" styleClass="admin-root" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.AdminDashboardController">
+       <!-- NAVBAR -->
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="14" styleClass="topbar">
+        <HBox alignment="CENTER_LEFT" spacing="16" styleClass="navbar">
             <padding>
-                <Insets bottom="14.0" left="28.0" right="28.0" top="14.0" />
+                <Insets top="12" right="24" bottom="12" left="24"/>
             </padding>
 
-            <Label styleClass="brand-mark" text="&lt;/&gt;" />
-            <Label styleClass="brand-text" text="CodeBoard" />
+            <children>
+                <Label fx:id="navlogo" styleClass="navlogo" text="⬡  CodeBoard"/>
 
-            <Region prefWidth="10.0" />
+                <Region prefWidth="40"/>
 
-            <Button mnemonicParsing="false" onAction="#goHome" styleClass="nav-btn, nav-btn-active" text="Home" />
-            <Button mnemonicParsing="false" onAction="#openQuestions" styleClass="nav-btn" text="Questions" />
-            <Button mnemonicParsing="false" onAction="#openCommunity" styleClass="nav-btn" text="Community" />
+                <Button text="Home" onAction="#goToHome" styleClass="nav-btn"/>
+                <Button text="Questions" onAction="#goToQuestions" styleClass="nav-btn"/>
+                <Button text="Community" onAction="#goToCommunity" styleClass="nav-btn"/>
 
-            <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="adminDashboardButton"
+                    mnemonicParsing="false"
+                    onAction="#goToAdminDashboard"
+                    styleClass="nav-btn, nav-btn-active"
+                    text="Admin Dashboard" />
 
-            <Label fx:id="avatarLabel" alignment="CENTER" prefHeight="28.0" prefWidth="28.0" styleClass="avatar-label" text="A" />
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label fx:id="navUserLabel" text="Name" styleClass="nav-username"/>
+
+                <Button onAction="#goToProfile" styleClass="nav-btn">
+                    <graphic>
+                        <StackPane alignment="CENTER">
+                            <children>
+                                <Circle radius="16" styleClass="nav-avatar"/>
+                            </children>
+                        </StackPane>
+                    </graphic>
+                </Button>
+            </children>
         </HBox>
     </top>
 

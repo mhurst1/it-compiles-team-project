@@ -1,5 +1,7 @@
 package com.controllers;
 
+import com.interviews.Status;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -13,6 +15,8 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import com.interviews.App;
 
 public class AddQuestionController {
+
+    @FXML private Button adminDashboardButton;
 
     @FXML private TextField txt_title;
     @FXML private ComboBox<String> cb_section;
@@ -57,6 +61,10 @@ public class AddQuestionController {
 
         if (App.currentUser != null) {
             welcomeLabel.setText(App.currentUser.getFirstName());
+        }
+        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
+            adminDashboardButton.setVisible(false);
+            adminDashboardButton.setManaged(false);
         }
 
         if (App.currentUser == null || !App.currentUser.canModifyQuestions()) {
@@ -188,4 +196,11 @@ public class AddQuestionController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+        private void goToAdminDashboard() throws IOException {
+            if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
+                App.setRoot("admindashboard");
+            }
+        }
 }

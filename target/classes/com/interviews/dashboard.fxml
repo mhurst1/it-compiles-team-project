@@ -31,6 +31,13 @@
                 <Button text="Questions" onAction="#goToQuestions" styleClass="nav-btn, nav-btn-active"/>
                 <Button text="Community" onAction="#goToCommunity" styleClass="nav-btn"/>
 
+                <Button fx:id="adminDashboardButton"
+                    mnemonicParsing="false"
+                    onAction="#goToAdminDashboard"
+                    styleClass="nav-btn"
+                    text="Admin Dashboard" />
+
+
                 <Region HBox.hgrow="ALWAYS"/>
 
                 <Label fx:id="welcomeLabel" text="Name" styleClass="nav-username"/>
