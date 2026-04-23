@@ -53,6 +53,7 @@
                         <StackPane alignment="CENTER">
                             <children>
                                 <Circle radius="16" styleClass="nav-avatar"/>
+                                <Label fx:id="navAvatarLetter" text="J" styleClass="nav-avatar-text"/>
                             </children>
                         </StackPane>
                     </graphic>

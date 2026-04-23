@@ -32,6 +32,8 @@ public class BrowseSolutions {
 
     @FXML private Button adminDashboardButton;
 
+    @FXML private Label navAvatarLetter;
+
     @FXML
     private Label navUsername;
     @FXML
@@ -57,6 +59,13 @@ public class BrowseSolutions {
             navUsername.setText(App.currentUser.getFirstName());
         } else {
             navUsername.setText("Unknown User");
+        }
+
+         if (App.currentUser != null && App.currentUser.getFirstName() != null && !App.currentUser.getFirstName().isEmpty()) {
+            String firstLetter = App.currentUser.getFirstName().substring(0, 1).toUpperCase();
+            navAvatarLetter.setText(firstLetter);
+        } else {
+            navAvatarLetter.setText("U");
         }
 
         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {

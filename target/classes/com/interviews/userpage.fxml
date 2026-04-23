@@ -39,9 +39,10 @@
                 <Button mnemonicParsing="false" onAction="#goToProfile" styleClass="nav-btn">
 
                     <graphic>
-                        <StackPane alignment="CENTER">
+                       <StackPane alignment="CENTER">
                             <children>
                                 <Circle radius="16" styleClass="nav-avatar"/>
+                                <Label fx:id="navAvatarLetter" text="J" styleClass="nav-avatar-text"/>
                             </children>
                         </StackPane>
                     </graphic>

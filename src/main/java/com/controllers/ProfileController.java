@@ -19,6 +19,8 @@ public class ProfileController {
 
     @FXML private Button adminDashboardButton;
 
+    @FXML private Label navAvatarLetter;
+
     @FXML
     private Label welcomeLabel;
     @FXML
@@ -72,6 +74,13 @@ public class ProfileController {
             welcomeLabel.setText("Unknown User");
             setEmptyState();
             return;
+        }
+
+        if (App.currentUser != null && App.currentUser.getFirstName() != null && !App.currentUser.getFirstName().isEmpty()) {
+            String firstLetter = App.currentUser.getFirstName().substring(0, 1).toUpperCase();
+            navAvatarLetter.setText(firstLetter);
+        } else {
+            navAvatarLetter.setText("U");
         }
 
       

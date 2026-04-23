@@ -43,6 +43,12 @@
     -fx-stroke-width: 2;
 }
 
+.nav-avatar-text {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
 /* Page */
 .lb-page {
     -fx-background-color: #ecedf5;
