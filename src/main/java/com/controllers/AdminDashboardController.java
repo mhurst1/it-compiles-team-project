@@ -1,5 +1,6 @@
 package com.controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -24,50 +25,28 @@ import javafx.scene.layout.VBox;
 
 public class AdminDashboardController {
 
-    @FXML
-    private Label welcomeLabel;
+    @FXML private Button adminDashboardButton;
 
-    @FXML
-    private Label avatarLabel;
+    @FXML private Label welcomeLabel;
+    @FXML private Label dashboardSubtitle;
 
-    @FXML
-    private Label dashboardSubtitle;
+    @FXML private Label totalUsersValue;
+    @FXML private Label totalUsersTrend;
 
-    @FXML
-    private Label totalUsersValue;
+    @FXML private Label totalQuestionsValue;
+    @FXML private Label totalQuestionsTrend;
 
-    @FXML
-    private Label totalUsersTrend;
+    @FXML private Label totalUpvotesValue;
+    @FXML private Label totalUpvotesTrend;
 
-    @FXML
-    private Label totalQuestionsValue;
+    @FXML private Label totalSolutionsValue;
+    @FXML private Label totalSolutionsTrend;
 
-    @FXML
-    private Label totalQuestionsTrend;
+    @FXML private VBox userManagementRows;
+    @FXML private VBox questionManagementRows;
+    @FXML private VBox leaderboardRows;
 
-    @FXML
-    private Label totalUpvotesValue;
-
-    @FXML
-    private Label totalUpvotesTrend;
-
-    @FXML
-    private Label totalSolutionsValue;
-
-    @FXML
-    private Label totalSolutionsTrend;
-
-    @FXML
-    private VBox userManagementRows;
-
-    @FXML
-    private VBox questionManagementRows;
-
-    @FXML
-    private VBox leaderboardRows;
-
-    @FXML
-    private Label actionMessage;
+    @FXML private Label actionMessage;
 
     private List<User> users;
     private List<Question> questions;
@@ -84,32 +63,53 @@ public class AdminDashboardController {
         populateUserManagement();
         populateQuestionManagement();
         populateLeaderboard();
+
+        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
+            adminDashboardButton.setVisible(false);
+            adminDashboardButton.setManaged(false);
+        }
     }
 
     @FXML
-    private void goHome() {
+    private void goToHome() {
         try {
-            App.setRoot("dashboard");
-        } catch (java.io.IOException e) {
+            App.setRoot("userpage");
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void openQuestions() {
+    private void goToQuestions() {
         try {
             App.setRoot("dashboard");
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void openCommunity() {
+    private void goToCommunity() {
         try {
             App.setRoot("leaderboard");
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToProfile() {
+        try {
+            App.setRoot("profile");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToAdminDashboard() throws IOException {
+        if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
+            App.setRoot("admindashboard");
         }
     }
 
@@ -126,7 +126,6 @@ public class AdminDashboardController {
         }
 
         welcomeLabel.setText(displayName);
-        avatarLabel.setText(displayName.substring(0, 1).toUpperCase(Locale.US));
         dashboardSubtitle.setText("Platform overview for " + users.size() + " users and "
                 + questions.size() + " questions.");
     }
@@ -135,7 +134,6 @@ public class AdminDashboardController {
         int totalVotes = 0;
         int totalSolutions = 0;
         int questionsWithSolutions = 0;
-        int pendingReviews = 0;
 
         for (Question question : questions) {
             ArrayList<UserSolution> solutions = question.getSolutionList();
@@ -145,8 +143,6 @@ public class AdminDashboardController {
                 for (UserSolution solution : solutions) {
                     totalVotes += Math.max(0, solution.getTotalVote());
                 }
-            } else {
-                pendingReviews++;
             }
         }
 

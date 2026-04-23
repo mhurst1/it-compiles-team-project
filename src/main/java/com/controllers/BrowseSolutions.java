@@ -26,8 +26,11 @@ import com.interviews.Question;
 import com.interviews.QuestionList;
 import com.interviews.Section;
 import com.interviews.UserSolution;
+import com.interviews.Status;
 
 public class BrowseSolutions {
+
+    @FXML private Button adminDashboardButton;
 
     @FXML
     private Label navUsername;
@@ -54,6 +57,10 @@ public class BrowseSolutions {
             navUsername.setText(App.currentUser.getFirstName());
         }
 
+        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
+            adminDashboardButton.setVisible(false);
+            adminDashboardButton.setManaged(false);
+        }
         Question q = App.currentQuestion;
         if (q == null || q.getSolutionList() == null || q.getSolutionList().isEmpty()) {
             for (Question candidate : DataLoader.getQuestions()) {
@@ -382,4 +389,11 @@ public class BrowseSolutions {
             ex.printStackTrace();
         }
     }
+
+    @FXML
+    private void goToAdminDashboard() throws IOException {
+        if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
+            App.setRoot("admindashboard");
+        }
+}
 }

@@ -42,6 +42,17 @@
     -fx-stroke-width: 2;
 }
 
+/* Header */
+.lb-heading {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+.lb-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6b7280;
+}
+
 /* Content */
 .scroll-pane {
     -fx-background-color: transparent;

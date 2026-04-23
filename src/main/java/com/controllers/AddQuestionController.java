@@ -1,7 +1,10 @@
 package com.controllers;
 
+import com.interviews.Status;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -11,8 +14,16 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 import com.interviews.App;
+import com.interviews.DataLoader;
+import com.interviews.DataWriter;
+import com.interviews.Difficulty;
+import com.interviews.Language;
+import com.interviews.Question;
+import com.interviews.Section;
 
 public class AddQuestionController {
+
+    @FXML private Button adminDashboardButton;
 
     @FXML private TextField txt_title;
     @FXML private ComboBox<String> cb_section;
@@ -57,6 +68,10 @@ public class AddQuestionController {
 
         if (App.currentUser != null) {
             welcomeLabel.setText(App.currentUser.getFirstName());
+        }
+        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
+            adminDashboardButton.setVisible(false);
+            adminDashboardButton.setManaged(false);
         }
 
         if (App.currentUser == null || !App.currentUser.canModifyQuestions()) {
@@ -108,26 +123,7 @@ public class AddQuestionController {
         feedbackLabel.setStyle("-fx-text-fill: #7734ED;");
     }
 
-    @FXML
-    private void submitQuestion() {
-        if (App.currentUser == null || !App.currentUser.canModifyQuestions()) {
-            feedbackLabel.setText("Access denied: only contributors can add questions.");
-            feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");
-            return;
-        }
-        if (txt_title.getText().isBlank()) {
-            feedbackLabel.setText("Question title is required.");
-            feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");
-            return;
-        }
-        if (cb_difficulty.getValue() == null) {
-            feedbackLabel.setText("Please select a difficulty.");
-            feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");
-            return;
-        }
-        feedbackLabel.setText("Question submitted!");
-        feedbackLabel.setStyle("-fx-text-fill: #22c55e;");
-    }
+
 
     @FXML
     private void addAttachment() {
@@ -188,4 +184,68 @@ public class AddQuestionController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+        private void goToAdminDashboard() throws IOException {
+            if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
+                App.setRoot("admindashboard");
+            }
+        }
+
+    @FXML
+private void submitQuestion() {
+    if (App.currentUser == null || !App.currentUser.canModifyQuestions()) {
+        feedbackLabel.setText("Access denied: only contributors can add questions.");
+        feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");
+        return;
+    }
+
+    if (txt_title.getText().isBlank()) {
+        feedbackLabel.setText("Question title is required.");
+        feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");
+        return;
+    }
+
+    if (cb_difficulty.getValue() == null) {
+        feedbackLabel.setText("Please select a difficulty.");
+        feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");
+        return;
+    }
+
+    Difficulty difficulty = Difficulty.valueOf(cb_difficulty.getValue().toUpperCase());
+    Language language = Language.JAVA;
+
+    ArrayList<String> hints = new ArrayList<>();
+    if (!txt_hint1.getText().isBlank()) hints.add(txt_hint1.getText().trim());
+    if (!txt_hint2.getText().isBlank()) hints.add(txt_hint2.getText().trim());
+    if (!txt_hint3.getText().isBlank()) hints.add(txt_hint3.getText().trim());
+
+    ArrayList<Section> sections = new ArrayList<>();
+    ArrayList<String> sectionContent = new ArrayList<>();
+    sectionContent.add(txt_description.getText().trim());
+    sections.add(new Section("Description", sectionContent, txt_description.getText().trim()));
+
+    Question q = new Question(
+        txt_title.getText().trim(),
+        App.currentUser,
+        txt_description.getText().trim(),
+        difficulty,
+        language,
+        hints,
+        sections
+    );
+
+    ArrayList<Question> questions = DataLoader.getQuestions();
+    questions.add(q);
+
+    boolean saved = DataWriter.saveQuestions(questions);
+
+    if (saved) {
+        feedbackLabel.setText("Question submitted!");
+        feedbackLabel.setStyle("-fx-text-fill: #22c55e;");
+    } else {
+        feedbackLabel.setText("Could not save question.");
+        feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");
+    }
+}
 }

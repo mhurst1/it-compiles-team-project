@@ -14,6 +14,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.PasswordField?>
 
+
 <BorderPane prefHeight="700.0" prefWidth="1100.0"
             stylesheets="@profile.css"
             xmlns="http://javafx.com/javafx/25"
@@ -36,9 +37,16 @@
                 <Button text="Questions" onAction="#goToQuestions" styleClass="nav-btn"/>
                 <Button text="Community" onAction="#goToCommunity" styleClass="nav-btn"/>
 
-                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="adminDashboardButton"
+                    mnemonicParsing="false"
+                    onAction="#goToAdminDashboard"
+                    styleClass="nav-btn"
+                    text="Admin Dashboard" />
 
-                <Label fx:id="navUserLabel" text="Name" styleClass="nav-username"/>
+
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="welcomeLabel" styleClass="nav-username" text="Name" />
+
 
                 <Button onAction="#goToProfile" styleClass="nav-btn">
                     <graphic>

@@ -10,6 +10,7 @@ import com.interviews.App;
 import com.interviews.Status;
 import com.interviews.User;
 import com.interviews.UserList;
+import com.interviews.Status;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -20,6 +21,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class LeaderboardController {
+
+    @FXML private Button adminDashboardButton;
 
     @FXML
     private Label welcomeLabel;
@@ -65,6 +68,12 @@ public class LeaderboardController {
             welcomeLabel.setText(App.currentUser.getFirstName());
             welcomeGreeting.setText("Welcome, " + App.currentUser.getFirstName() + "!");
         }
+
+        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
+            adminDashboardButton.setVisible(false);
+            adminDashboardButton.setManaged(false);
+}
+
         contentSubtitle.setText("See how you rank against the community.");
         allSorted = getSortedUsers();
         populatePodium(allSorted);
@@ -309,5 +318,12 @@ public class LeaderboardController {
      @FXML
     private void goToProfile() throws IOException {
         App.setRoot("profile");
+    }
+
+    @FXML
+    private void goToAdminDashboard() throws IOException {
+        if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
+            App.setRoot("admindashboard");
+        }
     }
 }

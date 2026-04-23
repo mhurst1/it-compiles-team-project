@@ -25,8 +25,16 @@
                 <Button mnemonicParsing="false" onAction="#goToHome" styleClass="nav-btn, nav-btn-active" text="Home" />
                 <Button mnemonicParsing="false" onAction="#goToQuestions" styleClass="nav-btn" text="Questions" />
                 <Button mnemonicParsing="false" onAction="#goToCommunity" styleClass="nav-btn" text="Community" />
+
+                <Button fx:id="adminDashboardButton"
+                    mnemonicParsing="false"
+                    onAction="#goToAdminDashboard"
+                    styleClass="nav-btn"
+                    text="Admin Dashboard" />
+
                 <Region HBox.hgrow="ALWAYS" />
-                <Label fx:id="navUserLabel" styleClass="nav-username" text="Name" />
+                <Label fx:id="welcomeLabel" styleClass="nav-username" text="Name" />
+
 
                 <Button mnemonicParsing="false" onAction="#goToProfile" styleClass="nav-btn">
 
@@ -49,6 +57,13 @@
                     <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </padding>
+
+                    <!-- Header -->
+                    <VBox spacing="4">
+                        <Label fx:id="welcomeGreeting" styleClass="lb-heading" text="Welcome!" />
+                        <Label fx:id="contentSubtitle" styleClass="lb-subtitle" text="See your progress and achievements!" />    
+                    </VBox>
+
 
                     <HBox fx:id="userbanner" styleClass="userbanner" spacing="20.0">
                         <children>

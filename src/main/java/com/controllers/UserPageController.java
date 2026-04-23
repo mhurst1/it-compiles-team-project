@@ -4,19 +4,25 @@ import com.interviews.Achievement;
 import com.interviews.App;
 import com.interviews.Question;
 import com.interviews.User;
-import com.interviews.UserSolution;
+import com.interviews.Status;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import java.util.List;
+
+
 
 import java.io.IOException;
-import java.util.List;
+
 
 public class UserPageController {
 
-    @FXML private Label navUserLabel;
+    @FXML private Button adminDashboardButton;
+    @FXML private Label welcomeLabel;
+    @FXML private Label welcomeGreeting;
+
     @FXML private Label avatarLabel;
 
     @FXML private Text profileName;
@@ -35,10 +41,24 @@ public class UserPageController {
 
     @FXML
     private void initialize() {
+         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
+            adminDashboardButton.setVisible(false);
+            adminDashboardButton.setManaged(false);
+        }
+
         User user = App.currentUser;
         if (user == null) {
             setEmptyState();
             return;
+        }
+
+        if (App.currentUser != null) {
+            String name = App.currentUser.getFirstName();
+            welcomeLabel.setText(name);
+            welcomeGreeting.setText("Welcome, " + name + "!");
+        } else {
+            welcomeLabel.setText("");
+            welcomeGreeting.setText("Welcome!");
         }
 
         String fullName = safe(user.getFirstName()) + " " + safe(user.getLastName());
@@ -46,7 +66,6 @@ public class UserPageController {
         profileHandle.setText("@" + safe(user.getUsername()));
         profileRole.setText(user.getStatus() != null ? user.getStatus().name() : "USER");
 
-        navUserLabel.setText(safe(user.getUsername()));
         avatarLabel.setText(getInitial(user.getFirstName()));
 
         questionsSolved.setText(String.valueOf(sizeOf(user.getAnsweredQuestions())));
@@ -87,6 +106,14 @@ public class UserPageController {
     @FXML
     private void goToProfile() throws IOException {
         App.setRoot("profile");
+
+    }
+
+    @FXML
+    private void goToAdminDashboard() throws IOException {
+        if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
+            App.setRoot("admindashboard");
+        }
     }
 
     private void populateSolvedQuestions(List<Question> questions) {
@@ -129,7 +156,6 @@ public class UserPageController {
     }
 
     private void setEmptyState() {
-        if (navUserLabel != null) navUserLabel.setText("User");
         if (avatarLabel != null) avatarLabel.setText("U");
         if (profileName != null) profileName.setText("Unknown User");
         if (profileHandle != null) profileHandle.setText("@unknown");
