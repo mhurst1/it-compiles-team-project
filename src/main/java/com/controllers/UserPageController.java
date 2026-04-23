@@ -105,8 +105,16 @@ public class UserPageController {
     }
 
     @FXML
-    private void goToProfile() throws IOException {
-        App.setRoot(App.currentUser != null ? "profile" : "login");
+    private void goToProfile() {
+        try {
+            if (App.currentUser == null) {
+                App.setRoot("login");
+            } else {
+                App.setRoot("profile");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

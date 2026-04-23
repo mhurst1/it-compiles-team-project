@@ -283,6 +283,11 @@ public class DashboardController {
     @FXML
     private void goToProfile() {
         try {
+            if (App.currentUser == null) {
+                App.setRoot("login");
+            } else {
+                App.setRoot("profile");
+            }
             App.setRoot(App.currentUser != null ? "profile" : "login");
         } catch (IOException e) {
             e.printStackTrace();
@@ -299,6 +304,7 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void goToAddQuestion() {

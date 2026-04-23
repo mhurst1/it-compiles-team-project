@@ -386,9 +386,13 @@ public class BrowseSolutions {
     @FXML
     private void goToProfile() {
         try {
-            App.setRoot(App.currentUser != null ? "profile" : "login");
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            if (App.currentUser == null) {
+                App.setRoot("login");
+            } else {
+                App.setRoot("profile");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

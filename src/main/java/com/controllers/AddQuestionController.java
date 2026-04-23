@@ -181,7 +181,11 @@ public class AddQuestionController {
     @FXML
     private void goToProfile() {
         try {
-            App.setRoot(App.currentUser != null ? "profile" : "login");
+            if (App.currentUser != null) {
+                App.setRoot("login");
+            } else {
+                App.setRoot("profile");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
