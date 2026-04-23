@@ -1,12 +1,12 @@
 .root {
     -fx-font-family: "Segoe UI";
-    -fx-background-color: #f0f2f5;
 }
 
+/* Navbar */
 .navbar {
     -fx-background-color: #12112a;
 }
-.nav-logo {
+.navlogo {
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
@@ -29,7 +29,9 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
-.nav-btn-active:hover { -fx-opacity: 0.88; }
+.nav-btn-active:hover {
+    -fx-opacity: 0.88;
+}
 .nav-username {
     -fx-text-fill: #d0cfe8;
     -fx-font-size: 13px;

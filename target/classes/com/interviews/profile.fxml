@@ -14,6 +14,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.PasswordField?>
 
+
 <BorderPane prefHeight="700.0" prefWidth="1100.0"
             stylesheets="@profile.css"
             xmlns="http://javafx.com/javafx/25"
@@ -43,9 +44,9 @@
                     text="Admin Dashboard" />
 
 
-                <Region HBox.hgrow="ALWAYS"/>
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="welcomeLabel" styleClass="nav-username" text="Name" />
 
-                <Label fx:id="navUserLabel" text="Name" styleClass="nav-username"/>
 
                 <Button onAction="#goToProfile" styleClass="nav-btn">
                     <graphic>

@@ -20,8 +20,9 @@ import java.io.IOException;
 public class UserPageController {
 
     @FXML private Button adminDashboardButton;
+    @FXML private Label welcomeLabel;
+    @FXML private Label welcomeGreeting;
 
-    @FXML private Label navUserLabel;
     @FXML private Label avatarLabel;
 
     @FXML private Text profileName;
@@ -40,15 +41,24 @@ public class UserPageController {
 
     @FXML
     private void initialize() {
+         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
+            adminDashboardButton.setVisible(false);
+            adminDashboardButton.setManaged(false);
+        }
+
         User user = App.currentUser;
         if (user == null) {
             setEmptyState();
             return;
         }
 
-        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
-            adminDashboardButton.setVisible(false);
-            adminDashboardButton.setManaged(false);
+        if (App.currentUser != null) {
+            String name = App.currentUser.getFirstName();
+            welcomeLabel.setText(name);
+            welcomeGreeting.setText("Welcome, " + name + "!");
+        } else {
+            welcomeLabel.setText("");
+            welcomeGreeting.setText("Welcome!");
         }
 
         String fullName = safe(user.getFirstName()) + " " + safe(user.getLastName());
@@ -56,7 +66,6 @@ public class UserPageController {
         profileHandle.setText("@" + safe(user.getUsername()));
         profileRole.setText(user.getStatus() != null ? user.getStatus().name() : "USER");
 
-        navUserLabel.setText(safe(user.getUsername()));
         avatarLabel.setText(getInitial(user.getFirstName()));
 
         questionsSolved.setText(String.valueOf(sizeOf(user.getAnsweredQuestions())));
@@ -147,7 +156,6 @@ public class UserPageController {
     }
 
     private void setEmptyState() {
-        if (navUserLabel != null) navUserLabel.setText("User");
         if (avatarLabel != null) avatarLabel.setText("U");
         if (profileName != null) profileName.setText("Unknown User");
         if (profileHandle != null) profileHandle.setText("@unknown");

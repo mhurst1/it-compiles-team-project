@@ -60,6 +60,7 @@ public class DashboardController {
             welcomeLabel.setText("");
             welcomeGreeting.setText("Welcome!");
         }
+        
 
         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
             adminDashboardButton.setVisible(false);

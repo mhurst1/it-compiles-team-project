@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.StackPane?>
 
 
-<BorderPane prefHeight="760.0" prefWidth="1080.0" stylesheets="@admin-dashboard.css" styleClass="admin-root" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.AdminDashboardController">
+<BorderPane prefHeight="760.0" prefWidth="1080.0" stylesheets="@admindashboard.css" styleClass="admin-root" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.AdminDashboardController">
        <!-- NAVBAR -->
     <top>
         <HBox alignment="CENTER_LEFT" spacing="16" styleClass="navbar">
@@ -38,9 +38,9 @@
                     text="Admin Dashboard" />
 
 
-                <Region HBox.hgrow="ALWAYS"/>
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="welcomeLabel" styleClass="nav-username" text="Name" />
 
-                <Label fx:id="navUserLabel" text="Name" styleClass="nav-username"/>
 
                 <Button onAction="#goToProfile" styleClass="nav-btn">
                     <graphic>
@@ -147,12 +147,6 @@
                         <VBox fx:id="leaderboardRows" />
                     </VBox>
 
-                    <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="footer-note">
-                        <Label text="Signed in as" />
-                        <Label fx:id="welcomeLabel" styleClass="footer-accent" text="Admin" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Label fx:id="actionMessage" styleClass="action-message" text="Admin actions are connected to the controller and ready for real workflows." />
-                    </HBox>
                 </VBox>
             </content>
             <padding>

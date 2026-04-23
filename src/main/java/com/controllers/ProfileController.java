@@ -20,7 +20,7 @@ public class ProfileController {
     @FXML private Button adminDashboardButton;
 
     @FXML
-    private Label navUserLabel;
+    private Label welcomeLabel;
     @FXML
     private Label avatarLabel;
     @FXML
@@ -59,8 +59,13 @@ public class ProfileController {
 
     private boolean editing = false;
 
-    @FXML
+   @FXML
     private void initialize() {
+    if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
+                adminDashboardButton.setVisible(false);
+                adminDashboardButton.setManaged(false);
+            }
+
         User user = App.currentUser;
 
         if (user == null) {
@@ -68,13 +73,20 @@ public class ProfileController {
             return;
         }
 
+      
+        String name = user.getFirstName();
+         if (App.currentUser != null) {
+            name = App.currentUser.getFirstName();
+            welcomeLabel.setText(name);
+        } else {
+            welcomeLabel.setText("");
+        }
+
+        welcomeLabel.setText(name);
+
         updateDisplay(user);
         setEditMode(false);
 
-        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
-            adminDashboardButton.setVisible(false);
-            adminDashboardButton.setManaged(false);
-}
     }
 
     @FXML
@@ -138,10 +150,6 @@ public class ProfileController {
         String password = safe(passwordField.getText()).trim();
         String gradYearText = safe(gradYearField.getText()).trim();
 
-        if (fullName.isBlank() || username.isBlank() || email.isBlank() || gradYearText.isBlank()) {
-            showError("Please fill out all editable fields.");
-            return;
-        }
 
         if (fullName.isBlank() || username.isBlank() || email.isBlank() || gradYearText.isBlank()
                 || password.isBlank()) {
@@ -202,7 +210,6 @@ public class ProfileController {
         String lastName = safe(user.getLastName());
         String fullName = (firstName + " " + lastName).trim();
 
-        navUserLabel.setText(safe(user.getUsername()));
         avatarLabel.setText(getInitial(firstName));
 
         profileName.setText(fullName.isBlank() ? "Unknown User" : fullName);
@@ -278,8 +285,6 @@ public class ProfileController {
     }
 
     private void setEmptyState() {
-        if (navUserLabel != null)
-            navUserLabel.setText("User");
         if (avatarLabel != null)
             avatarLabel.setText("U");
         if (profileName != null)
