@@ -162,9 +162,9 @@ public class ContributorTest {
                 Difficulty.EASY, Language.JAVA);
 
         contributor.editQuestion(question.getId(), "Old Title", contributor, "Old description", sections, hints,
-                Difficulty.DIFFICULT, Language.JAVA);
+                Difficulty.HARD, Language.JAVA);
 
-        assertEquals(Difficulty.DIFFICULT, question.getDifficulty());
+        assertEquals(Difficulty.HARD, question.getDifficulty());
     }
 
     @Test

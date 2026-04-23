@@ -237,7 +237,7 @@ public class UserTest {
     @Test
     public void testStarMultipleDistinctQuestions() {
         Question q1 = new Question("Q1", user, "d1", new ArrayList<>(), new ArrayList<>(), Difficulty.EASY, Language.JAVA);
-        Question q2 = new Question("Q2", user, "d2", new ArrayList<>(), new ArrayList<>(), Difficulty.DIFFICULT, Language.PYTHON);
+        Question q2 = new Question("Q2", user, "d2", new ArrayList<>(), new ArrayList<>(), Difficulty.HARD, Language.PYTHON);
         user.starQuestion(q1);
         user.starQuestion(q2);
         assertEquals(2, user.getStarredQuestions().size());

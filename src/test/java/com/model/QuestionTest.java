@@ -246,8 +246,8 @@ public class QuestionTest {
     /** PASSES — setDifficulty updates the stored difficulty. */
     @Test
     public void testSetDifficultyUpdatesDifficulty() {
-        q.setDifficulty(Difficulty.DIFFICULT);
-        assertEquals(Difficulty.DIFFICULT, q.getDifficulty());
+        q.setDifficulty(Difficulty.HARD);
+        assertEquals(Difficulty.HARD, q.getDifficulty());
     }
 
     /** PASSES — setLanguage updates the stored language. */

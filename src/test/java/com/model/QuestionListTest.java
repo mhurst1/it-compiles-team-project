@@ -236,7 +236,7 @@ public class QuestionListTest {
     /** PASSES — a substring of a title still counts as a match */
     @Test
     public void testGetQuestionsKeywordPartialMatch() {
-        questionList.addQuestion("JavaScript Closures", testUser, "desc", Difficulty.DIFFICULT,
+        questionList.addQuestion("JavaScript Closures", testUser, "desc", Difficulty.HARD,
                 Language.JAVASCRIPT, new ArrayList<>(), new ArrayList<>());
         ArrayList<Question> results = questionList.getQuestions("Script");
         assertEquals(1, results.size());

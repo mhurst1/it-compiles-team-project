@@ -283,7 +283,7 @@ public class QuestionApplicationTest {
     @Test
     public void testEditQuestionUpdatesTitle() {
         Question result = app.editQuestion(q1, "Updated Title", alice, "new desc",
-                new ArrayList<>(), new ArrayList<>(), Difficulty.DIFFICULT, Language.JAVA);
+                new ArrayList<>(), new ArrayList<>(), Difficulty.HARD, Language.JAVA);
         assertNotNull(result);
         assertEquals("Updated Title", q1.getTitle());
     }
