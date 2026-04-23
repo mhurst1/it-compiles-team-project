@@ -168,6 +168,7 @@ public class DataWriter {
             obj.put("user-level", (long) a.getUserLevel());
             obj.put("all-vote-points", (long) a.getAllVotePoints());
             obj.put("streak", (long) a.getStreak());
+            obj.put("last-active-date", a.getLastActiveDate() != null ? a.getLastActiveDate().toString() : "");
             arr.add(obj);
         }
         return arr;

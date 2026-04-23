@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -110,12 +111,19 @@ public class DataLoader {
         if (achArray != null) {
             for (Object achObj : achArray) {
                 JSONObject ach = (JSONObject) achObj;
-                achievements.add(new Achievement(
+                Achievement a = new Achievement(
                         getInt(ach, "leaderboard-place"),
                         getInt(ach, "user-level"),
                         getInt(ach, "all-vote-points"),
                         getInt(ach, "streak")
-                ));
+                );
+                String dateStr = getString(ach, "last-active-date");
+                if (dateStr != null && !dateStr.isBlank()) {
+                    try {
+                        a.setLastActiveDate(LocalDate.parse(dateStr));
+                    } catch (Exception ignored) {}
+                }
+                achievements.add(a);
             }
         }
 

@@ -12,11 +12,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import com.interviews.Achievement;
 import com.interviews.App;
-import com.interviews.DataLoader;
 import com.interviews.Difficulty;
 import com.interviews.Language;
 import com.interviews.Question;
+import com.interviews.QuestionList;
 import com.interviews.Status;
+import com.interviews.UserSolution;
 
 public class DashboardController {
 
@@ -42,7 +43,6 @@ public class DashboardController {
     @FXML private Label statStreakValue;
     @FXML private Label statRankValue;
     @FXML private Label statUpvoteValue;
-    @FXML private Label statDownvoteValue;
 
     // Recent activity
     @FXML private VBox recentActivityList;
@@ -64,7 +64,7 @@ public class DashboardController {
             addQuestionBtn.setManaged(false);
         }
 
-        questions = DataLoader.getQuestions();
+        questions = new ArrayList<>(QuestionList.getInstance().getQuestions());
 
         if (App.currentUser != null) {
             String name = App.currentUser.getFirstName();
@@ -155,20 +155,31 @@ public class DashboardController {
                 Achievement a = ach.get(ach.size() - 1);
                 statStreakValue.setText(a.getStreak() + " days");
                 statRankValue.setText("#" + a.getLeaderboardPlace());
-                statUpvoteValue.setText("↑ " + a.getAllVotePoints());
             } else {
                 statStreakValue.setText("0 days");
                 statRankValue.setText("#0");
-                statUpvoteValue.setText("↑ 0");
             }
-            statDownvoteValue.setText("↓ 0");
+            statUpvoteValue.setText(String.valueOf(computeUserVotePoints()));
         } else {
             statSolvedValue.setText("0");
             statStreakValue.setText("0 days");
             statRankValue.setText("#0");
-            statUpvoteValue.setText("↑ 0");
-            statDownvoteValue.setText("↓ 0");
+            statUpvoteValue.setText("0");
         }
+    }
+
+    private int computeUserVotePoints() {
+        int total = 0;
+        for (Question q : QuestionList.getInstance().getQuestions()) {
+            if (q.getSolutionList() == null) continue;
+            for (UserSolution sol : q.getSolutionList()) {
+                if (sol.getUser() != null && App.currentUser != null
+                        && sol.getUser().getId().equals(App.currentUser.getId())) {
+                    total += sol.getTotalVote();
+                }
+            }
+        }
+        return total;
     }
 
     private void populateRecentActivity() {
@@ -188,7 +199,7 @@ public class DashboardController {
         }
         int start = Math.max(0, answered.size() - 5);
         for (int i = answered.size() - 1; i >= start; i--) {
-            Label item = new Label("✅ Solved " + answered.get(i).getTitle());
+            Label item = new Label("Posted a solution on " + answered.get(i).getTitle());
             item.getStyleClass().add("activity-item");
             recentActivityList.getChildren().add(item);
         }

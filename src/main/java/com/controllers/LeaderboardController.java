@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.interviews.App;
+import com.interviews.Question;
+import com.interviews.QuestionList;
 import com.interviews.Status;
 import com.interviews.User;
 import com.interviews.UserList;
-import com.interviews.Status;
+import com.interviews.UserSolution;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -93,16 +95,25 @@ public class LeaderboardController {
             }
         }
         List<User> deduped = new ArrayList<>(seen.values());
-        deduped.sort((a, b) -> b.getAnsweredQuestions().size() - a.getAnsweredQuestions().size());
+        deduped.sort((a, b) -> {
+            int cmp = b.getAnsweredQuestions().size() - a.getAnsweredQuestions().size();
+            if (cmp != 0) return cmp;
+            cmp = getUserVotePoints(b) - getUserVotePoints(a);
+            if (cmp != 0) return cmp;
+            return getStreak(b) - getStreak(a);
+        });
         return deduped;
     }
 
     private void populatePodium(List<User> sorted) {
-        if (sorted.size() >= 2) {
-            fillPodiumCard(secondPlaceCard, sorted.get(1), 2, "🥈");
-        }
+        firstPlaceCard.getChildren().clear();
+        secondPlaceCard.getChildren().clear();
+        thirdPlaceCard.getChildren().clear();
         if (!sorted.isEmpty()) {
             fillPodiumCard(firstPlaceCard, sorted.get(0), 1, "🥇");
+        }
+        if (sorted.size() >= 2) {
+            fillPodiumCard(secondPlaceCard, sorted.get(1), 2, "🥈");
         }
         if (sorted.size() >= 3) {
             fillPodiumCard(thirdPlaceCard, sorted.get(2), 3, "🥉");
@@ -128,7 +139,7 @@ public class LeaderboardController {
         Label roleLabel = new Label(user.getStatus().toString());
         roleLabel.getStyleClass().add(badgeClass(user));
 
-        Label stats = new Label("⬆ " + getVotePoints(user) + "   solved: " + user.getAnsweredQuestions().size());
+        Label stats = new Label("⬆ " + getUserVotePoints(user) + "   solved: " + user.getAnsweredQuestions().size());
         stats.getStyleClass().add("lb-card-stats");
 
         card.getChildren().addAll(placeLabel, medalLabel, avatar, username, roleLabel, stats);
@@ -159,6 +170,7 @@ public class LeaderboardController {
     @FXML
     private void filterAll() {
         setActiveFilter(filterAllBtn);
+        populatePodium(allSorted);
         populateList(allSorted);
     }
 
@@ -171,6 +183,7 @@ public class LeaderboardController {
                 filtered.add(u);
             }
         }
+        populatePodium(filtered);
         populateList(filtered);
     }
 
@@ -183,6 +196,7 @@ public class LeaderboardController {
                 filtered.add(u);
             }
         }
+        populatePodium(filtered);
         populateList(filtered);
     }
 
@@ -195,6 +209,7 @@ public class LeaderboardController {
                 filtered.add(u);
             }
         }
+        populatePodium(filtered);
         populateList(filtered);
     }
 
@@ -235,14 +250,10 @@ public class LeaderboardController {
         solvedLabel.setMinWidth(145);
         solvedLabel.getStyleClass().add("lb-solved");
 
-        int votes = getVotePoints(user);
+        int votes = getUserVotePoints(user);
         Label votesLabel = new Label("⬆ " + votes);
-        votesLabel.setMinWidth(95);
+        votesLabel.setMinWidth(190);
         votesLabel.getStyleClass().add("lb-votes");
-
-        Label downvotesLabel = new Label("↓ 0");
-        downvotesLabel.setMinWidth(95);
-        downvotesLabel.getStyleClass().add("lb-downvotes");
 
         int streak = getStreak(user);
         String streakText = streak == 0 ? "today" : streak + "d 🔥";
@@ -253,16 +264,13 @@ public class LeaderboardController {
         Button viewBtn = new Button("View Profile");
         viewBtn.getStyleClass().add("lb-view-btn");
 
-        row.getChildren().addAll(rankLabel, usernameLabel, roleCell, solvedLabel, votesLabel, downvotesLabel, streakLabel, viewBtn);
+        row.getChildren().addAll(rankLabel, usernameLabel, roleCell, solvedLabel, votesLabel, streakLabel, viewBtn);
         return row;
     }
 
     private String getInitials(User user) {
-        String f = (user.getFirstName() != null && !user.getFirstName().isBlank())
-            ? user.getFirstName().substring(0, 1).toUpperCase() : "";
-        String l = (user.getLastName() != null && !user.getLastName().isBlank())
-            ? user.getLastName().substring(0, 1).toUpperCase() : "";
-        return f + l;
+        return (user.getFirstName() != null && !user.getFirstName().isBlank())
+            ? user.getFirstName().substring(0, 1).toUpperCase() : "?";
     }
 
     private String badgeClass(User user) {
@@ -288,11 +296,17 @@ public class LeaderboardController {
         return "";
     }
 
-    private int getVotePoints(User user) {
-        if (user.getAchievements() != null && !user.getAchievements().isEmpty()) {
-            return user.getAchievements().get(0).getAllVotePoints();
+    private int getUserVotePoints(User user) {
+        int total = 0;
+        for (Question q : QuestionList.getInstance().getQuestions()) {
+            if (q.getSolutionList() == null) continue;
+            for (UserSolution sol : q.getSolutionList()) {
+                if (sol.getUser() != null && sol.getUser().getId().equals(user.getId())) {
+                    total += sol.getTotalVote();
+                }
+            }
         }
-        return 0;
+        return total;
     }
 
     private int getStreak(User user) {

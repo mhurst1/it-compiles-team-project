@@ -19,7 +19,16 @@ public class QuestionCardController {
     public HBox buildCard(Question question, int index) {
         
         Circle dot = new Circle(5);
-        dot.getStyleClass().add("dot-unsolved");
+        boolean solved = false;
+        if (App.currentUser != null && App.currentUser.getAnsweredQuestions() != null) {
+            for (Question q : App.currentUser.getAnsweredQuestions()) {
+                if (q.getId().equals(question.getId())) {
+                    solved = true;
+                    break;
+                }
+            }
+        }
+        dot.getStyleClass().add(solved ? "dot-solved" : "dot-unsolved");
 
         Label number = new Label(String.valueOf(index));
         number.getStyleClass().add("question-number");

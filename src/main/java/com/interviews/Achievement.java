@@ -121,6 +121,10 @@ public class Achievement {
         this.lastActiveDate = lastActiveDate;
     }
 
+    public LocalDate getLastActiveDate() {
+        return lastActiveDate;
+    }
+
 
     // NEED TO BE MODIFIED FOR DATA WRITER
     public int getLeaderboardPlace(){

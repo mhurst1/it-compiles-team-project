@@ -20,7 +20,7 @@ import javafx.scene.shape.Circle;
 
 import com.interviews.App;
 import com.interviews.Comment;
-import com.interviews.DataLoader;
+import com.interviews.UserList;
 import com.interviews.Difficulty;
 import com.interviews.Question;
 import com.interviews.QuestionList;
@@ -64,16 +64,6 @@ public class BrowseSolutions {
             adminDashboardButton.setManaged(false);
         }
         Question q = App.currentQuestion;
-        if (q == null || q.getSolutionList() == null || q.getSolutionList().isEmpty()) {
-            for (Question candidate : DataLoader.getQuestions()) {
-                ArrayList<UserSolution> sols = candidate.getSolutionList();
-                if (sols != null && !sols.isEmpty()) {
-                    q = candidate;
-                    App.currentQuestion = q;
-                    break;
-                }
-            }
-        }
 
         if (q == null) {
             questionTitle.setText("No question selected");
@@ -86,9 +76,6 @@ public class BrowseSolutions {
         questionTitle.setText(q.getTitle() != null ? q.getTitle() : "");
         questionDescription.setText(buildDescriptionText(q));
         updateDifficultyBadge(q.getDifficulty());
-        if (App.currentCategory != null && !App.currentCategory.isBlank()) {
-            categoryBadge.setText(App.currentCategory);
-        }
 
         ArrayList<UserSolution> solutions = q.getSolutionList();
         int count = (solutions == null) ? 0 : solutions.size();
@@ -349,6 +336,21 @@ public class BrowseSolutions {
         int count = App.currentQuestion.getSolutionList().size();
         answersLabel.setText(count + (count == 1 ? " Answer" : " Answers"));
         populateSolutions(App.currentQuestion);
+        QuestionList.getInstance().saveAll();
+
+        if (App.currentUser != null) {
+            boolean alreadyAnswered = false;
+            for (Question q2 : App.currentUser.getAnsweredQuestions()) {
+                if (q2.getId().equals(App.currentQuestion.getId())) {
+                    alreadyAnswered = true;
+                    break;
+                }
+            }
+            if (!alreadyAnswered) {
+                App.currentUser.getAnsweredQuestions().add(App.currentQuestion);
+                UserList.getInstance().save();
+            }
+        }
     }
 
     @FXML

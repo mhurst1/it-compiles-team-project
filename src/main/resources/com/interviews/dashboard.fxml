@@ -119,13 +119,8 @@
                 </VBox>
 
                 <VBox fx:id="statCardUpvotes" spacing="4" styleClass="stat-card">
-                    <Label fx:id="statUpvoteLabel" styleClass="stat-label" text="Total Upvotes" />
-                    <Label fx:id="statUpvoteValue" styleClass="stat-value, stat-upvote" text="↑ 0" />
-                </VBox>
-
-                <VBox fx:id="statCardDownvotes" spacing="4" styleClass="stat-card">
-                    <Label fx:id="statDownvoteLabel" styleClass="stat-label" text="Total Downvotes" />
-                    <Label fx:id="statDownvoteValue" styleClass="stat-value, stat-downvote" text="↓ 0" />
+                    <Label fx:id="statUpvoteLabel" styleClass="stat-label" text="Vote Points" />
+                    <Label fx:id="statUpvoteValue" styleClass="stat-value, stat-upvote" text="0" />
                 </VBox>
 
                 <VBox fx:id="recentActivityCard" spacing="6" styleClass="stat-card">

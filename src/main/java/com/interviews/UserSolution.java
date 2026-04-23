@@ -13,7 +13,9 @@ public class UserSolution {
     private UUID solutionID;
     private UUID questionID;
     public boolean userVote;
-    public int totalVote; // I think this can be replaced with upVotes and downVotes
+    public int totalVote;
+    private int upVotes;
+    private int downVotes;
 
     /**
      * Creates a fully populated solution object.
