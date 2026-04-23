@@ -57,10 +57,10 @@ public class DashboardController {
             welcomeLabel.setText(name);
             welcomeGreeting.setText("Welcome, " + name + "!");
         } else {
-            welcomeLabel.setText("");
+            welcomeLabel.setText("Name");
             welcomeGreeting.setText("Welcome!");
         }
-        
+
 
         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
             adminDashboardButton.setVisible(false);
@@ -195,4 +195,6 @@ public class DashboardController {
             questionCardList.getChildren().add(card);
         }
     }
+
+    
 }
