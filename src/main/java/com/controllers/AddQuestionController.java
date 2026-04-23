@@ -24,6 +24,7 @@ import com.interviews.Section;
 public class AddQuestionController {
 
     @FXML private Button adminDashboardButton;
+    @FXML private Label navAvatarLetter;
 
     @FXML private TextField txt_title;
     @FXML private ComboBox<String> cb_language;
@@ -53,6 +54,13 @@ public class AddQuestionController {
 
     @FXML
     public void initialize() {
+         if (App.currentUser != null && App.currentUser.getFirstName() != null && !App.currentUser.getFirstName().isEmpty()) {
+            String firstLetter = App.currentUser.getFirstName().substring(0, 1).toUpperCase();
+            navAvatarLetter.setText(firstLetter);
+        } else {
+            navAvatarLetter.setText("U");
+        }
+
         cb_language.getItems().addAll(
              "JAVA",
             "JAVASCRIPT",
@@ -69,6 +77,8 @@ public class AddQuestionController {
         } else {
             welcomeLabel.setText("Unknown User");
         }
+
+
         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
             adminDashboardButton.setVisible(false);
             adminDashboardButton.setManaged(false);

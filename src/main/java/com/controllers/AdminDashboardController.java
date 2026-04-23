@@ -26,6 +26,7 @@ import javafx.scene.layout.VBox;
 public class AdminDashboardController {
 
     @FXML private Button adminDashboardButton;
+    @FXML private Label navAvatarLetter;
 
     @FXML private Label welcomeLabel;
     @FXML private Label dashboardSubtitle;
@@ -67,6 +68,13 @@ public class AdminDashboardController {
         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
             adminDashboardButton.setVisible(false);
             adminDashboardButton.setManaged(false);
+        }
+
+         if (App.currentUser != null && App.currentUser.getFirstName() != null && !App.currentUser.getFirstName().isEmpty()) {
+            String firstLetter = App.currentUser.getFirstName().substring(0, 1).toUpperCase();
+            navAvatarLetter.setText(firstLetter);
+        } else {
+            navAvatarLetter.setText("U");
         }
     }
 

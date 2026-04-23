@@ -21,6 +21,7 @@ import com.interviews.Status;
 public class DashboardController {
 
     @FXML private Button adminDashboardButton;
+    @FXML private Label navAvatarLetter;
     @FXML private Button addQuestionBtn;
     @FXML private Label welcomeLabel;
     @FXML private Label welcomeGreeting;
@@ -57,6 +58,13 @@ public class DashboardController {
         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
             adminDashboardButton.setVisible(false);
             adminDashboardButton.setManaged(false);
+        }
+
+         if (App.currentUser != null && App.currentUser.getFirstName() != null && !App.currentUser.getFirstName().isEmpty()) {
+            String firstLetter = App.currentUser.getFirstName().substring(0, 1).toUpperCase();
+            navAvatarLetter.setText(firstLetter);
+        } else {
+            navAvatarLetter.setText("U");
         }
 
         if (App.currentUser == null || App.currentUser.getStatus() == Status.USER) {
@@ -294,7 +302,6 @@ public class DashboardController {
             } else {
                 App.setRoot("profile");
             }
-            App.setRoot(App.currentUser != null ? "profile" : "login");
         } catch (IOException e) {
             e.printStackTrace();
         }

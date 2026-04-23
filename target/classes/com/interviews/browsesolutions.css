@@ -42,6 +42,16 @@
     -fx-stroke-width: 2;
 }
 
+.nav-avatar-text {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+
+
+
+
 .left-scroll {
     -fx-background-color: white;
     -fx-border-color: transparent #e8e8ec transparent transparent;

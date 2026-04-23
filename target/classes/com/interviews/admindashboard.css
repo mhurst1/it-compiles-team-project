@@ -49,6 +49,13 @@
     -fx-font-weight: 800;
 }
 
+.nav-avatar-text {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+
 .dashboard-scroll {
     -fx-background-color: transparent;
     -fx-border-color: transparent;

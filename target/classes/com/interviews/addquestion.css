@@ -52,6 +52,13 @@
     -fx-stroke-width: 2;
 }
 
+.nav-avatar-text {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+
 /* ── Sidebar card ─────────────────────────────────────────── */
 #sidebarCard {
     -fx-background-color: white;
