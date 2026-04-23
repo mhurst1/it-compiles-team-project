@@ -133,21 +133,6 @@
                         </VBox>
                     </HBox>
 
-                    <VBox spacing="0.0" styleClass="panel-card">
-                        <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="panel-header">
-                            <Label styleClass="panel-title" text="Leaderboard - Top Upvotes" />
-                        </HBox>
-
-                        <HBox spacing="10.0" styleClass="table-header">
-                            <Label prefWidth="52.0" styleClass="header-label" text="Rank" />
-                            <Label prefWidth="130.0" styleClass="header-label" text="User" />
-                            <Label prefWidth="95.0" styleClass="header-label" text="Role" />
-                            <Label prefWidth="70.0" styleClass="header-label" text="Votes" />
-                        </HBox>
-
-                        <VBox fx:id="leaderboardRows" />
-                    </VBox>
-
                 </VBox>
             </content>
             <padding>

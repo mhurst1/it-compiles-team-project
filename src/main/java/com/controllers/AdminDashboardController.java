@@ -63,7 +63,6 @@ public class AdminDashboardController {
         populateStatCards();
         populateUserManagement();
         populateQuestionManagement();
-        populateLeaderboard();
 
         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
             adminDashboardButton.setVisible(false);
@@ -210,26 +209,6 @@ public class AdminDashboardController {
         }
     }
 
-    private void populateLeaderboard() {
-        leaderboardRows.getChildren().clear();
-
-        List<UserMetrics> leaderboard = new ArrayList<>(metricsByUser.values());
-        leaderboard.sort(Comparator.comparingInt(UserMetrics::getVoteTotal).reversed()
-                .thenComparing(UserMetrics::getUsername, String.CASE_INSENSITIVE_ORDER));
-
-        int limit = Math.min(5, leaderboard.size());
-        for (int i = 0; i < limit; i++) {
-            UserMetrics metrics = leaderboard.get(i);
-            HBox row = createPanelRow();
-            row.getChildren().addAll(
-                    textCell("#" + (i + 1), "panel-cell rank-cell", 52),
-                    textCell(metrics.getUsername(), "panel-cell user-name-cell", 130),
-                    badgeCell(roleLabel(metrics.getStatus()), roleClass(metrics.getStatus()), 95),
-                    accentCell(String.valueOf(metrics.getVoteTotal()), 70)
-            );
-            leaderboardRows.getChildren().add(row);
-        }
-    }
 
     private List<QuestionSnapshot> buildQuestionSnapshots() {
         List<QuestionSnapshot> snapshots = new ArrayList<>();

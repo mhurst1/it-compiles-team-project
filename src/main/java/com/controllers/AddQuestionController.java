@@ -19,6 +19,7 @@ import com.interviews.DataWriter;
 import com.interviews.Difficulty;
 import com.interviews.Language;
 import com.interviews.Question;
+import com.interviews.QuestionList;
 import com.interviews.Section;
 
 public class AddQuestionController {
@@ -206,6 +207,35 @@ public class AddQuestionController {
             }
         }
 
+  private void clearForm() {
+    txt_title.clear();
+    txt_description.clear();
+
+    txt_hint1.clear();
+    txt_hint2.clear();
+    txt_hint3.clear();
+
+    cb_language.setValue(null);
+    cb_difficulty.setValue(null);
+
+    // Reset hint UI
+    hint3Row.setVisible(false);
+    hint3Row.setManaged(false);
+    visibleHints = 2;
+
+    addHintBtn.setVisible(true);
+    addHintBtn.setManaged(true);
+
+    // Reset attachment
+    selectedAttachment = null;
+    attachmentLabel.setText("No file chosen");
+    attachmentLabel.setStyle("-fx-text-fill: #6b7280;"); // default gray
+
+    // clear feedback
+    //feedbackLabel.setText("");
+}
+
+
     @FXML
 private void submitQuestion() {
     if (App.currentUser == null || !App.currentUser.canModifyQuestions()) {
@@ -255,14 +285,17 @@ private void submitQuestion() {
         sections
     );
 
-    ArrayList<Question> questions = DataLoader.getQuestions();
-    questions.add(q);
+    QuestionList.getInstance().getQuestions().add(q);
 
-    boolean saved = DataWriter.saveQuestions(questions);
-
+        boolean saved = DataWriter.saveQuestions(
+            QuestionList.getInstance().getQuestions()
+        );
     if (saved) {
         feedbackLabel.setText("Question submitted!");
         feedbackLabel.setStyle("-fx-text-fill: #22c55e;");
+
+        clearForm();
+
     } else {
         feedbackLabel.setText("Could not save question.");
         feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");

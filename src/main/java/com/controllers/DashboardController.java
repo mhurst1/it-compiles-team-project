@@ -72,8 +72,8 @@ public class DashboardController {
             addQuestionBtn.setManaged(false);
         }
 
-        questions = new ArrayList<>(QuestionList.getInstance().getQuestions());
-
+        questions = QuestionList.getInstance().getQuestions();
+      
         if (App.currentUser != null) {
             String name = App.currentUser.getFirstName();
             welcomeLabel.setText(name);
