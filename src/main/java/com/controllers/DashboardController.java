@@ -16,9 +16,11 @@ import com.interviews.DataLoader;
 import com.interviews.Difficulty;
 import com.interviews.Language;
 import com.interviews.Question;
+import com.interviews.Status;
 
 public class DashboardController {
 
+    @FXML private Button adminDashboardButton;
     @FXML private Label welcomeLabel;
     @FXML private Label welcomeGreeting;
     @FXML private Label contentSubtitle;
@@ -51,6 +53,11 @@ public class DashboardController {
 
     @FXML
     private void initialize() {
+        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
+            adminDashboardButton.setVisible(false);
+            adminDashboardButton.setManaged(false);
+        }
+
         questions = DataLoader.getQuestions();
 
         if (App.currentUser != null) {
@@ -58,7 +65,7 @@ public class DashboardController {
             welcomeLabel.setText(name);
             welcomeGreeting.setText("Welcome, " + name + "!");
         } else {
-            welcomeLabel.setText("");
+            welcomeLabel.setText("Unknown User");
             welcomeGreeting.setText("Welcome!");
         }
 
@@ -276,7 +283,18 @@ public class DashboardController {
     @FXML
     private void goToProfile() {
         try {
-            App.setRoot("profile");
+            App.setRoot(App.currentUser != null ? "profile" : "login");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToAdminDashboard() {
+        try {
+            if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
+                App.setRoot("admindashboard");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -48,6 +48,7 @@ public class UserPageController {
 
         User user = App.currentUser;
         if (user == null) {
+            welcomeLabel.setText("Unknown User");
             setEmptyState();
             return;
         }
@@ -57,7 +58,7 @@ public class UserPageController {
             welcomeLabel.setText(name);
             welcomeGreeting.setText("Welcome, " + name + "!");
         } else {
-            welcomeLabel.setText("");
+            welcomeLabel.setText("Unknown User");
             welcomeGreeting.setText("Welcome!");
         }
 
@@ -105,8 +106,7 @@ public class UserPageController {
 
     @FXML
     private void goToProfile() throws IOException {
-        App.setRoot("profile");
-
+        App.setRoot(App.currentUser != null ? "profile" : "login");
     }
 
     @FXML

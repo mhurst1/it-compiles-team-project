@@ -69,6 +69,7 @@ public class ProfileController {
         User user = App.currentUser;
 
         if (user == null) {
+            welcomeLabel.setText("Unknown User");
             setEmptyState();
             return;
         }
@@ -79,7 +80,7 @@ public class ProfileController {
             name = App.currentUser.getFirstName();
             welcomeLabel.setText(name);
         } else {
-            welcomeLabel.setText("");
+            welcomeLabel.setText("Unknown User");
         }
 
         welcomeLabel.setText(name);
@@ -106,7 +107,7 @@ public class ProfileController {
 
     @FXML
     private void goToProfile() throws IOException {
-        App.setRoot("profile");
+        App.setRoot(App.currentUser != null ? "profile" : "login");
     }
 
     @FXML

@@ -67,6 +67,8 @@ public class LeaderboardController {
         if (App.currentUser != null) {
             welcomeLabel.setText(App.currentUser.getFirstName());
             welcomeGreeting.setText("Welcome, " + App.currentUser.getFirstName() + "!");
+        } else {
+            welcomeLabel.setText("Unknown User");
         }
 
         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
@@ -312,12 +314,12 @@ public class LeaderboardController {
 
     @FXML
     private void goToCommunity() throws IOException {
-        App.setRoot("community");
+        App.setRoot("leaderboard");
     }
 
-     @FXML
+    @FXML
     private void goToProfile() throws IOException {
-        App.setRoot("profile");
+        App.setRoot(App.currentUser != null ? "profile" : "login");
     }
 
     @FXML

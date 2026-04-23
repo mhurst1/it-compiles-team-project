@@ -55,6 +55,8 @@ public class BrowseSolutions {
     public void initialize() {
         if (App.currentUser != null) {
             navUsername.setText(App.currentUser.getFirstName());
+        } else {
+            navUsername.setText("Unknown User");
         }
 
         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
@@ -384,7 +386,7 @@ public class BrowseSolutions {
     @FXML
     private void goToProfile() {
         try {
-            App.setRoot("profile");
+            App.setRoot(App.currentUser != null ? "profile" : "login");
         } catch (IOException ex) {
             ex.printStackTrace();
         }

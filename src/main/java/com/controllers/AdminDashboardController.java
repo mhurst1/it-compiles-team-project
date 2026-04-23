@@ -100,7 +100,7 @@ public class AdminDashboardController {
     @FXML
     private void goToProfile() {
         try {
-            App.setRoot("profile");
+            App.setRoot(App.currentUser != null ? "profile" : "login");
         } catch (IOException e) {
             e.printStackTrace();
         }

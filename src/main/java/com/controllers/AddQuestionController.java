@@ -68,6 +68,8 @@ public class AddQuestionController {
 
         if (App.currentUser != null) {
             welcomeLabel.setText(App.currentUser.getFirstName());
+        } else {
+            welcomeLabel.setText("Unknown User");
         }
         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
             adminDashboardButton.setVisible(false);
@@ -143,7 +145,7 @@ public class AddQuestionController {
     @FXML
     private void goToHome() {
         try {
-            App.setRoot("dashboard");
+            App.setRoot("userpage");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -179,7 +181,7 @@ public class AddQuestionController {
     @FXML
     private void goToProfile() {
         try {
-            App.setRoot("profile");
+            App.setRoot(App.currentUser != null ? "profile" : "login");
         } catch (IOException e) {
             e.printStackTrace();
         }
