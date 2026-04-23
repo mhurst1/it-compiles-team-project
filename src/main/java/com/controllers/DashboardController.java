@@ -2,48 +2,37 @@ package com.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+
 import com.interviews.App;
 import com.interviews.DataLoader;
 import com.interviews.Difficulty;
 import com.interviews.Question;
 import com.interviews.Status;
 
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
 public class DashboardController {
 
     @FXML private Button adminDashboardButton;
+    @FXML private Button addQuestionBtn;
 
-    @FXML 
-    private Label welcomeLabel;
+    @FXML private Label welcomeLabel;
+    @FXML private Label welcomeGreeting;
+    @FXML private Label contentSubtitle;
 
-    @FXML 
-    private Label welcomeGreeting;
+    @FXML private VBox questionCardList;
 
-    @FXML 
-    private Label contentSubtitle;
+    @FXML private Button filterAllBtn;
+    @FXML private Button filterEasyBtn;
+    @FXML private Button filterMediumBtn;
+    @FXML private Button filterHardBtn;
 
-    @FXML 
-    private VBox questionCardList;
-
-    @FXML 
-    private Button filterAllBtn;
-
-    @FXML 
-    private Button filterEasyBtn;
-
-    @FXML 
-    private Button filterMediumBtn;
-    
-    @FXML
-    private Button filterHardBtn;
-
-    @FXML
-    private TextField searchField;
+    @FXML private TextField searchField;
 
     private ArrayList<Question> questions;
     private Difficulty activeFilter = null;
@@ -51,6 +40,9 @@ public class DashboardController {
     @FXML
     private void initialize() {
         questions = DataLoader.getQuestions();
+        if (questions == null) {
+            questions = new ArrayList<>();
+        }
 
         if (App.currentUser != null) {
             String name = App.currentUser.getFirstName();
@@ -61,16 +53,25 @@ public class DashboardController {
             welcomeGreeting.setText("Welcome!");
         }
 
-
         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
             adminDashboardButton.setVisible(false);
             adminDashboardButton.setManaged(false);
-}
+        }
+
+        boolean canAddQuestion = canAddQuestion();
+        addQuestionBtn.setVisible(canAddQuestion);
+        addQuestionBtn.setManaged(canAddQuestion);
 
         contentSubtitle.setText(questions.size() + " questions across all topics");
         loadCards(questions);
 
         searchField.textProperty().addListener((obs, oldVal, newVal) -> applyFilters());
+    }
+
+    private boolean canAddQuestion() {
+        return App.currentUser != null &&
+               (App.currentUser.getStatus() == Status.ADMIN ||
+                App.currentUser.getStatus() == Status.CONTRIBUTOR);
     }
 
     @FXML
@@ -104,15 +105,17 @@ public class DashboardController {
     private void applyFilters() {
         String query = searchField.getText().trim().toLowerCase();
         ArrayList<Question> result = activeFilter == null ? questions : filterByDifficulty(activeFilter);
+
         if (!query.isEmpty()) {
             ArrayList<Question> searched = new ArrayList<>();
             for (Question q : result) {
-                if (q.getTitle().toLowerCase().contains(query)) {
+                if (q.getTitle() != null && q.getTitle().toLowerCase().contains(query)) {
                     searched.add(q);
                 }
             }
             result = searched;
         }
+
         contentSubtitle.setText(result.size() + " question" + (result.size() == 1 ? "" : "s") + " found");
         loadCards(result);
     }
@@ -163,11 +166,11 @@ public class DashboardController {
     }
 
     @FXML
-        private void goToAdminDashboard() throws IOException {
-            if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
-                App.setRoot("admindashboard");
-            }
+    private void goToAdminDashboard() throws IOException {
+        if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
+            App.setRoot("admindashboard");
         }
+    }
 
     @FXML
     private void goToProfile() {
@@ -179,22 +182,19 @@ public class DashboardController {
     }
 
     @FXML
-    private void goToAddQuestion() {
-        try {
+    private void goToAddQuestion() throws IOException {
+        if (canAddQuestion()) {
             App.setRoot("addquestion");
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
     private void loadCards(ArrayList<Question> list) {
         questionCardList.getChildren().clear();
         QuestionCardController cardBuilder = new QuestionCardController();
+
         for (int i = 0; i < list.size(); i++) {
             HBox card = cardBuilder.buildCard(list.get(i), i + 1);
             questionCardList.getChildren().add(card);
         }
     }
-
-    
 }
