@@ -211,6 +211,7 @@ public class ProfileController {
 
         nameField.setText(fullName);
         usernameField.setText(safe(user.getUsername()));
+        passwordField.setText(safe(user.getPassword()));
         emailField.setText(safe(user.getEmail()));
         gradYearField.setText(String.valueOf(user.getGraduationYear()));
     }

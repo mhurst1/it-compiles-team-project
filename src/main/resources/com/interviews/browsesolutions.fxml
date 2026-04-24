@@ -70,11 +70,22 @@
 
                     <Label fx:id="questionTitle" styleClass="question-page-title" text="" wrapText="true" />
 
-                    <HBox alignment="CENTER_LEFT" spacing="8">
-                        <Label fx:id="categoryBadge" styleClass="cat-badge" text="" />
-                        <Label fx:id="difficultyBadge" styleClass="diff-badge" text="" />
-                        <Label fx:id="answersLabel" styleClass="answers-label" text="" />
-                    </HBox>
+                   <VBox spacing="6">
+
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <Label fx:id="starLabel" text="☆" styleClass="star-label" onMouseClicked="#toggleStar"/>
+                            <Label fx:id="languageBadge" styleClass="badge badge-language"/>
+                            <Label fx:id="difficultyBadge" styleClass="diff-badge"/>
+                        </HBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="authorLabel" styleClass="question-author"/>
+                        </HBox>
+
+                        <Label fx:id="answersLabel" styleClass="answers-label"/>
+
+                    </VBox>
 
                     <VBox styleClass="description-box">
                         <padding><Insets bottom="18" left="18" right="18" top="18" /></padding>

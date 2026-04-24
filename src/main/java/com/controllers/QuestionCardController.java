@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.interviews.App;
 import com.interviews.Difficulty;
+import com.interviews.Language;
 import com.interviews.Question;
 import com.interviews.UserSolution;
 import javafx.geometry.Insets;
@@ -43,6 +44,9 @@ public class QuestionCardController {
         Label badge = new Label(difficultyText(question.getDifficulty()));
         badge.getStyleClass().addAll("badge", difficultyBadgeClass(question.getDifficulty()));
 
+        Label languageBadge = new Label(languageText(question.getLanguage()));
+        languageBadge.getStyleClass().add("badge");
+
         int totalVotes = 0;
         if (question.getSolutionList() != null) {
             for (UserSolution sol : question.getSolutionList()) {
@@ -55,7 +59,7 @@ public class QuestionCardController {
         Label arrow = new Label("›");
         arrow.getStyleClass().add("arrow");
 
-        HBox card = new HBox(12, dot, number, titleBox, badge, votes, arrow);
+        HBox card = new HBox(12, dot, number, titleBox, languageBadge, badge, votes, arrow);
         card.getStyleClass().add("question-card");
         card.setAlignment(Pos.CENTER_LEFT);
         card.setPadding(new Insets(12, 14, 12, 14));
@@ -89,6 +93,11 @@ public class QuestionCardController {
         }
     }
 
+     private String languageText(Language l) {
+        if (l == null) return "Unknown";
+        return l.name();
+    }
+
     private String difficultyBadgeClass(Difficulty d) {
         if (d == null) {
             return "badge-easy";
@@ -103,5 +112,6 @@ public class QuestionCardController {
             default:
                 return "badge-easy";
         }
+    
     }
 }

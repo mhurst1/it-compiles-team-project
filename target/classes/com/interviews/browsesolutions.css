@@ -83,6 +83,27 @@
     -fx-font-weight: bold;
 }
 
+.star-label {
+    -fx-text-fill: #9ca3af; /* gray */
+    -fx-font-size: 16px;
+}
+
+.starred {
+    -fx-text-fill: gold;
+}
+
+.badge-language {
+    -fx-background-color: #e0f2fe;
+    -fx-text-fill: #0369a1;
+    -fx-padding: 2 8 2 8;
+    -fx-background-radius: 10;
+}
+
+.question-author {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 12px;
+    
+}
 .cat-badge {
     -fx-background-color: #ede9fe;
     -fx-text-fill: #7734ED;

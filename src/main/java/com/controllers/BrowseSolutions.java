@@ -22,6 +22,7 @@ import com.interviews.App;
 import com.interviews.Comment;
 import com.interviews.UserList;
 import com.interviews.Difficulty;
+import com.interviews.Language;
 import com.interviews.Question;
 import com.interviews.QuestionList;
 import com.interviews.Section;
@@ -38,8 +39,10 @@ public class BrowseSolutions {
     private Label navUsername;
     @FXML
     private Label questionTitle;
-    @FXML
-    private Label categoryBadge;
+
+    @FXML private Label starLabel;
+    @FXML private Label languageBadge;
+    @FXML private Label authorLabel;
     @FXML
     private Label difficultyBadge;
     @FXML
@@ -74,6 +77,33 @@ public class BrowseSolutions {
         }
         Question q = App.currentQuestion;
 
+        if (q != null) {
+        if (App.currentUser != null && App.currentUser.getStarredQuestions() != null) {
+                boolean starred = false;
+                for (Question s : App.currentUser.getStarredQuestions()) {
+                    if (s.getId().equals(q.getId())) {
+                        starred = true;
+                        break;
+                    }
+                }
+                starLabel.setText(starred ? "★" : "☆");
+            } else {
+                starLabel.setText("☆");
+            }
+
+            if (q.getLanguage() != null) {
+                languageBadge.setText(languageText(q.getLanguage()));
+            } else {
+                languageBadge.setText("Unknown");
+            }
+            
+            if (q.getUser() != null && q.getUser().getUsername() != null) {
+                authorLabel.setText("by " + q.getUser().getUsername());
+            } else {
+                authorLabel.setText("by Anonymous");
+            }
+        }
+
         if (q == null) {
             questionTitle.setText("No question selected");
             questionDescription.setText("");
@@ -81,6 +111,8 @@ public class BrowseSolutions {
             updateDifficultyBadge(null);
             return;
         }
+
+        updateStarUI();
 
         questionTitle.setText(q.getTitle() != null ? q.getTitle() : "");
         questionDescription.setText(buildDescriptionText(q));
@@ -91,6 +123,32 @@ public class BrowseSolutions {
         answersLabel.setText(count + (count == 1 ? " Answer" : " Answers"));
 
         populateSolutions(q);
+    }
+
+    @FXML
+    private void toggleStar() {
+        if (App.currentUser == null || App.currentQuestion == null) return;
+
+        ArrayList<Question> starred = App.currentUser.getStarredQuestions();
+        Question current = App.currentQuestion;
+
+        boolean exists = false;
+        for (Question q : starred) {
+            if (q.getId().equals(current.getId())) {
+                exists = true;
+                break;
+            }
+        }
+
+        if (exists) {
+            starred.removeIf(q -> q.getId().equals(current.getId()));
+        } else {
+            starred.add(current);
+        }
+
+        UserList.getInstance().save();
+
+        updateStarUI();
     }
 
     private String buildDescriptionText(Question q) {
@@ -115,6 +173,12 @@ public class BrowseSolutions {
             }
         }
         return sb.toString();
+    }
+
+    
+    private String languageText(Language l) {
+        if (l == null) return "Unknown";
+        return l.name();
     }
 
     private void updateDifficultyBadge(Difficulty difficulty) {
@@ -411,6 +475,29 @@ public class BrowseSolutions {
     private void goToAdminDashboard() throws IOException {
         if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
             App.setRoot("admindashboard");
+     }
+    }
+
+    private void updateStarUI() {
+    if (App.currentUser == null || App.currentQuestion == null) {
+        starLabel.setText("☆");
+        return;
+    }
+
+    boolean starred = false;
+    for (Question q : App.currentUser.getStarredQuestions()) {
+        if (q.getId().equals(App.currentQuestion.getId())) {
+            starred = true;
+            break;
         }
+    }
+
+    starLabel.setText(starred ? "★" : "☆");
+
+    starLabel.getStyleClass().remove("starred");
+    if (starred) {
+        starLabel.getStyleClass().add("starred");
+    }
 }
 }
+
