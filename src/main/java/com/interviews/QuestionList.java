@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,12 +17,18 @@ import org.json.simple.JSONObject;
 public class QuestionList {
     private static QuestionList questionList;
     private ArrayList<Question> questions;
+    private ArrayList<User> users;
 
     /**
      * Initializes the QuestionList with an empty list of questions. This constructor is private to enforce the singleton pattern, ensuring that only one instance of QuestionList exists throughout the application. The getInstance() method is used to access the single instance of QuestionList, and it will create the instance if it does not already exist.
      */
     public QuestionList() {
         questions = DataLoader.getQuestions();
+        users = DataLoader.getLastLoadedUsers();
+    }
+
+    public ArrayList<User> getUsers() {
+        return users;
     }
 
     /**
@@ -191,7 +198,8 @@ public class QuestionList {
             obj.put("description", us.getDescription() != null ? us.getDescription() : "");
             obj.put("thread", buildCommentArray(us.getReplies()));
             obj.put("user-vote", us.getUserVote());
-            obj.put("total-vote", (long) us.getTotalVote());
+            obj.put("up-voters", buildUUIDArray(us.getUpVoters()));
+            obj.put("down-voters", buildUUIDArray(us.getDownVoters()));
             arr.add(obj);
         }
         return arr;
@@ -207,6 +215,16 @@ public class QuestionList {
             obj.put("comment", c.getComment() != null ? c.getComment() : "");
             obj.put("replies", buildCommentArray(c.getReplies()));
             arr.add(obj);
+        }
+        return arr;
+    }
+
+    @SuppressWarnings("unchecked")
+    private JSONArray buildUUIDArray(ArrayList<UUID> list) {
+        JSONArray arr = new JSONArray();
+        if (list == null) return arr;
+        for (UUID id : list) {
+            if (id != null) arr.add(id.toString());
         }
         return arr;
     }

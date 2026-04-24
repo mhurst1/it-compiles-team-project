@@ -88,6 +88,7 @@
                     <Button fx:id="filterEasyBtn" mnemonicParsing="false" onAction="#filterEasy" styleClass="filter-btn" text="Easy" />
                     <Button fx:id="filterMediumBtn" mnemonicParsing="false" onAction="#filterMedium" styleClass="filter-btn" text="Medium" />
                     <Button fx:id="filterHardBtn" mnemonicParsing="false" onAction="#filterHard" styleClass="filter-btn" text="Hard" />
+                    <Button fx:id="filterStarredBtn" mnemonicParsing="false" onAction="#filterStarred" styleClass="filter-btn" text="⭐ Starred" />
                     <Button fx:id="addQuestionBtn" mnemonicParsing="false" onAction="#goToAddQuestion" styleClass="add-btn" text="+" />
                 </HBox>
 

@@ -6,8 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import org.json.simple.JSONArray;
@@ -84,20 +82,8 @@ public class DataWriter {
      */
     @SuppressWarnings("unchecked")
     public static boolean saveQuestions(ArrayList<Question> questions) {
-        Map<UUID, Question> questionMap = new HashMap<>();
-        for (Question q : DataLoader.getQuestions()) {
-            questionMap.put(q.getId(), q);
-        }
-        for (Question q : questions) {
-            if (questionMap.containsKey(q.getId())) {
-                System.err.println("DataWriter: question already exists:" + q.getTitle());
-            } else {
-                questionMap.put(q.getId(), q);
-            }
-        }
-
         JSONArray array = new JSONArray();
-        for (Question q : questionMap.values()) {
+        for (Question q : questions) {
             JSONObject obj = new JSONObject();
 
             String qId = "";
@@ -256,8 +242,19 @@ public class DataWriter {
 
             obj.put("thread", commentArray(us.getReplies()));
             obj.put("user-vote", us.getUserVote());
-            obj.put("total-vote", (long) us.getTotalVote());
+            obj.put("up-voters",   uuidArray(us.getUpVoters()));
+            obj.put("down-voters", uuidArray(us.getDownVoters()));
             arr.add(obj);
+        }
+        return arr;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static JSONArray uuidArray(ArrayList<UUID> list) {
+        JSONArray arr = new JSONArray();
+        if (list == null) return arr;
+        for (UUID id : list) {
+            if (id != null) arr.add(id.toString());
         }
         return arr;
     }
@@ -374,7 +371,7 @@ public class DataWriter {
      *
      * @param args command-line arguments (not used)
      */
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         System.out.println("========= DATA WRITER TESTER =========\n");
 
         // Fixed UUIDs so re-running this tester is safe — DataWriter skips
@@ -549,6 +546,7 @@ public class DataWriter {
 
         System.out.println("========= DONE =========");
     }
+    */
 
     // -------------------------------------------------------------------------
     // Path resolution — walks up the directory tree to find the json/ folder

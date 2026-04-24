@@ -15,7 +15,7 @@ public class UserList {
      * Creates a user list by loading users from persistent storage.
      */
     public UserList(){
-        users = DataLoader.getUsers();
+        users = QuestionList.getInstance().getUsers();
     }
 
 

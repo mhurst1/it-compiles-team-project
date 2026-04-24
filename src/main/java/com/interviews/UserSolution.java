@@ -13,9 +13,8 @@ public class UserSolution {
     private UUID solutionID;
     private UUID questionID;
     public boolean userVote;
-    public int totalVote;
-    private int upVotes;
-    private int downVotes;
+    private ArrayList<UUID> upVoters;
+    private ArrayList<UUID> downVoters;
 
     /**
      * Creates a fully populated solution object.
@@ -26,12 +25,14 @@ public class UserSolution {
      * @param replies the comments attached to the solution
      * @param totalVote the current total vote count
      */
-    public UserSolution(User user, String description, UUID solutionID, ArrayList<Comment> replies, int totalVote){
+    public UserSolution(User user, String description, UUID solutionID, ArrayList<Comment> replies,
+                        ArrayList<UUID> upVoters, ArrayList<UUID> downVoters) {
         this.user = user;
         this.description = description;
         this.solutionID = (solutionID == null) ? UUID.randomUUID() : solutionID;
-        this.replies = replies;
-        this.totalVote = totalVote;
+        this.replies = (replies != null) ? replies : new ArrayList<>();
+        this.upVoters = (upVoters != null) ? upVoters : new ArrayList<>();
+        this.downVoters = (downVoters != null) ? downVoters : new ArrayList<>();
     }
 
     /**
@@ -45,7 +46,8 @@ public class UserSolution {
         this.description = description;
         this.solutionID = UUID.randomUUID();
         this.replies = new ArrayList<>();
-        this.totalVote = 0;
+        this.upVoters = new ArrayList<>();
+        this.downVoters = new ArrayList<>();
         this.userVote = false;
     }
 
@@ -90,8 +92,25 @@ public class UserSolution {
      *
      * @return the total vote count
      */
-    public int getTotalVote(){
-        return totalVote;
+    public int getUpVotes() { return upVoters.size(); }
+    public int getDownVotes() { return downVoters.size(); }
+    public int getTotalVote() { return Math.max(0, upVoters.size() - downVoters.size()); }
+    public ArrayList<UUID> getUpVoters() { return upVoters; }
+    public ArrayList<UUID> getDownVoters() { return downVoters; }
+
+    public int getVoteStateForUser(UUID userId) {
+        if (userId == null) return 0;
+        if (upVoters.contains(userId)) return 1;
+        if (downVoters.contains(userId)) return -1;
+        return 0;
+    }
+
+    public void castVote(UUID userId, int direction) {
+        if (userId == null) return;
+        upVoters.remove(userId);
+        downVoters.remove(userId);
+        if (direction == 1) upVoters.add(userId);
+        else if (direction == -1) downVoters.add(userId);
     }
 
     /**

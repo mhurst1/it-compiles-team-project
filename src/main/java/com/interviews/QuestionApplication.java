@@ -284,9 +284,10 @@ public class QuestionApplication {
     * @param totalVote the total vote count for the solution
     */
     public void addUserSolution(User user, String description, UUID solutionID,
-            ArrayList<Comment> replies, int totalVote) {
-        
-        UserSolution newSolu = new UserSolution(user, description, solutionID, replies, totalVote);
+            ArrayList<Comment> replies) {
+
+        UserSolution newSolu = new UserSolution(user, description, solutionID, replies,
+                new ArrayList<>(), new ArrayList<>());
         if (currentQuestion != null) {
             newSolu.setQuestionId(currentQuestion.getId());
         }

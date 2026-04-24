@@ -255,6 +255,11 @@ public class LeaderboardController {
         roleCell.setMinWidth(130);
         roleCell.setAlignment(Pos.CENTER_LEFT);
 
+        int level = (!user.getAchievements().isEmpty()) ? user.getAchievements().get(0).getUserLevel() : 1;
+        Label levelLabel = new Label("Lv " + level);
+        levelLabel.setMinWidth(60);
+        levelLabel.getStyleClass().add("lb-level");
+
         Label solvedLabel = new Label(String.valueOf(user.getAnsweredQuestions().size()));
         solvedLabel.setMinWidth(145);
         solvedLabel.getStyleClass().add("lb-solved");
@@ -265,7 +270,7 @@ public class LeaderboardController {
         votesLabel.getStyleClass().add("lb-votes");
 
         int streak = getStreak(user);
-        String streakText = streak == 0 ? "today" : streak + "d 🔥";
+        String streakText = streak == 0 ? "0" : streak + "d 🔥";
         Label streakLabel = new Label(streakText);
         streakLabel.setMinWidth(90);
         streakLabel.getStyleClass().add(streak > 5 ? "lb-streak-hot" : "lb-streak");
@@ -273,7 +278,7 @@ public class LeaderboardController {
         Button viewBtn = new Button("View Profile");
         viewBtn.getStyleClass().add("lb-view-btn");
 
-        row.getChildren().addAll(rankLabel, usernameLabel, roleCell, solvedLabel, votesLabel, streakLabel, viewBtn);
+        row.getChildren().addAll(rankLabel, usernameLabel, roleCell, levelLabel, solvedLabel, votesLabel, streakLabel, viewBtn);
         return row;
     }
 

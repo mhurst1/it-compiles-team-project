@@ -21,6 +21,12 @@ import org.json.simple.parser.ParseException;
  */
 public class DataLoader {
 
+    private static ArrayList<User> loadedUsers = new ArrayList<>();
+
+    public static ArrayList<User> getLastLoadedUsers() {
+        return loadedUsers;
+    }
+
     private static final String PROJECT_DIR = "it-compiles-team-project";
 
     /** Path to the users JSON file. */
@@ -83,6 +89,26 @@ public class DataLoader {
             System.err.println("DataLoader: could not load questions: " + e.getMessage());
         }
 
+        // Second pass: resolve answered/starred questions for each user
+        Map<UUID, Question> questionsById = new HashMap<>();
+        for (Question q : questions) {
+            if (q.getId() != null) questionsById.put(q.getId(), q);
+        }
+        try (FileReader r2 = new FileReader(USERS_PATH.toFile())) {
+            JSONArray arr2 = (JSONArray) new JSONParser().parse(r2);
+            for (Object o : arr2) {
+                JSONObject uo = (JSONObject) o;
+                UUID uid = toUUID(getString(uo, "id"));
+                User user = usersById.get(uid);
+                if (user == null) continue;
+                resolveQuestionList(user.getAnsweredQuestions(), (JSONArray) uo.get("answered-questions"), questionsById);
+                resolveQuestionList(user.getStarredQuestions(),  (JSONArray) uo.get("starred-questions"),  questionsById);
+            }
+        } catch (IOException | ParseException e) {
+            System.err.println("DataLoader: could not resolve user questions: " + e.getMessage());
+        }
+
+        loadedUsers = new ArrayList<>(usersById.values());
         return questions;
     }
 
@@ -180,7 +206,6 @@ public class DataLoader {
                 UUID solId = toUUID(getString(sol, "id"));
                 UUID qId = toUUID(getString(sol, "question-id"));
                 String desc = getString(sol, "description");
-                int totalVote = getInt(sol, "total-vote");
                 UUID solUserId = toUUID(getString(sol, "user"));
                 User solUser = null;
                 if (solUserId != null) {
@@ -188,7 +213,15 @@ public class DataLoader {
                 }
                 ArrayList<Comment> thread = parseComments((JSONArray) sol.get("thread"), usersById);
 
-                UserSolution solution = new UserSolution(solUser, desc, solId, thread, totalVote);
+                ArrayList<UUID> upVoters = toUUIDList((JSONArray) sol.get("up-voters"));
+                ArrayList<UUID> downVoters = toUUIDList((JSONArray) sol.get("down-voters"));
+                // backward-compat: if no voter lists exist but total-vote does, seed upVoters
+                if (upVoters.isEmpty() && downVoters.isEmpty()) {
+                    int legacy = getInt(sol, "total-vote");
+                    for (int _i = 0; _i < legacy; _i++) upVoters.add(UUID.randomUUID());
+                }
+
+                UserSolution solution = new UserSolution(solUser, desc, solId, thread, upVoters, downVoters);
                 if (qId != null) {
                     solution.setQuestionId(qId);
                 } else {
@@ -480,6 +513,27 @@ public class DataLoader {
             for (Comment reply : comment.getReplies()) {
                 printComment(reply, indent + "  ");
             }
+        }
+    }
+
+    private static ArrayList<UUID> toUUIDList(JSONArray arr) {
+        ArrayList<UUID> list = new ArrayList<>();
+        if (arr == null) return list;
+        for (Object o : arr) {
+            if (o == null) continue;
+            UUID id = toUUID(o.toString());
+            if (id != null) list.add(id);
+        }
+        return list;
+    }
+
+    private static void resolveQuestionList(ArrayList<Question> target, JSONArray uuids, Map<UUID, Question> map) {
+        if (uuids == null) return;
+        for (Object id : uuids) {
+            if (id == null) continue;
+            UUID qId = toUUID(id.toString());
+            Question q = map.get(qId);
+            if (q != null && !target.contains(q)) target.add(q);
         }
     }
 

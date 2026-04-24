@@ -2,6 +2,7 @@ package com.controllers;
 
 import com.interviews.App;
 import com.interviews.DataWriter;
+import com.interviews.QuestionList;
 import com.interviews.User;
 import com.interviews.UserList;
 import com.interviews.Status;
@@ -128,6 +129,8 @@ public class ProfileController {
 
     @FXML
     private void handleLogout(ActionEvent event) throws IOException {
+        UserList.getInstance().save();
+        QuestionList.getInstance().saveAll();
         App.currentUser = null;
         App.setRoot("login");
     }
