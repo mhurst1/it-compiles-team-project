@@ -8,6 +8,7 @@ import com.interviews.Status;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import java.util.List;
@@ -37,7 +38,7 @@ public class UserPageController {
     @FXML private Label downvotesReceived;
 
     @FXML private VBox questionsSolvedBox;
-    @FXML private VBox mySolutionsBox;
+    @FXML private VBox questionsStarredBox;
     @FXML private VBox recentActivityBox;
 
     @FXML
@@ -93,7 +94,7 @@ public class UserPageController {
         downvotesReceived.setText("0");
 
         populateSolvedQuestions(user.getAnsweredQuestions());
-        populateSolutions(user);
+        populateStarredQuestions(user.getStarredQuestions());
         populateRecentActivity(user);
     }
 
@@ -136,23 +137,42 @@ public class UserPageController {
         questionsSolvedBox.getChildren().clear();
 
         if (questions == null || questions.isEmpty()) {
-            questionsSolvedBox.getChildren().add(new Label("No questions solved yet."));
+            questionsSolvedBox.getChildren().add(new Label("No questions solved yet.") {
+                {
+                    setStyle("-fx-text-fill: #888888;");
+                }
+            });
             return;
         }
 
+        QuestionCardController cardBuilder = new QuestionCardController(); 
+
+        int index = 1;
         for (Question q : questions) {
-            String title = q != null && q.getTitle() != null ? q.getTitle() : "Untitled Question";
-            Label item = new Label("• " + title);
-            questionsSolvedBox.getChildren().add(item);
+            HBox card = cardBuilder.buildCard(q, index++); 
+            questionsSolvedBox.getChildren().add(card);
         }
     }
 
-    private void populateSolutions(User user) {
-        mySolutionsBox.getChildren().clear();
+     private void populateStarredQuestions(List<Question> questions) {
+        questionsStarredBox.getChildren().clear();
 
-        // Your User class currently does not expose a getSolutions() method.
-        // So for now, show a placeholder until that getter is added.
-        mySolutionsBox.getChildren().add(new Label("No solutions loaded yet."));
+        if (questions == null || questions.isEmpty()) {
+            questionsStarredBox.getChildren().add(new Label("No starred questions.") {
+                {
+                    setStyle("-fx-text-fill: #888888;");
+                }
+            });
+            return;
+        }
+
+        QuestionCardController cardBuilder = new QuestionCardController();
+
+        int index = 1;
+        for (Question q : questions) {
+            HBox card = cardBuilder.buildCard(q, index++);
+            questionsStarredBox.getChildren().add(card);
+        }
     }
 
     private void populateRecentActivity(User user) {
@@ -184,7 +204,7 @@ public class UserPageController {
         if (downvotesReceived != null) downvotesReceived.setText("0");
 
         if (questionsSolvedBox != null) questionsSolvedBox.getChildren().clear();
-        if (mySolutionsBox != null) mySolutionsBox.getChildren().clear();
+        if (questionsStarredBox != null) questionsStarredBox.getChildren().clear();
         if (recentActivityBox != null) recentActivityBox.getChildren().clear();
     }
 
