@@ -31,7 +31,7 @@ public class UserSolutionTest {
 
     @Test
     public void testCalculateVotesReturnsDifference() {
-        UserSolution solution = new UserSolution(null, "sample solution", UUID.randomUUID(), new ArrayList<>(), 0);
+        UserSolution solution = new UserSolution(null, "sample solution", UUID.randomUUID(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         int result = solution.calculateVotes(null, 5, 2);
 
@@ -40,7 +40,7 @@ public class UserSolutionTest {
 
     @Test
     public void testCalculateVotesClampsNegativeToZero() {
-        UserSolution solution = new UserSolution(null, "sample solution", UUID.randomUUID(), new ArrayList<>(), 0);
+        UserSolution solution = new UserSolution(null, "sample solution", UUID.randomUUID(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         int result = solution.calculateVotes(null, 2, 5);
 
@@ -49,7 +49,7 @@ public class UserSolutionTest {
 
     @Test
     public void testCalculateVotesWithZeroVotes() {
-        UserSolution solution = new UserSolution(null, "sample solution", UUID.randomUUID(), new ArrayList<>(), 0);
+        UserSolution solution = new UserSolution(null, "sample solution", UUID.randomUUID(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         int result = solution.calculateVotes(null, 0, 0);
 
@@ -58,7 +58,7 @@ public class UserSolutionTest {
 
     @Test
     public void testCalculateVotesWithTenUpvotesAndNoDownvotes() {
-        UserSolution solution = new UserSolution(null, "sample solution", UUID.randomUUID(), new ArrayList<>(), 0);
+        UserSolution solution = new UserSolution(null, "sample solution", UUID.randomUUID(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         int result = solution.calculateVotes(null, 10, 0);
 
@@ -126,17 +126,16 @@ public class UserSolutionTest {
         ArrayList<Comment> replies = new ArrayList<>();
         UUID id = UUID.randomUUID();
 
-        UserSolution solution = new UserSolution(null, "sample solution", id, replies, 5);
+        UserSolution solution = new UserSolution(null, "sample solution", id, replies, new ArrayList<>(), new ArrayList<>());
 
         assertEquals("sample solution", solution.getDescription());
         assertEquals(replies, solution.getReplies());
-        assertEquals(5, solution.getTotalVote());
         assertEquals(id, solution.getSoulutionId());
     }
 
     @Test
     public void testFullConstructorGeneratesUUIDWhenNull() {
-        UserSolution solution = new UserSolution(null, "sample solution", null, new ArrayList<>(), 0);
+        UserSolution solution = new UserSolution(null, "sample solution", null, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
 
         assertNotNull(solution.getSoulutionId());
     }

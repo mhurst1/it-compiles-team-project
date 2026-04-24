@@ -147,10 +147,13 @@ public class Achievement {
         LocalDate today = LocalDate.now();
 
         if (lastActiveDate == null) {
-            streak++;
+            streak = 1;
+        } else if (lastActiveDate.equals(today)) {
+            // already logged in today — no change
         } else if (lastActiveDate.plusDays(1).equals(today)) {
             streak++;
-        } else if (!lastActiveDate.equals(today)) {
+        } else {
+            // missed at least one day — streak resets
             streak = 1;
         }
 

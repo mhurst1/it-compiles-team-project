@@ -92,8 +92,7 @@
                             <Label minWidth="120" styleClass="lb-col-header" text="User" />
                             <Label minWidth="130" styleClass="lb-col-header" text="Role" />
                             <Label minWidth="145" styleClass="lb-col-header" text="Questions Solved" />
-                            <Label minWidth="95" styleClass="lb-col-header" text="Upvotes" />
-                            <Label minWidth="95" styleClass="lb-col-header" text="Downvotes" />
+                            <Label minWidth="190" styleClass="lb-col-header" text="Vote Points" />
                             <Label minWidth="90" styleClass="lb-col-header" text="Streak" />
                             <Label styleClass="lb-col-header" text="Actions" />
                         </HBox>

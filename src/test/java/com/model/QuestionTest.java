@@ -296,7 +296,7 @@ public class QuestionTest {
     @Test
     public void testGetSolutionListSyncsQuestionId() {
         UserSolution sol = new UserSolution(alice, "My solution", UUID.randomUUID(),
-                new ArrayList<>(), 0);
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         q.getSolutionList().add(sol);
         q.getSolutionList(); // triggers sync
         assertEquals(q.getId(), sol.getQuestionId());

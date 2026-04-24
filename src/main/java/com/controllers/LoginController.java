@@ -1,6 +1,7 @@
 package com.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,11 +38,17 @@ public class LoginController {
         User user = UserList.getInstance().getUser(username, password);
         if (user != null) {
             App.currentUser = user;
-            if (user.getAchievements() != null && !user.getAchievements().isEmpty()) {
-                Achievement ach = user.getAchievements().get(0);
-                ach.streakCounter();
-                UserList.getInstance().save();
+            ArrayList<Achievement> achievements = user.getAchievements();
+            if (achievements == null) {
+                achievements = new ArrayList<>();
+                user.setAchievements(achievements);
             }
+            if (achievements.isEmpty()) {
+                achievements.add(new Achievement(0, 1, 0, 0));
+            }
+            Achievement ach = achievements.get(0);
+            ach.streakCounter();
+            UserList.getInstance().save();
             App.setRoot("userpage");
         } else {
             errorLabel.setText("Invalid username or password. Please try again.");
