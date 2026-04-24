@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="700.0" prefWidth="1100.0" stylesheets="@userpage.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.UserPageController">
+<BorderPane prefHeight="700.0" prefWidth="1100.0" stylesheets="@userpage.css, @dashboard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.controllers.UserPageController">
 
     <!-- Navbar-->
     <top>
@@ -160,7 +160,7 @@
 
             <ScrollPane fitToWidth="true" prefHeight="300.0">
                 <content>
-                    <VBox fx:id="mySolutionsBox" spacing="10.0" styleClass="list-box">
+                    <VBox fx:id="questionsStarredBox" spacing="10.0" styleClass="list-box">
                         <padding>
                             <Insets top="5" right="5" bottom="5" left="5"/>
                         </padding>

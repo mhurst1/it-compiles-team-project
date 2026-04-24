@@ -84,7 +84,7 @@ public class DataWriter {
      */
     @SuppressWarnings("unchecked")
     public static boolean saveQuestions(ArrayList<Question> questions) {
-        Map<UUID, Question> questionMap = new HashMap<>();
+        /* Map<UUID, Question> questionMap = new HashMap<>();
         for (Question q : DataLoader.getQuestions()) {
             questionMap.put(q.getId(), q);
         }
@@ -95,9 +95,10 @@ public class DataWriter {
                 questionMap.put(q.getId(), q);
             }
         }
+            */
 
         JSONArray array = new JSONArray();
-        for (Question q : questionMap.values()) {
+        for (Question q : questions) {
             JSONObject obj = new JSONObject();
 
             String qId = "";
