@@ -2,6 +2,7 @@ package com.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import javafx.fxml.FXML;
@@ -53,6 +54,7 @@ public class BrowseSolutions {
     @FXML
     private VBox solutionsContainer;
 
+    private final HashMap<UUID, Integer> voteState = new HashMap<>();
 
     @FXML
     public void initialize() {
@@ -222,6 +224,9 @@ public class BrowseSolutions {
     }
 
     private VBox buildSolutionCard(UserSolution solution) {
+        UUID solId = solution.getSoulutionId();
+        voteState.putIfAbsent(solId, 0);
+
         VBox card = new VBox(0);
         card.getStyleClass().add("solution-card");
 
@@ -251,43 +256,53 @@ public class BrowseSolutions {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        UUID currentUserId = (App.currentUser != null) ? App.currentUser.getId() : null;
-
-        Label totalLabel = new Label(String.valueOf(solution.getTotalVote()));
-        totalLabel.getStyleClass().add("vote-total");
-
-        Button thumbUp = new Button("▲  " + solution.getUpVotes());
+        Button thumbUp = new Button("▲  " + solution.getTotalVote());
         thumbUp.getStyleClass().add("vote-btn");
 
-        Button thumbDown = new Button("▼  " + solution.getDownVotes());
+        Button thumbDown = new Button("▼");
         thumbDown.getStyleClass().add("vote-btn");
 
-        int initState = solution.getVoteStateForUser(currentUserId);
-        refreshVoteStyles(thumbUp, thumbDown, initState);
+        if (voteState.get(solId) == 1) {
+            thumbUp.getStyleClass().add("vote-btn-active");
+        } else if (voteState.get(solId) == -1) {
+            thumbDown.getStyleClass().add("vote-btn-active");
+        }
 
         thumbUp.setOnAction(e -> {
-            if (currentUserId == null) return;
-            int cur = solution.getVoteStateForUser(currentUserId);
-            solution.castVote(currentUserId, cur == 1 ? 0 : 1);
-            thumbUp.setText("▲  " + solution.getUpVotes());
-            thumbDown.setText("▼  " + solution.getDownVotes());
-            totalLabel.setText(String.valueOf(solution.getTotalVote()));
-            refreshVoteStyles(thumbUp, thumbDown, solution.getVoteStateForUser(currentUserId));
+            int current = voteState.get(solId);
+            if (current == 0) {
+                solution.totalVote++;
+                voteState.put(solId, 1);
+            } else if (current == 1) {
+                solution.totalVote--;
+                voteState.put(solId, 0);
+            } else {
+                solution.totalVote += 2;
+                voteState.put(solId, 1);
+            }
+            thumbUp.setText("▲  " + solution.getTotalVote());
+            refreshVoteStyles(thumbUp, thumbDown, voteState.get(solId));
             QuestionList.getInstance().saveAll();
         });
 
         thumbDown.setOnAction(e -> {
-            if (currentUserId == null) return;
-            int cur = solution.getVoteStateForUser(currentUserId);
-            solution.castVote(currentUserId, cur == -1 ? 0 : -1);
-            thumbUp.setText("▲  " + solution.getUpVotes());
-            thumbDown.setText("▼  " + solution.getDownVotes());
-            totalLabel.setText(String.valueOf(solution.getTotalVote()));
-            refreshVoteStyles(thumbUp, thumbDown, solution.getVoteStateForUser(currentUserId));
+            int current = voteState.get(solId);
+            if (current == 0) {
+                solution.totalVote--;
+                voteState.put(solId, -1);
+            } else if (current == -1) {
+                solution.totalVote++;
+                voteState.put(solId, 0);
+            } else {
+                solution.totalVote -= 2;
+                voteState.put(solId, -1);
+            }
+            thumbUp.setText("▲  " + solution.getTotalVote());
+            refreshVoteStyles(thumbUp, thumbDown, voteState.get(solId));
             QuestionList.getInstance().saveAll();
         });
 
-        userRow.getChildren().addAll(avatar, usernameLabel, spacer, totalLabel, thumbUp, thumbDown);
+        userRow.getChildren().addAll(avatar, usernameLabel, spacer, thumbUp, thumbDown);
 
         HBox replyRow = new HBox(8);
         replyRow.setAlignment(Pos.CENTER_LEFT);

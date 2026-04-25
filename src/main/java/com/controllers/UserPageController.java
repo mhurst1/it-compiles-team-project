@@ -3,7 +3,10 @@ package com.controllers;
 import com.interviews.Achievement;
 import com.interviews.App;
 import com.interviews.Question;
+import com.interviews.QuestionList;
 import com.interviews.User;
+import com.interviews.UserList;
+import com.interviews.UserSolution;
 import com.interviews.Status;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,6 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,7 +39,7 @@ public class UserPageController {
     @FXML private Label questionsSolved;
     @FXML private Label currentStreak;
     @FXML private Label rankLabel;
-    @FXML private Label upvotesReceived;
+    @FXML private Label votesReceived;
     @FXML private Label downvotesReceived;
 
     @FXML private VBox questionsSolvedBox;
@@ -80,18 +85,10 @@ public class UserPageController {
 
         questionsSolved.setText(String.valueOf(sizeOf(user.getAnsweredQuestions())));
 
-        Achievement achievement = getFirstAchievement(user);
-        if (achievement != null) {
-            currentStreak.setText(achievement.getStreak() + " days");
-            rankLabel.setText("#" + achievement.getLeaderboardPlace());
-            upvotesReceived.setText(String.valueOf(achievement.getAllVotePoints()));
-        } else {
-            currentStreak.setText("0 days");
-            rankLabel.setText("#0");
-            upvotesReceived.setText("0");
-        }
+        currentStreak.setText(getUserStreak(user) + " days");
+        rankLabel.setText("#" + computeUserRank(user));
+        votesReceived.setText(String.valueOf(computeUserVotePoints(user)));
 
-        downvotesReceived.setText("0");
 
         populateSolvedQuestions(user.getAnsweredQuestions());
         populateStarredQuestions(user.getStarredQuestions());
@@ -175,13 +172,57 @@ public class UserPageController {
         }
     }
 
-    private void populateRecentActivity(User user) {
+   private void populateRecentActivity(User user) {
         recentActivityBox.getChildren().clear();
 
-        // Placeholder activity based on available data
-        recentActivityBox.getChildren().add(new Label("Joined CodeBoard"));
-        recentActivityBox.getChildren().add(new Label("Questions solved: " + sizeOf(user.getAnsweredQuestions())));
-        recentActivityBox.getChildren().add(new Label("Starred questions: " + sizeOf(user.getStarredQuestions())));
+        if (user == null) {
+            Label msg = new Label("Login to view recent activity");
+            msg.getStyleClass().add("activity-item");
+            recentActivityBox.getChildren().add(msg);
+            return;
+        }
+
+        ArrayList<String> activities = new ArrayList<>();
+        ArrayList<Question> answered = user.getAnsweredQuestions();
+
+        ArrayList<Question> userQuestions = new ArrayList<>();
+        for (Question q : QuestionList.getInstance().getQuestions()) {
+            if (q.getUser() != null &&
+                q.getUser().getId().equals(user.getId())) {
+                userQuestions.add(q);
+            }
+        }
+
+        int i = (answered == null ? -1 : answered.size() - 1);
+        int j = userQuestions.size() - 1;
+
+        while (activities.size() < 5 && (i >= 0 || j >= 0)) {
+
+            if (i >= 0) {
+                activities.add("Posted a solution on " + answered.get(i).getTitle());
+                i--;
+            }
+
+            if (activities.size() >= 5) break;
+
+            if (j >= 0) {
+                activities.add("Posted a question: " + userQuestions.get(j).getTitle());
+                j--;
+            }
+        }
+
+        if (activities.isEmpty()) {
+            Label msg = new Label("No recent activity");
+            msg.getStyleClass().add("activity-item");
+            recentActivityBox.getChildren().add(msg);
+            return;
+        }
+
+        for (String text : activities) {
+            Label item = new Label(text);
+            item.getStyleClass().add("activity-item");
+            recentActivityBox.getChildren().add(item);
+        }
     }
 
     private Achievement getFirstAchievement(User user) {
@@ -200,7 +241,7 @@ public class UserPageController {
         if (questionsSolved != null) questionsSolved.setText("0");
         if (currentStreak != null) currentStreak.setText("0 days");
         if (rankLabel != null) rankLabel.setText("#0");
-        if (upvotesReceived != null) upvotesReceived.setText("0");
+        if (votesReceived != null) votesReceived.setText("0");
         if (downvotesReceived != null) downvotesReceived.setText("0");
 
         if (questionsSolvedBox != null) questionsSolvedBox.getChildren().clear();
@@ -222,4 +263,53 @@ public class UserPageController {
     private String safe(String s) {
         return s == null ? "" : s;
     }
+
+
+    private int computeUserVotePoints(User user) {
+        int total = 0;
+
+        for (Question q : QuestionList.getInstance().getQuestions()) {
+            if (q.getSolutionList() == null) continue;
+
+            for (UserSolution sol : q.getSolutionList()) {
+                if (sol.getUser() != null &&
+                    sol.getUser().getId().equals(user.getId())) {
+
+                    total += sol.getTotalVote();
+                }
+            }
+        }
+
+        return total;
+    }
+
+    private int computeUserRank(User currentUser) {
+        ArrayList<User> users = new ArrayList<>(UserList.getInstance().getUsers());
+
+        users.sort((a, b) -> {
+            int cmp = b.getAnsweredQuestions().size() - a.getAnsweredQuestions().size();
+            if (cmp != 0) return cmp;
+
+            cmp = computeUserVotePoints(b) - computeUserVotePoints(a);
+            if (cmp != 0) return cmp;
+
+            return getUserStreak(b) - getUserStreak(a);
+        });
+
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId().equals(currentUser.getId())) {
+                return i + 1;
+            }
+        }
+
+        return users.size();
+    }
+
+    private int getUserStreak(User user) {
+        if (user.getAchievements() == null || user.getAchievements().isEmpty()) {
+            return 0;
+        }
+        return user.getAchievements().get(user.getAchievements().size() - 1).getStreak();
+    }
+    
 }

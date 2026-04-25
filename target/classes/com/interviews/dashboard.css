@@ -234,6 +234,16 @@
     -fx-fill: #d1d5db;
 }
 
+.star-filled {
+    -fx-text-fill: #facc15; /* yellow */
+    -fx-font-size: 14px;
+}
+
+.star-empty {
+    -fx-text-fill: #d1d5db; /* gray */
+    -fx-font-size: 14px;
+}
+
 .question-number {
     -fx-text-fill: #aaa;
     -fx-font-size: 12px;

@@ -17,12 +17,7 @@ import com.interviews.Language;
 import com.interviews.Question;
 import com.interviews.QuestionList;
 import com.interviews.Status;
-import com.interviews.User;
-import com.interviews.UserList;
 import com.interviews.UserSolution;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 public class DashboardController {
 
@@ -37,7 +32,6 @@ public class DashboardController {
     @FXML private Button filterEasyBtn;
     @FXML private Button filterMediumBtn;
     @FXML private Button filterHardBtn;
-    @FXML private Button filterStarredBtn;
     @FXML private TextField searchField;
 
     // Left sidebar
@@ -166,82 +160,88 @@ public class DashboardController {
 
             ArrayList<Achievement> ach = App.currentUser.getAchievements();
             if (ach != null && !ach.isEmpty()) {
-                statStreakValue.setText(ach.get(ach.size() - 1).getStreak() + " days");
+                Achievement a = ach.get(ach.size() - 1);
+                statStreakValue.setText(a.getStreak() + " days");
+                statRankValue.setText("#" + a.getLeaderboardPlace());
             } else {
                 statStreakValue.setText("0 days");
+                statRankValue.setText("#0");
             }
-            statRankValue.setText("#" + computeUserRank());
             statUpvoteValue.setText(String.valueOf(computeUserVotePoints()));
         } else {
-            statSolvedValue.setText("");
-            statStreakValue.setText("");
-            statRankValue.setText("");
-            statUpvoteValue.setText("");
+            statSolvedValue.setText("0");
+            statStreakValue.setText("0 days");
+            statRankValue.setText("#0");
+            statUpvoteValue.setText("0");
         }
     }
 
-    private int computeUserRank() {
-        List<User> all = new ArrayList<>(UserList.getInstance().getUsers());
-        Map<String, User> seen = new LinkedHashMap<>();
-        for (User u : all) {
-            if (u.getUsername() != null && !u.getUsername().isBlank() && !seen.containsKey(u.getUsername()))
-                seen.put(u.getUsername(), u);
-        }
-        List<User> sorted = new ArrayList<>(seen.values());
-        sorted.sort((a, b) -> {
-            int cmp = b.getAnsweredQuestions().size() - a.getAnsweredQuestions().size();
-            if (cmp != 0) return cmp;
-            cmp = computeVotePointsFor(b) - computeVotePointsFor(a);
-            if (cmp != 0) return cmp;
-            int sa = a.getAchievements().isEmpty() ? 0 : a.getAchievements().get(0).getStreak();
-            int sb = b.getAchievements().isEmpty() ? 0 : b.getAchievements().get(0).getStreak();
-            return sb - sa;
-        });
-        for (int i = 0; i < sorted.size(); i++) {
-            if (sorted.get(i).getId().equals(App.currentUser.getId())) return i + 1;
-        }
-        return sorted.size();
-    }
-
-    private int computeVotePointsFor(User user) {
+    private int computeUserVotePoints() {
         int total = 0;
         for (Question q : QuestionList.getInstance().getQuestions()) {
             if (q.getSolutionList() == null) continue;
             for (UserSolution sol : q.getSolutionList()) {
-                if (sol.getUser() != null && sol.getUser().getId().equals(user.getId()))
+                if (sol.getUser() != null && App.currentUser != null
+                        && sol.getUser().getId().equals(App.currentUser.getId())) {
                     total += sol.getTotalVote();
+                }
             }
         }
         return total;
     }
 
-    private int computeUserVotePoints() {
-        return App.currentUser != null ? computeVotePointsFor(App.currentUser) : 0;
-    }
-
     private void populateRecentActivity() {
         recentActivityList.getChildren().clear();
+
         if (App.currentUser == null) {
             Label msg = new Label("Login to view recent activity");
             msg.getStyleClass().add("activity-item");
             recentActivityList.getChildren().add(msg);
             return;
         }
+
+        ArrayList<String> activities = new ArrayList<>();
         ArrayList<Question> answered = App.currentUser.getAnsweredQuestions();
-        if (answered == null || answered.isEmpty()) {
+
+        ArrayList<Question> userQuestions = new ArrayList<>();
+        for (Question q : QuestionList.getInstance().getQuestions()) {
+            if (q.getUser() != null &&
+                q.getUser().getId().equals(App.currentUser.getId())) {
+                userQuestions.add(q);
+            }
+        }
+        int i = (answered == null ? -1 : answered.size() - 1);
+        int j = userQuestions.size() - 1;
+
+        while (activities.size() < 5 && (i >= 0 || j >= 0)) {
+
+            if (i >= 0) {
+                activities.add("Posted a solution on " + answered.get(i).getTitle());
+                i--;
+            }
+
+            if (activities.size() >= 5) break;
+
+            if (j >= 0) {
+                activities.add("Posted a question: " + userQuestions.get(j).getTitle());
+                j--;
+            }
+        }
+
+        if (activities.isEmpty()) {
             Label msg = new Label("No recent activity");
             msg.getStyleClass().add("activity-item");
             recentActivityList.getChildren().add(msg);
             return;
         }
-        int start = Math.max(0, answered.size() - 5);
-        for (int i = answered.size() - 1; i >= start; i--) {
-            Label item = new Label("Posted a solution on " + answered.get(i).getTitle());
+
+        for (String text : activities) {
+            Label item = new Label(text);
             item.getStyleClass().add("activity-item");
             recentActivityList.getChildren().add(item);
         }
     }
-
+    
     @FXML
     private void filterAll() {
         setActiveFilter(filterAllBtn);
@@ -268,22 +268,6 @@ public class DashboardController {
         setActiveFilter(filterHardBtn);
         activeFilter = Difficulty.HARD;
         applyFilters();
-    }
-
-    @FXML
-    private void filterStarred() {
-        setActiveFilter(filterStarredBtn);
-        if (App.currentUser == null || App.currentUser.getStarredQuestions() == null) {
-            loadCards(new ArrayList<>());
-            return;
-        }
-        ArrayList<Question> starred = new ArrayList<>();
-        for (Question q : questions) {
-            for (Question sq : App.currentUser.getStarredQuestions()) {
-                if (sq.getId().equals(q.getId())) { starred.add(q); break; }
-            }
-        }
-        loadCards(starred);
     }
 
     private void applyFilters() {
@@ -320,7 +304,6 @@ public class DashboardController {
         filterEasyBtn.getStyleClass().remove("filter-btn-active");
         filterMediumBtn.getStyleClass().remove("filter-btn-active");
         filterHardBtn.getStyleClass().remove("filter-btn-active");
-        filterStarredBtn.getStyleClass().remove("filter-btn-active");
         active.getStyleClass().add("filter-btn-active");
     }
 
@@ -392,5 +375,28 @@ public class DashboardController {
             HBox card = cardBuilder.buildCard(list.get(i), i + 1);
             questionCardList.getChildren().add(card);
         }
+    }
+
+    @FXML
+    private void filterStarred() {
+        setActiveFilter(null); // optional styling reset
+
+        if (App.currentUser == null || App.currentUser.getStarredQuestions() == null) {
+            loadCards(new ArrayList<>());
+            return;
+        }
+
+        ArrayList<Question> starred = new ArrayList<>();
+
+        for (Question q : questions) {
+            for (Question sq : App.currentUser.getStarredQuestions()) {
+                if (sq.getId().equals(q.getId())) {
+                    starred.add(q);
+                    break;
+                }
+            }
+        }
+
+        loadCards(starred);
     }
 }

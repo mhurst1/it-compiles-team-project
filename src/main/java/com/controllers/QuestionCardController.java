@@ -1,6 +1,8 @@
 package com.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import com.interviews.UserList;
 
 import com.interviews.App;
 import com.interviews.Difficulty;
@@ -31,6 +33,22 @@ public class QuestionCardController {
         }
         dot.getStyleClass().add(solved ? "dot-solved" : "dot-unsolved");
 
+
+        boolean starred = false;
+        if (App.currentUser != null && App.currentUser.getStarredQuestions() != null) {
+            for (Question q : App.currentUser.getStarredQuestions()) {
+                if (q.getId().equals(question.getId())) {
+                    starred = true;
+                    break;
+                }
+            }
+        }
+
+        Label star = new Label(starred ? "★" : "☆");
+        star.getStyleClass().add(starred ? "star-filled" : "star-empty");
+
+        
+
         Label number = new Label(String.valueOf(index));
         number.getStyleClass().add("question-number");
 
@@ -59,14 +77,14 @@ public class QuestionCardController {
         Label arrow = new Label("›");
         arrow.getStyleClass().add("arrow");
 
-        HBox card = new HBox(12, dot, number, titleBox, languageBadge, badge, votes, arrow);
+        HBox card = new HBox(12, dot, star, number, titleBox, languageBadge, badge, votes, arrow);
         card.getStyleClass().add("question-card");
         card.setAlignment(Pos.CENTER_LEFT);
         card.setPadding(new Insets(12, 14, 12, 14));
 
         card.setOnMouseClicked(e -> {
             App.currentQuestion = question;
-            App.currentCategory = difficultyText(question.getDifficulty()); // placeholder until Question has a category field
+            App.currentCategory = difficultyText(question.getDifficulty()); 
             try {
                 App.setRoot("browsesolutions");
             } catch (IOException ex) {
@@ -112,6 +130,5 @@ public class QuestionCardController {
             default:
                 return "badge-easy";
         }
-    
     }
 }

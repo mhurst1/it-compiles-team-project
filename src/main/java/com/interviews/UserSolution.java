@@ -15,6 +15,7 @@ public class UserSolution {
     public boolean userVote;
     private ArrayList<UUID> upVoters;
     private ArrayList<UUID> downVoters;
+    public int totalVote;
 
     /**
      * Creates a fully populated solution object.

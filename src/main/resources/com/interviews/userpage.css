@@ -75,7 +75,6 @@
     -fx-alignment: center-left;
 }
 
-/* AVATAR CIRCLE (StackPane container) */
 .userbanner StackPane {
     -fx-background-color: linear-gradient(to bottom right, #7b2ff7, #f107a3);
     -fx-background-radius: 50;
@@ -86,7 +85,6 @@
     -fx-alignment: center;
 }
 
-/* AVATAR LETTER */
 #avatarLabel {
     -fx-text-fill: white;
     -fx-font-size: 28px;
@@ -100,7 +98,6 @@
     -fx-font-weight: bold;
 }
 
-/* USERNAME (@handle) */
 #profileHandle {
     -fx-fill: #e0e0e0;
     -fx-font-size: 13px;
@@ -121,7 +118,6 @@
 
 /* STAT BOXES */
 
-/* CONTAINER (the HBox holding all stat boxes) */
 .stats-container {
     -fx-spacing: 16;
     -fx-padding: 10 0 0 0;
@@ -137,20 +133,32 @@
     -fx-pref-width: 160;
 }
 
-/* LABEL (e.g., "Questions Solved") */
 .stat-title {
     -fx-text-fill: #888888;
     -fx-font-size: 12px;
 }
 
-/* VALUE (e.g., "77", "#4", "5 days") */
+
 .stat-value {
     -fx-text-fill: #2c2c2c;
     -fx-font-size: 18px;
     -fx-font-weight: bold;
 }
 
-/* MAIN PANEL (Questions Solved / My Solutions) */
+.stat-streak {
+    -fx-text-fill: #f97316;
+}
+
+.stat-rank {
+    -fx-text-fill: #c040a0;
+}
+
+.stat-upvote {
+    -fx-text-fill: #16a34a;
+}
+
+
+/* MAIN PANEL */
 .content-panel {
     -fx-background-color: #ffffff;
     -fx-background-radius: 12;
@@ -181,7 +189,7 @@
     -fx-spacing: 10;
 }
 
-/* INDIVIDUAL ITEM (each question/solution row) */
+/* INDIVIDUAL ITEM  */
 .list-item {
     -fx-background-color: #f9fafb;
     -fx-background-radius: 8;
@@ -197,7 +205,7 @@
     -fx-text-fill: #2c2c2c;
 }
 
-/* SUBTEXT (topic, description, etc.) */
+/* SUBTEXt */
 .item-subtext {
     -fx-font-size: 11px;
     -fx-text-fill: #777777;

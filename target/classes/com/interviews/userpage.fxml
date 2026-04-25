@@ -101,30 +101,24 @@
                         <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="stat-box">
                             <children>
                                 <Label text="Current Streak" styleClass="stat-title"/>
-                                <Label fx:id="currentStreak" text="0 days" styleClass="stat-value"/>
+                                <Label fx:id="currentStreak" text="0 days" styleClass="stat-value, stat-streak"/>
                             </children>
                         </VBox>
 
                         <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="stat-box">
                             <children>
                                 <Label text="Rank" styleClass="stat-title"/>
-                                <Label fx:id="rankLabel" text="#0" styleClass="stat-value"/>
+                                <Label fx:id="rankLabel" text="#0" styleClass="stat-value, stat-rank"/>
                             </children>
                         </VBox>
 
                         <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="stat-box">
                             <children>
-                                <Label text="Upvotes Received" styleClass="stat-title"/>
-                                <Label fx:id="upvotesReceived" text="0" styleClass="stat-value"/>
+                                <Label text="Votes Received" styleClass="stat-title"/>
+                                <Label fx:id="votesReceived" text="0" styleClass="stat-value, stat-upvote"/>
                             </children>
                         </VBox>
 
-                        <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="stat-box">
-                            <children>
-                                <Label text="Downvotes Received" styleClass="stat-title"/>
-                                <Label fx:id="downvotesReceived" text="0" styleClass="stat-value"/>
-                            </children>
-                        </VBox>
 
                     </children>
                 </HBox>
