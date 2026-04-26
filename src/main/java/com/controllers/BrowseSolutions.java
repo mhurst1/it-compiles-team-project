@@ -304,6 +304,24 @@ public class BrowseSolutions {
 
         userRow.getChildren().addAll(avatar, usernameLabel, spacer, thumbUp, thumbDown);
 
+        boolean isSolutionOwner = App.currentUser != null
+                && solution.getUser() != null
+                && App.currentUser.getId() != null
+                && App.currentUser.getId().equals(solution.getUser().getId());
+
+        if (isSolutionOwner) {
+            Button deleteBtn = new Button("Delete");
+            deleteBtn.getStyleClass().add("solution-delete-btn");
+            deleteBtn.setOnAction(e -> {
+                App.currentQuestion.getSolutionList().remove(solution);
+                QuestionList.getInstance().saveAll();
+                int count = App.currentQuestion.getSolutionList().size();
+                answersLabel.setText(count + (count == 1 ? " Answer" : " Answers"));
+                populateSolutions(App.currentQuestion);
+            });
+            userRow.getChildren().add(deleteBtn);
+        }
+
         HBox replyRow = new HBox(8);
         replyRow.setAlignment(Pos.CENTER_LEFT);
         TextField replyField = new TextField();

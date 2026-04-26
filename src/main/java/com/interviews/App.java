@@ -17,6 +17,7 @@ public class App extends Application {
     public static User currentUser;
     public static Question currentQuestion;
     public static String currentCategory;
+    public static Question editingQuestion;
 
     /**
      * Starts the JavaFX application and loads the primary scene.

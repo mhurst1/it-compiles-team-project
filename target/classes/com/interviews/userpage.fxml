@@ -166,6 +166,21 @@
 
 </HBox>
 
+                    <VBox fx:id="myPostedQuestionsPanel" spacing="10.0" styleClass="content-panel" managed="false" visible="false">
+                        <children>
+                            <Label text="My Posted Questions" styleClass="panel-title"/>
+                            <ScrollPane fitToWidth="true" prefHeight="260.0">
+                                <content>
+                                    <VBox fx:id="myPostedQuestionsBox" spacing="10.0" styleClass="list-box">
+                                        <padding>
+                                            <Insets top="5" right="5" bottom="5" left="5"/>
+                                        </padding>
+                                    </VBox>
+                                </content>
+                            </ScrollPane>
+                        </children>
+                    </VBox>
+
                     <Separator />
 
                     <VBox spacing="10.0" styleClass="activity-panel">

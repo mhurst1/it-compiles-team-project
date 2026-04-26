@@ -317,3 +317,20 @@
     -fx-background-color: #fef2f2;
     -fx-background-radius: 4;
 }
+
+.solution-delete-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #dc2626;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #dc2626;
+    -fx-border-width: 1;
+    -fx-padding: 4 10 4 10;
+    -fx-cursor: hand;
+}
+
+.solution-delete-btn:hover {
+    -fx-background-color: #fef2f2;
+}

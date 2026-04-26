@@ -2,6 +2,8 @@ package com.controllers;
 
 import com.interviews.Achievement;
 import com.interviews.App;
+import com.interviews.Difficulty;
+import com.interviews.Language;
 import com.interviews.Question;
 import com.interviews.QuestionList;
 import com.interviews.User;
@@ -9,16 +11,17 @@ import com.interviews.UserList;
 import com.interviews.UserSolution;
 import com.interviews.Status;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 import java.io.IOException;
 
@@ -45,6 +48,8 @@ public class UserPageController {
     @FXML private VBox questionsSolvedBox;
     @FXML private VBox questionsStarredBox;
     @FXML private VBox recentActivityBox;
+    @FXML private VBox myPostedQuestionsPanel;
+    @FXML private VBox myPostedQuestionsBox;
 
     @FXML
     private void initialize() {
@@ -93,6 +98,12 @@ public class UserPageController {
         populateSolvedQuestions(user.getAnsweredQuestions());
         populateStarredQuestions(user.getStarredQuestions());
         populateRecentActivity(user);
+
+        if (user.canModifyQuestions()) {
+            myPostedQuestionsPanel.setVisible(true);
+            myPostedQuestionsPanel.setManaged(true);
+            populateMyPostedQuestions(user);
+        }
     }
 
     @FXML
@@ -311,5 +322,76 @@ public class UserPageController {
         }
         return user.getAchievements().get(user.getAchievements().size() - 1).getStreak();
     }
-    
+
+    private void populateMyPostedQuestions(User user) {
+        myPostedQuestionsBox.getChildren().clear();
+
+        List<Question> mine = new ArrayList<>();
+        for (Question q : QuestionList.getInstance().getQuestions()) {
+            if (q.getUser() != null && q.getUser().getId().equals(user.getId())) {
+                mine.add(q);
+            }
+        }
+
+        if (mine.isEmpty()) {
+            Label msg = new Label("No questions posted yet.");
+            msg.setStyle("-fx-text-fill: #888888;");
+            myPostedQuestionsBox.getChildren().add(msg);
+            return;
+        }
+
+        for (Question q : mine) {
+            myPostedQuestionsBox.getChildren().add(buildEditableQuestionRow(q));
+        }
+    }
+
+    private HBox buildEditableQuestionRow(Question q) {
+        Label title = new Label(q.getTitle() != null ? q.getTitle() : "Untitled");
+        title.getStyleClass().add("question-title");
+        VBox titleBox = new VBox(title);
+        HBox.setHgrow(titleBox, Priority.ALWAYS);
+
+        Label diffBadge = new Label(difficultyText(q.getDifficulty()));
+        diffBadge.getStyleClass().addAll("badge", difficultyBadgeClass(q.getDifficulty()));
+
+        Label langBadge = new Label(q.getLanguage() != null ? q.getLanguage().name() : "Unknown");
+        langBadge.getStyleClass().add("badge");
+
+        Button editBtn = new Button("Edit");
+        editBtn.getStyleClass().add("btn-edit-question");
+        editBtn.setOnAction(e -> {
+            App.editingQuestion = q;
+            try {
+                App.setRoot("addquestion");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        HBox row = new HBox(12, titleBox, langBadge, diffBadge, editBtn);
+        row.getStyleClass().add("question-card");
+        row.setAlignment(Pos.CENTER_LEFT);
+        row.setPadding(new Insets(12, 14, 12, 14));
+        return row;
+    }
+
+    private String difficultyText(Difficulty d) {
+        if (d == null) return "Unknown";
+        switch (d) {
+            case EASY: return "Easy";
+            case MEDIUM: return "Medium";
+            case HARD: return "Hard";
+            default: return "Unknown";
+        }
+    }
+
+    private String difficultyBadgeClass(Difficulty d) {
+        if (d == null) return "badge-easy";
+        switch (d) {
+            case EASY: return "badge-easy";
+            case MEDIUM: return "badge-medium";
+            case HARD: return "badge-hard";
+            default: return "badge-easy";
+        }
+    }
 }
