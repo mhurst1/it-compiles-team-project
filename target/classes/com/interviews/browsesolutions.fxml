@@ -33,11 +33,21 @@
                 <Button text="Questions" onAction="#goToQuestions" styleClass="nav-btn"/>
                 <Button text="Community" onAction="#goToCommunity" styleClass="nav-btn"/>
 
+                <Button fx:id="contributorApplicationButton"
+                    managed="false"
+                    mnemonicParsing="false"
+                    onAction="#goToContributorApplication"
+                    styleClass="nav-btn"
+                    text="Contributor Application"
+                    visible="false" />
+
                 <Button fx:id="adminDashboardButton"
+                    managed="false"
                     mnemonicParsing="false"
                     onAction="#goToAdminDashboard"
                     styleClass="nav-btn"
-                    text="Admin Dashboard" />
+                    text="Admin Dashboard"
+                    visible="false" />
 
 
                 <Region HBox.hgrow="ALWAYS"/>

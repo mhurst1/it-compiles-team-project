@@ -27,11 +27,11 @@ import com.interviews.Question;
 import com.interviews.QuestionList;
 import com.interviews.Section;
 import com.interviews.UserSolution;
-import com.interviews.Status;
 
 public class BrowseSolutions {
 
     @FXML private Button adminDashboardButton;
+    @FXML private Button contributorApplicationButton;
 
     @FXML private Label navAvatarLetter;
 
@@ -58,6 +58,9 @@ public class BrowseSolutions {
 
     @FXML
     public void initialize() {
+        App.configureAdminDashboardButton(adminDashboardButton);
+        App.configureContributorApplicationButton(contributorApplicationButton);
+
         if (App.currentUser != null) {
             navUsername.setText(App.currentUser.getFirstName());
         } else {
@@ -71,10 +74,6 @@ public class BrowseSolutions {
             navAvatarLetter.setText("U");
         }
 
-        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
-            adminDashboardButton.setVisible(false);
-            adminDashboardButton.setManaged(false);
-        }
         Question q = App.currentQuestion;
 
         if (q != null) {
@@ -491,9 +490,12 @@ public class BrowseSolutions {
 
     @FXML
     private void goToAdminDashboard() throws IOException {
-        if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
-            App.setRoot("admindashboard");
-     }
+        App.goToAdminDashboardIfAllowed();
+    }
+
+    @FXML
+    private void goToContributorApplication() throws IOException {
+        App.goToContributorApplicationIfAllowed();
     }
 
     private void updateStarUI() {

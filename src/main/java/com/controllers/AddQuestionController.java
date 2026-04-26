@@ -1,7 +1,5 @@
 package com.controllers;
 
-import com.interviews.Status;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,17 +12,18 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 import com.interviews.App;
-import com.interviews.DataLoader;
 import com.interviews.DataWriter;
 import com.interviews.Difficulty;
 import com.interviews.Language;
 import com.interviews.Question;
 import com.interviews.QuestionList;
 import com.interviews.Section;
+import com.interviews.contentType;
 
 public class AddQuestionController {
 
     @FXML private Button adminDashboardButton;
+    @FXML private Button contributorApplicationButton;
     @FXML private Label navAvatarLetter;
 
     @FXML private TextField txt_title;
@@ -51,6 +50,7 @@ public class AddQuestionController {
     @FXML private Button submitBtn;
 
     private File selectedAttachment;
+    private String existingAttachmentName;
     private Question questionToEdit;
 
     private int visibleHints = 2;
@@ -59,6 +59,8 @@ public class AddQuestionController {
     public void initialize() {
         questionToEdit = App.editingQuestion;
         App.editingQuestion = null;
+        App.configureAdminDashboardButton(adminDashboardButton);
+        App.configureContributorApplicationButton(contributorApplicationButton);
 
         if (App.currentUser != null && App.currentUser.getFirstName() != null && !App.currentUser.getFirstName().isEmpty()) {
             String firstLetter = App.currentUser.getFirstName().substring(0, 1).toUpperCase();
@@ -77,16 +79,13 @@ public class AddQuestionController {
             "UNKNOWN"
         );
         cb_difficulty.getItems().addAll("Easy", "Medium", "Hard");
+        attachmentLabel.setText("No file chosen");
+        attachmentLabel.setStyle("-fx-text-fill: #6b7280;");
 
         if (App.currentUser != null) {
             welcomeLabel.setText(App.currentUser.getFirstName());
         } else {
             welcomeLabel.setText("Unknown User");
-        }
-
-        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
-            adminDashboardButton.setVisible(false);
-            adminDashboardButton.setManaged(false);
         }
 
         if (App.currentUser == null || !App.currentUser.canModifyQuestions()) {
@@ -126,6 +125,12 @@ public class AddQuestionController {
                     addHintBtn.setVisible(false);
                     addHintBtn.setManaged(false);
                 }
+            }
+
+            existingAttachmentName = getQuestionAttachmentName(questionToEdit);
+            if (existingAttachmentName != null && !existingAttachmentName.isBlank()) {
+                attachmentLabel.setText(existingAttachmentName);
+                attachmentLabel.setStyle("-fx-text-fill: #7734ED;");
             }
         }
     }
@@ -233,9 +238,9 @@ public class AddQuestionController {
     private void goToProfile() {
         try {
             if (App.currentUser != null) {
-                App.setRoot("login");
-            } else {
                 App.setRoot("profile");
+            } else {
+                App.setRoot("login");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -244,9 +249,12 @@ public class AddQuestionController {
 
     @FXML
         private void goToAdminDashboard() throws IOException {
-            if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
-                App.setRoot("admindashboard");
-            }
+            App.goToAdminDashboardIfAllowed();
+        }
+
+    @FXML
+        private void goToContributorApplication() throws IOException {
+            App.goToContributorApplicationIfAllowed();
         }
 
   private void clearForm() {
@@ -268,6 +276,7 @@ public class AddQuestionController {
     addHintBtn.setManaged(true);
 
     selectedAttachment = null;
+    existingAttachmentName = null;
     attachmentLabel.setText("No file chosen");
     attachmentLabel.setStyle("-fx-text-fill: #6b7280;");
 }
@@ -310,7 +319,7 @@ public class AddQuestionController {
         ArrayList<Section> sections = new ArrayList<>();
         ArrayList<String> sectionContent = new ArrayList<>();
         sectionContent.add(txt_description.getText().trim());
-        sections.add(new Section("Description", sectionContent, txt_description.getText().trim()));
+        sections.add(buildDescriptionSection(sectionContent, txt_description.getText().trim()));
 
         if (questionToEdit != null) {
             questionToEdit.setTitle(txt_title.getText().trim());
@@ -344,5 +353,26 @@ public class AddQuestionController {
             feedbackLabel.setText("Could not save question.");
             feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");
         }
+    }
+
+    private Section buildDescriptionSection(ArrayList<String> sectionContent, String description) {
+        String attachmentName = selectedAttachment != null ? selectedAttachment.getName() : existingAttachmentName;
+        if (attachmentName != null && !attachmentName.isBlank()) {
+            return new Section("Description", sectionContent, description, attachmentName, contentType.TEXT);
+        }
+        return new Section("Description", sectionContent, description);
+    }
+
+    private String getQuestionAttachmentName(Question question) {
+        if (question == null || question.getQuestionContent() == null) {
+            return null;
+        }
+
+        for (Section section : question.getQuestionContent()) {
+            if (section != null && section.getFileName() != null && !section.getFileName().isBlank()) {
+                return section.getFileName();
+            }
+        }
+        return null;
     }
 }

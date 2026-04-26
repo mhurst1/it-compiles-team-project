@@ -61,6 +61,9 @@ public class DataWriter {
             obj.put("password", u.getPassword());
             obj.put("email", u.getEmail());
             obj.put("status", u.getStatus().toString());
+            obj.put("contributor-application-pending", u.hasContributorApplicationPending());
+            obj.put("contributor-application-experience", u.getContributorApplicationExperience());
+            obj.put("contributor-application-motivation", u.getContributorApplicationMotivation());
             obj.put("graduation-year", (long) u.getGraduationYear());
             obj.put("id-usc", u.getIdUSC());
             obj.put("starred-questions", questionIdArray(u.getStarredQuestionList()));

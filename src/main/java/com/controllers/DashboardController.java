@@ -5,23 +5,26 @@ import java.util.ArrayList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import com.interviews.Achievement;
 import com.interviews.App;
 import com.interviews.Difficulty;
 import com.interviews.Language;
 import com.interviews.Question;
 import com.interviews.QuestionList;
 import com.interviews.Status;
+import com.interviews.User;
+import com.interviews.UserList;
 import com.interviews.UserSolution;
 
 public class DashboardController {
 
     @FXML private Button adminDashboardButton;
+    @FXML private Button contributorApplicationButton;
     @FXML private Label navAvatarLetter;
     @FXML private Button addQuestionBtn;
     @FXML private Label welcomeLabel;
@@ -44,6 +47,7 @@ public class DashboardController {
     @FXML private Label statStreakValue;
     @FXML private Label statRankValue;
     @FXML private Label statUpvoteValue;
+    @FXML private ComboBox<String> rankModeComboBox;
 
     // Recent activity
     @FXML private VBox recentActivityList;
@@ -53,12 +57,14 @@ public class DashboardController {
     private Language activeLanguageFilter = null;
     private HBox activeSidebarItem;
 
+    private static final String RANK_OVERALL = "Overall";
+    private static final String RANK_UPVOTES = "Upvotes";
+    private static final String RANK_SOLUTIONS_POSTED = "Solutions Posted";
+
     @FXML
     private void initialize() {
-        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
-            adminDashboardButton.setVisible(false);
-            adminDashboardButton.setManaged(false);
-        }
+        App.configureAdminDashboardButton(adminDashboardButton);
+        App.configureContributorApplicationButton(contributorApplicationButton);
 
          if (App.currentUser != null && App.currentUser.getFirstName() != null && !App.currentUser.getFirstName().isEmpty()) {
             String firstLetter = App.currentUser.getFirstName().substring(0, 1).toUpperCase();
@@ -97,8 +103,15 @@ public class DashboardController {
         });
 
         populateLanguageSidebar();
+        configureRankModeSelector();
         populateQuickStats();
         populateRecentActivity();
+    }
+
+    private void configureRankModeSelector() {
+        rankModeComboBox.getItems().setAll(RANK_OVERALL, RANK_UPVOTES, RANK_SOLUTIONS_POSTED);
+        rankModeComboBox.setValue(RANK_OVERALL);
+        rankModeComboBox.setOnAction(event -> updateRankStat());
     }
 
     private void populateLanguageSidebar() {
@@ -157,17 +170,9 @@ public class DashboardController {
             int solved = App.currentUser.getAnsweredQuestions() != null
                          ? App.currentUser.getAnsweredQuestions().size() : 0;
             statSolvedValue.setText(String.valueOf(solved));
-
-            ArrayList<Achievement> ach = App.currentUser.getAchievements();
-            if (ach != null && !ach.isEmpty()) {
-                Achievement a = ach.get(ach.size() - 1);
-                statStreakValue.setText(a.getStreak() + " days");
-                statRankValue.setText("#" + a.getLeaderboardPlace());
-            } else {
-                statStreakValue.setText("0 days");
-                statRankValue.setText("#0");
-            }
+            statStreakValue.setText(getUserStreak(App.currentUser) + " days");
             statUpvoteValue.setText(String.valueOf(computeUserVotePoints()));
+            updateRankStat();
         } else {
             statSolvedValue.setText("0");
             statStreakValue.setText("0 days");
@@ -177,17 +182,120 @@ public class DashboardController {
     }
 
     private int computeUserVotePoints() {
+        return computeUserVotePoints(App.currentUser);
+    }
+
+    private int computeUserVotePoints(User user) {
+        if (user == null || user.getId() == null) {
+            return 0;
+        }
+
         int total = 0;
         for (Question q : QuestionList.getInstance().getQuestions()) {
             if (q.getSolutionList() == null) continue;
             for (UserSolution sol : q.getSolutionList()) {
-                if (sol.getUser() != null && App.currentUser != null
-                        && sol.getUser().getId().equals(App.currentUser.getId())) {
+                if (sol.getUser() != null && sol.getUser().getId() != null
+                        && sol.getUser().getId().equals(user.getId())) {
                     total += sol.getTotalVote();
                 }
             }
         }
         return total;
+    }
+
+    private int computeUserRank(User currentUser) {
+        return computeUserRank(currentUser, getRankMode());
+    }
+
+    private int computeUserRank(User currentUser, String rankMode) {
+        if (currentUser == null || currentUser.getId() == null) {
+            return 0;
+        }
+
+        ArrayList<User> rankedUsers = new ArrayList<>(UserList.getInstance().getUsers());
+        rankedUsers.sort((a, b) -> compareUsersForRank(a, b, rankMode));
+
+        for (int i = 0; i < rankedUsers.size(); i++) {
+            User user = rankedUsers.get(i);
+            if (user != null && user.getId() != null && user.getId().equals(currentUser.getId())) {
+                return i + 1;
+            }
+        }
+
+        return 0;
+    }
+
+    private int compareUsersForRank(User a, User b, String rankMode) {
+        if (RANK_UPVOTES.equals(rankMode)) {
+            int cmp = Integer.compare(computeUserVotePoints(b), computeUserVotePoints(a));
+            if (cmp != 0) return cmp;
+
+            cmp = Integer.compare(countSolutionsPosted(b), countSolutionsPosted(a));
+            if (cmp != 0) return cmp;
+
+            return Integer.compare(sizeOf(b.getAnsweredQuestions()), sizeOf(a.getAnsweredQuestions()));
+        }
+
+        if (RANK_SOLUTIONS_POSTED.equals(rankMode)) {
+            int cmp = Integer.compare(countSolutionsPosted(b), countSolutionsPosted(a));
+            if (cmp != 0) return cmp;
+
+            cmp = Integer.compare(computeUserVotePoints(b), computeUserVotePoints(a));
+            if (cmp != 0) return cmp;
+
+            return Integer.compare(getUserStreak(b), getUserStreak(a));
+        }
+
+        int cmp = Integer.compare(sizeOf(b.getAnsweredQuestions()), sizeOf(a.getAnsweredQuestions()));
+        if (cmp != 0) return cmp;
+
+        cmp = Integer.compare(computeUserVotePoints(b), computeUserVotePoints(a));
+        if (cmp != 0) return cmp;
+
+        return Integer.compare(getUserStreak(b), getUserStreak(a));
+    }
+
+    private int countSolutionsPosted(User user) {
+        if (user == null || user.getId() == null) {
+            return 0;
+        }
+
+        int total = 0;
+        for (Question question : QuestionList.getInstance().getQuestions()) {
+            if (question.getSolutionList() == null) continue;
+            for (UserSolution solution : question.getSolutionList()) {
+                if (solution != null && solution.getUser() != null && solution.getUser().getId() != null
+                        && solution.getUser().getId().equals(user.getId())) {
+                    total++;
+                }
+            }
+        }
+        return total;
+    }
+
+    private void updateRankStat() {
+        if (App.currentUser == null) {
+            statRankValue.setText("#0");
+            return;
+        }
+
+        statRankValue.setText("#" + computeUserRank(App.currentUser, getRankMode()));
+    }
+
+    private String getRankMode() {
+        String selectedMode = rankModeComboBox.getValue();
+        return selectedMode == null ? RANK_OVERALL : selectedMode;
+    }
+
+    private int getUserStreak(User user) {
+        if (user == null || user.getAchievements() == null || user.getAchievements().isEmpty()) {
+            return 0;
+        }
+        return user.getAchievements().get(user.getAchievements().size() - 1).getStreak();
+    }
+
+    private int sizeOf(ArrayList<?> list) {
+        return list == null ? 0 : list.size();
     }
 
     private void populateRecentActivity() {
@@ -350,9 +458,16 @@ public class DashboardController {
     @FXML
     private void goToAdminDashboard() {
         try {
-            if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
-                App.setRoot("admindashboard");
-            }
+            App.goToAdminDashboardIfAllowed();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void goToContributorApplication() {
+        try {
+            App.goToContributorApplicationIfAllowed();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -371,10 +486,31 @@ public class DashboardController {
     private void loadCards(ArrayList<Question> list) {
         questionCardList.getChildren().clear();
         QuestionCardController cardBuilder = new QuestionCardController();
-        for (int i = 0; i < list.size(); i++) {
-            HBox card = cardBuilder.buildCard(list.get(i), i + 1);
+        ArrayList<Question> sortedQuestions = sortByUpvotes(list);
+        for (int i = 0; i < sortedQuestions.size(); i++) {
+            HBox card = cardBuilder.buildCard(sortedQuestions.get(i), i + 1);
             questionCardList.getChildren().add(card);
         }
+    }
+
+    private ArrayList<Question> sortByUpvotes(ArrayList<Question> list) {
+        ArrayList<Question> sortedQuestions = new ArrayList<>(list);
+        sortedQuestions.sort((a, b) -> Integer.compare(getQuestionVoteTotal(b), getQuestionVoteTotal(a)));
+        return sortedQuestions;
+    }
+
+    private int getQuestionVoteTotal(Question question) {
+        if (question == null || question.getSolutionList() == null) {
+            return 0;
+        }
+
+        int total = 0;
+        for (UserSolution solution : question.getSolutionList()) {
+            if (solution != null) {
+                total += solution.getTotalVote();
+            }
+        }
+        return total;
     }
 
     @FXML

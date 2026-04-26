@@ -9,7 +9,6 @@ import com.interviews.QuestionList;
 import com.interviews.User;
 import com.interviews.UserList;
 import com.interviews.UserSolution;
-import com.interviews.Status;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -29,6 +28,7 @@ import java.io.IOException;
 public class UserPageController {
 
     @FXML private Button adminDashboardButton;
+    @FXML private Button contributorApplicationButton;
     @FXML private Label navAvatarLetter;
     @FXML private Label welcomeLabel;
     @FXML private Label welcomeGreeting;
@@ -53,10 +53,8 @@ public class UserPageController {
 
     @FXML
     private void initialize() {
-         if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
-            adminDashboardButton.setVisible(false);
-            adminDashboardButton.setManaged(false);
-        }
+        App.configureAdminDashboardButton(adminDashboardButton);
+        App.configureContributorApplicationButton(contributorApplicationButton);
 
         if (App.currentUser != null && App.currentUser.getFirstName() != null && !App.currentUser.getFirstName().isEmpty()) {
             String firstLetter = App.currentUser.getFirstName().substring(0, 1).toUpperCase();
@@ -136,9 +134,12 @@ public class UserPageController {
 
     @FXML
     private void goToAdminDashboard() throws IOException {
-        if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
-            App.setRoot("admindashboard");
-        }
+        App.goToAdminDashboardIfAllowed();
+    }
+
+    @FXML
+    private void goToContributorApplication() throws IOException {
+        App.goToContributorApplicationIfAllowed();
     }
 
     private void populateSolvedQuestions(List<Question> questions) {

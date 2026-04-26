@@ -18,6 +18,9 @@ public class User {
     private String idUSC;
     private UUID id;
     private Status status;
+    private boolean contributorApplicationPending;
+    private String contributorApplicationExperience;
+    private String contributorApplicationMotivation;
     private ArrayList<Question> starredQuestions;
     private ArrayList<Question> answeredQuestions;
     private ArrayList<Achievement> achievements;
@@ -55,6 +58,9 @@ public class User {
         this.answeredQuestions = answeredQuestions;
         this.achievements = achievements;
         this.status = status;
+        this.contributorApplicationPending = false;
+        this.contributorApplicationExperience = "";
+        this.contributorApplicationMotivation = "";
         this.graduationYear = graduationYear;
         this.idUSC = idUSC;
 
@@ -116,6 +122,9 @@ public class User {
         this.graduationYear = graduationYear;
         this.idUSC = idUSC;
         this.status = Status.USER;
+        this.contributorApplicationPending = false;
+        this.contributorApplicationExperience = "";
+        this.contributorApplicationMotivation = "";
 
         this.starredQuestions = new ArrayList<>();
         this.answeredQuestions = new ArrayList<>();
@@ -371,6 +380,61 @@ public class User {
      */
     public void setStatus(Status status){
         this.status = status;
+    }
+
+    /**
+     * Stores a pending request for contributor access.
+     *
+     * @param experience the applicant's relevant experience
+     * @param motivation the applicant's reason for applying
+     */
+    public void submitContributorApplication(String experience, String motivation) {
+        this.contributorApplicationPending = true;
+        this.contributorApplicationExperience = experience != null ? experience.trim() : "";
+        this.contributorApplicationMotivation = motivation != null ? motivation.trim() : "";
+    }
+
+    /**
+     * Restores contributor application data from saved JSON.
+     *
+     * @param pending whether the application is pending admin approval
+     * @param experience the saved experience response
+     * @param motivation the saved motivation response
+     */
+    public void restoreContributorApplication(boolean pending, String experience, String motivation) {
+        this.contributorApplicationPending = pending;
+        this.contributorApplicationExperience = experience != null ? experience : "";
+        this.contributorApplicationMotivation = motivation != null ? motivation : "";
+    }
+
+    /**
+     * Clears a contributor application after an admin approves or rejects it.
+     */
+    public void clearContributorApplication() {
+        this.contributorApplicationPending = false;
+        this.contributorApplicationExperience = "";
+        this.contributorApplicationMotivation = "";
+    }
+
+    /**
+     * @return true when the user has a contributor application waiting for admin review
+     */
+    public boolean hasContributorApplicationPending() {
+        return contributorApplicationPending;
+    }
+
+    /**
+     * @return the applicant's contributor experience response
+     */
+    public String getContributorApplicationExperience() {
+        return contributorApplicationExperience != null ? contributorApplicationExperience : "";
+    }
+
+    /**
+     * @return the applicant's contributor motivation response
+     */
+    public String getContributorApplicationMotivation() {
+        return contributorApplicationMotivation != null ? contributorApplicationMotivation : "";
     }
 
     /**

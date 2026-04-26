@@ -17,6 +17,7 @@ import com.interviews.UserSolution;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -25,6 +26,7 @@ import javafx.scene.layout.VBox;
 public class LeaderboardController {
 
     @FXML private Button adminDashboardButton;
+    @FXML private Button contributorApplicationButton;
 
     @FXML private Label navAvatarLetter;
 
@@ -56,6 +58,9 @@ public class LeaderboardController {
     private TextField searchField;
 
     @FXML
+    private ComboBox<String> rankModeComboBox;
+
+    @FXML
     private VBox firstPlaceCard;
 
     @FXML
@@ -65,19 +70,22 @@ public class LeaderboardController {
     private VBox thirdPlaceCard;
 
     private List<User> allSorted;
+    private Status activeRoleFilter = null;
+
+    private static final String RANK_QUESTIONS_SOLVED = "Questions Solved";
+    private static final String RANK_UPVOTES = "Upvotes";
+    private static final String RANK_SOLUTIONS_POSTED = "Solutions Posted";
 
     @FXML
     private void initialize() {
+        App.configureAdminDashboardButton(adminDashboardButton);
+        App.configureContributorApplicationButton(contributorApplicationButton);
+
         if (App.currentUser != null) {
             welcomeLabel.setText(App.currentUser.getFirstName());
             welcomeGreeting.setText("Welcome, " + App.currentUser.getFirstName() + "!");
         } else {
             welcomeLabel.setText("Unknown User");
-        }
-
-        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
-            adminDashboardButton.setVisible(false);
-            adminDashboardButton.setManaged(false);
         }
 
          if (App.currentUser != null && App.currentUser.getFirstName() != null && !App.currentUser.getFirstName().isEmpty()) {
@@ -88,11 +96,20 @@ public class LeaderboardController {
         }
 
         contentSubtitle.setText("See how you rank against the community.");
+        configureRankModeDropdown();
         allSorted = getSortedUsers();
-        populatePodium(allSorted);
-        populateList(allSorted);
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> filterList(newVal));
+        refreshRankings();
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> refreshRankings());
         setActiveFilter(filterAllBtn);
+    }
+
+    private void configureRankModeDropdown() {
+        rankModeComboBox.getItems().setAll(RANK_QUESTIONS_SOLVED, RANK_UPVOTES, RANK_SOLUTIONS_POSTED);
+        rankModeComboBox.setValue(RANK_QUESTIONS_SOLVED);
+        rankModeComboBox.setOnAction(event -> {
+            allSorted = getSortedUsers();
+            refreshRankings();
+        });
     }
 
     private List<User> getSortedUsers() {
@@ -104,13 +121,7 @@ public class LeaderboardController {
             }
         }
         List<User> deduped = new ArrayList<>(seen.values());
-        deduped.sort((a, b) -> {
-            int cmp = b.getAnsweredQuestions().size() - a.getAnsweredQuestions().size();
-            if (cmp != 0) return cmp;
-            cmp = getUserVotePoints(b) - getUserVotePoints(a);
-            if (cmp != 0) return cmp;
-            return getStreak(b) - getStreak(a);
-        });
+        deduped.sort((a, b) -> compareUsersForRank(a, b, getRankMode()));
         return deduped;
     }
 
@@ -148,7 +159,7 @@ public class LeaderboardController {
         Label roleLabel = new Label(user.getStatus().toString());
         roleLabel.getStyleClass().add(badgeClass(user));
 
-        Label stats = new Label("⬆ " + getUserVotePoints(user) + "   solved: " + user.getAnsweredQuestions().size());
+        Label stats = new Label(podiumStatsText(user));
         stats.getStyleClass().add("lb-card-stats");
 
         card.getChildren().addAll(placeLabel, medalLabel, avatar, username, roleLabel, stats);
@@ -161,65 +172,59 @@ public class LeaderboardController {
         }
     }
 
-    private void filterList(String query) {
-        if (query == null || query.isBlank()) {
-            populateList(allSorted);
-            return;
-        }
-        String lower = query.toLowerCase();
-        List<User> filtered = new ArrayList<>();
-        for (User u : allSorted) {
-            if (u.getUsername() != null && u.getUsername().toLowerCase().contains(lower)) {
-                filtered.add(u);
-            }
-        }
+    private void refreshRankings() {
+        List<User> filtered = filterRankedUsers();
+        populatePodium(filtered);
         populateList(filtered);
+    }
+
+    private List<User> filterRankedUsers() {
+        String query = searchField.getText();
+        String lower = query == null ? "" : query.toLowerCase().trim();
+        List<User> filtered = new ArrayList<>();
+
+        for (User u : allSorted) {
+            if (activeRoleFilter != null && u.getStatus() != activeRoleFilter) {
+                continue;
+            }
+            if (!lower.isEmpty()) {
+                String username = u.getUsername();
+                if (username == null || !username.toLowerCase().contains(lower)) {
+                    continue;
+                }
+            }
+            filtered.add(u);
+        }
+
+        return filtered;
     }
 
     @FXML
     private void filterAll() {
+        activeRoleFilter = null;
         setActiveFilter(filterAllBtn);
-        populatePodium(allSorted);
-        populateList(allSorted);
+        refreshRankings();
     }
 
     @FXML
     private void filterEasy() {
+        activeRoleFilter = Status.USER;
         setActiveFilter(filterEasyBtn);
-        List<User> filtered = new ArrayList<>();
-        for (User u : allSorted) {
-            if (u.getStatus() == Status.USER) {
-                filtered.add(u);
-            }
-        }
-        populatePodium(filtered);
-        populateList(filtered);
+        refreshRankings();
     }
 
     @FXML
     private void filterMedium() {
+        activeRoleFilter = Status.CONTRIBUTOR;
         setActiveFilter(filterMediumBtn);
-        List<User> filtered = new ArrayList<>();
-        for (User u : allSorted) {
-            if (u.getStatus() == Status.CONTRIBUTOR) {
-                filtered.add(u);
-            }
-        }
-        populatePodium(filtered);
-        populateList(filtered);
+        refreshRankings();
     }
 
     @FXML
     private void filterHard() {
+        activeRoleFilter = Status.ADMIN;
         setActiveFilter(filterHardBtn);
-        List<User> filtered = new ArrayList<>();
-        for (User u : allSorted) {
-            if (u.getStatus() == Status.ADMIN) {
-                filtered.add(u);
-            }
-        }
-        populatePodium(filtered);
-        populateList(filtered);
+        refreshRankings();
     }
 
     private void setActiveFilter(Button active) {
@@ -255,14 +260,18 @@ public class LeaderboardController {
         roleCell.setMinWidth(130);
         roleCell.setAlignment(Pos.CENTER_LEFT);
 
-        int level = (!user.getAchievements().isEmpty()) ? user.getAchievements().get(0).getUserLevel() : 1;
+        int level = getUserLevel(user);
         Label levelLabel = new Label("Lv " + level);
         levelLabel.setMinWidth(60);
         levelLabel.getStyleClass().add("lb-level");
 
-        Label solvedLabel = new Label(String.valueOf(user.getAnsweredQuestions().size()));
+        Label solvedLabel = new Label(String.valueOf(sizeOf(user.getAnsweredQuestions())));
         solvedLabel.setMinWidth(145);
         solvedLabel.getStyleClass().add("lb-solved");
+
+        Label solutionLabel = new Label(String.valueOf(countSolutionsPosted(user)));
+        solutionLabel.setMinWidth(120);
+        solutionLabel.getStyleClass().add("lb-solved");
 
         int votes = getUserVotePoints(user);
         Label votesLabel = new Label("⬆ " + votes);
@@ -277,9 +286,18 @@ public class LeaderboardController {
 
         Button viewBtn = new Button("View Profile");
         viewBtn.getStyleClass().add("lb-view-btn");
+        viewBtn.setOnAction(event -> viewProfile(user));
 
-        row.getChildren().addAll(rankLabel, usernameLabel, roleCell, levelLabel, solvedLabel, votesLabel, streakLabel, viewBtn);
+        row.getChildren().addAll(rankLabel, usernameLabel, roleCell, levelLabel, solvedLabel, solutionLabel, votesLabel, streakLabel, viewBtn);
         return row;
+    }
+
+    private void viewProfile(User user) {
+        try {
+            App.viewProfile(user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private String getInitials(User user) {
@@ -311,11 +329,16 @@ public class LeaderboardController {
     }
 
     private int getUserVotePoints(User user) {
+        if (user == null || user.getId() == null) {
+            return 0;
+        }
+
         int total = 0;
         for (Question q : QuestionList.getInstance().getQuestions()) {
             if (q.getSolutionList() == null) continue;
             for (UserSolution sol : q.getSolutionList()) {
-                if (sol.getUser() != null && sol.getUser().getId().equals(user.getId())) {
+                if (sol.getUser() != null && sol.getUser().getId() != null
+                        && sol.getUser().getId().equals(user.getId())) {
                     total += sol.getTotalVote();
                 }
             }
@@ -323,8 +346,82 @@ public class LeaderboardController {
         return total;
     }
 
+    private int countSolutionsPosted(User user) {
+        if (user == null || user.getId() == null) {
+            return 0;
+        }
+
+        int total = 0;
+        for (Question question : QuestionList.getInstance().getQuestions()) {
+            if (question.getSolutionList() == null) continue;
+            for (UserSolution solution : question.getSolutionList()) {
+                if (solution != null && solution.getUser() != null && solution.getUser().getId() != null
+                        && solution.getUser().getId().equals(user.getId())) {
+                    total++;
+                }
+            }
+        }
+        return total;
+    }
+
+    private int compareUsersForRank(User a, User b, String rankMode) {
+        if (RANK_UPVOTES.equals(rankMode)) {
+            int cmp = Integer.compare(getUserVotePoints(b), getUserVotePoints(a));
+            if (cmp != 0) return cmp;
+
+            cmp = Integer.compare(countSolutionsPosted(b), countSolutionsPosted(a));
+            if (cmp != 0) return cmp;
+
+            return Integer.compare(sizeOf(b.getAnsweredQuestions()), sizeOf(a.getAnsweredQuestions()));
+        }
+
+        if (RANK_SOLUTIONS_POSTED.equals(rankMode)) {
+            int cmp = Integer.compare(countSolutionsPosted(b), countSolutionsPosted(a));
+            if (cmp != 0) return cmp;
+
+            cmp = Integer.compare(getUserVotePoints(b), getUserVotePoints(a));
+            if (cmp != 0) return cmp;
+
+            return Integer.compare(getStreak(b), getStreak(a));
+        }
+
+        int cmp = Integer.compare(sizeOf(b.getAnsweredQuestions()), sizeOf(a.getAnsweredQuestions()));
+        if (cmp != 0) return cmp;
+
+        cmp = Integer.compare(getUserVotePoints(b), getUserVotePoints(a));
+        if (cmp != 0) return cmp;
+
+        return Integer.compare(getStreak(b), getStreak(a));
+    }
+
+    private String podiumStatsText(User user) {
+        if (RANK_UPVOTES.equals(getRankMode())) {
+            return "votes: " + getUserVotePoints(user) + "   solutions: " + countSolutionsPosted(user);
+        }
+        if (RANK_SOLUTIONS_POSTED.equals(getRankMode())) {
+            return "solutions: " + countSolutionsPosted(user) + "   votes: " + getUserVotePoints(user);
+        }
+        return "solved: " + sizeOf(user.getAnsweredQuestions()) + "   votes: " + getUserVotePoints(user);
+    }
+
+    private String getRankMode() {
+        String selectedMode = rankModeComboBox.getValue();
+        return selectedMode == null ? RANK_QUESTIONS_SOLVED : selectedMode;
+    }
+
+    private int getUserLevel(User user) {
+        if (user == null || user.getAchievements() == null || user.getAchievements().isEmpty()) {
+            return 1;
+        }
+        return user.getAchievements().get(0).getUserLevel();
+    }
+
+    private int sizeOf(ArrayList<?> list) {
+        return list == null ? 0 : list.size();
+    }
+
     private int getStreak(User user) {
-        if (user.getAchievements() != null && !user.getAchievements().isEmpty()) {
+        if (user != null && user.getAchievements() != null && !user.getAchievements().isEmpty()) {
             return user.getAchievements().get(0).getStreak();
         }
         return 0;
@@ -348,11 +445,7 @@ public class LeaderboardController {
     @FXML
     private void goToProfile() {
         try {
-            if (App.currentUser == null) {
-                App.setRoot("login");
-            } else {
-                App.setRoot("profile");
-            }
+            App.viewCurrentUserProfile();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -360,8 +453,11 @@ public class LeaderboardController {
 
     @FXML
     private void goToAdminDashboard() throws IOException {
-        if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
-            App.setRoot("admindashboard");
-        }
+        App.goToAdminDashboardIfAllowed();
+    }
+
+    @FXML
+    private void goToContributorApplication() throws IOException {
+        App.goToContributorApplicationIfAllowed();
     }
 }

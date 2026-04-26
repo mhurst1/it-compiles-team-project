@@ -32,10 +32,12 @@
                 <Button text="Community" onAction="#goToCommunity" styleClass="nav-btn"/>
 
                 <Button fx:id="adminDashboardButton"
+                    managed="false"
                     mnemonicParsing="false"
                     onAction="#goToAdminDashboard"
                     styleClass="nav-btn, nav-btn-active"
-                    text="Admin Dashboard" />
+                    text="Admin Dashboard"
+                    visible="false" />
 
 
                 <Region HBox.hgrow="ALWAYS" />
@@ -132,6 +134,8 @@
                             <VBox fx:id="questionManagementRows" />
                         </VBox>
                     </HBox>
+
+                    <Label fx:id="actionMessage" styleClass="action-message" text="" />
 
                 </VBox>
             </content>

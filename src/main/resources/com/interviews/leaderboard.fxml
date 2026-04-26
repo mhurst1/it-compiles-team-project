@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
@@ -26,11 +27,21 @@
                 <Button mnemonicParsing="false" onAction="#goToQuestions" styleClass="nav-btn" text="Questions" />
                 <Button mnemonicParsing="false" onAction="#goToCommunity" styleClass="nav-btn, nav-btn-active" text="Community" />
 
+                <Button fx:id="contributorApplicationButton"
+                                    managed="false"
+                                    mnemonicParsing="false"
+                                    onAction="#goToContributorApplication"
+                                    styleClass="nav-btn"
+                                    text="Contributor Application"
+                                    visible="false" />
+
                 <Button fx:id="adminDashboardButton"
+                                    managed="false"
                                     mnemonicParsing="false"
                                     onAction="#goToAdminDashboard"
                                     styleClass="nav-btn"
-                                    text="Admin Dashboard" />
+                                    text="Admin Dashboard"
+                                    visible="false" />
 
 
                 <Region HBox.hgrow="ALWAYS" />
@@ -71,6 +82,7 @@
                         <Button fx:id="filterMediumBtn" mnemonicParsing="false" onAction="#filterMedium" styleClass="filter-btn" text="Contributors" />
                         <Button fx:id="filterHardBtn" mnemonicParsing="false" onAction="#filterHard" styleClass="filter-btn" text="Admins" />
                         <Region HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="rankModeComboBox" promptText="Rank by" styleClass="lb-rank-select" />
                         <TextField fx:id="searchField" promptText="Search users..." styleClass="lb-search" />
                     </HBox>
 
@@ -91,7 +103,9 @@
                             <Label minWidth="70" styleClass="lb-col-header" text="Rank" />
                             <Label minWidth="120" styleClass="lb-col-header" text="User" />
                             <Label minWidth="130" styleClass="lb-col-header" text="Role" />
+                            <Label minWidth="60" styleClass="lb-col-header" text="Level" />
                             <Label minWidth="145" styleClass="lb-col-header" text="Questions Solved" />
+                            <Label minWidth="120" styleClass="lb-col-header" text="Solutions" />
                             <Label minWidth="190" styleClass="lb-col-header" text="Vote Points" />
                             <Label minWidth="90" styleClass="lb-col-header" text="Streak" />
                             <Label styleClass="lb-col-header" text="Actions" />

@@ -26,11 +26,21 @@
                 <Button mnemonicParsing="false" onAction="#goToQuestions" styleClass="nav-btn" text="Questions" />
                 <Button mnemonicParsing="false" onAction="#goToCommunity" styleClass="nav-btn" text="Community" />
 
+                <Button fx:id="contributorApplicationButton"
+                    managed="false"
+                    mnemonicParsing="false"
+                    onAction="#goToContributorApplication"
+                    styleClass="nav-btn"
+                    text="Contributor Application"
+                    visible="false" />
+
                 <Button fx:id="adminDashboardButton"
+                    managed="false"
                     mnemonicParsing="false"
                     onAction="#goToAdminDashboard"
                     styleClass="nav-btn"
-                    text="Admin Dashboard" />
+                    text="Admin Dashboard"
+                    visible="false" />
 
                 <Region HBox.hgrow="ALWAYS" />
                 <Label fx:id="welcomeLabel" styleClass="nav-username" text="Name" />

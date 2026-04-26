@@ -332,6 +332,15 @@
     -fx-text-fill: #c040a0;
 }
 
+.rank-mode-select {
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-border-color: #e0e0ea;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-font-size: 11px;
+}
+
 .stat-upvote {
     -fx-text-fill: #16a34a;
 }
@@ -345,4 +354,32 @@
     -fx-text-fill: #555570;
     -fx-font-size: 12px;
     -fx-padding: 2 0 2 0;
+}
+
+.application-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #ebebf2;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2);
+}
+
+.application-name {
+    -fx-text-fill: #1a1a2e;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.application-textarea {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #e0e0ea;
+    -fx-border-width: 1;
+    -fx-background-insets: 0;
+    -fx-padding: 8 10 8 10;
+    -fx-font-size: 13px;
+    -fx-text-fill: #333;
+    -fx-prompt-text-fill: #aaa;
 }

@@ -5,7 +5,6 @@ import com.interviews.DataWriter;
 import com.interviews.QuestionList;
 import com.interviews.User;
 import com.interviews.UserList;
-import com.interviews.Status;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -19,6 +18,7 @@ import java.io.IOException;
 public class ProfileController {
 
     @FXML private Button adminDashboardButton;
+    @FXML private Button contributorApplicationButton;
 
     @FXML private Label navAvatarLetter;
 
@@ -45,6 +45,8 @@ public class ProfileController {
     private Label gradYearLabel;
     @FXML
     private Label memberSinceLabel;
+    @FXML
+    private Label sectionSubtitle;
 
     @FXML
     private TextField nameField;
@@ -61,15 +63,18 @@ public class ProfileController {
     private Button editInfoButton;
 
     private boolean editing = false;
+    private boolean readOnlyProfile = false;
+    private User profileUser;
 
    @FXML
     private void initialize() {
-    if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
-                adminDashboardButton.setVisible(false);
-                adminDashboardButton.setManaged(false);
-            }
+        App.configureAdminDashboardButton(adminDashboardButton);
+        App.configureContributorApplicationButton(contributorApplicationButton);
 
-        User user = App.currentUser;
+        User navUser = App.currentUser;
+        User user = App.getProfileUser();
+        profileUser = user;
+        readOnlyProfile = !App.isViewingCurrentUserProfile();
 
         if (user == null) {
             welcomeLabel.setText("Unknown User");
@@ -77,17 +82,16 @@ public class ProfileController {
             return;
         }
 
-        if (App.currentUser != null && App.currentUser.getFirstName() != null && !App.currentUser.getFirstName().isEmpty()) {
-            String firstLetter = App.currentUser.getFirstName().substring(0, 1).toUpperCase();
+        if (navUser != null && navUser.getFirstName() != null && !navUser.getFirstName().isEmpty()) {
+            String firstLetter = navUser.getFirstName().substring(0, 1).toUpperCase();
             navAvatarLetter.setText(firstLetter);
         } else {
             navAvatarLetter.setText("U");
         }
 
-      
-        String name = user.getFirstName();
-         if (App.currentUser != null) {
-            name = App.currentUser.getFirstName();
+        String name = "Unknown User";
+         if (navUser != null) {
+            name = navUser.getFirstName();
             welcomeLabel.setText(name);
         } else {
             welcomeLabel.setText("Unknown User");
@@ -97,6 +101,7 @@ public class ProfileController {
 
         updateDisplay(user);
         setEditMode(false);
+        configureProfileAccess();
 
     }
 
@@ -117,14 +122,17 @@ public class ProfileController {
 
     @FXML
     private void goToProfile() throws IOException {
-        App.setRoot(App.currentUser != null ? "profile" : "login");
+        App.viewCurrentUserProfile();
     }
 
     @FXML
     private void goToAdminDashboard() throws IOException {
-        if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
-            App.setRoot("admindashboard");
-        }
+        App.goToAdminDashboardIfAllowed();
+    }
+
+    @FXML
+    private void goToContributorApplication() throws IOException {
+        App.goToContributorApplicationIfAllowed();
     }
 
     @FXML
@@ -137,7 +145,12 @@ public class ProfileController {
 
     @FXML
     private void editInformation() {
-        User user = App.currentUser;
+        if (readOnlyProfile) {
+            showError("You can only edit your own profile.");
+            return;
+        }
+
+        User user = profileUser;
         if (user == null) {
             showError("No user is currently logged in.");
             return;
@@ -155,7 +168,7 @@ public class ProfileController {
 
 
     private void saveEdits() {
-        User user = App.currentUser;
+        User user = profileUser;
 
         String fullName = safe(nameField.getText()).trim();
         String username = safe(usernameField.getText()).trim();
@@ -263,6 +276,22 @@ public class ProfileController {
 
         if (editInfoButton != null) {
             editInfoButton.setText(isEditing ? "Save" : "Edit Information");
+        }
+    }
+
+    private void configureProfileAccess() {
+        if (sectionSubtitle != null) {
+            sectionSubtitle.setText(readOnlyProfile
+                    ? "Viewing public account details"
+                    : "View and edit account details");
+        }
+        if (editInfoButton != null) {
+            editInfoButton.setVisible(!readOnlyProfile);
+            editInfoButton.setManaged(!readOnlyProfile);
+            editInfoButton.setDisable(readOnlyProfile);
+        }
+        if (readOnlyProfile) {
+            setEditMode(false);
         }
     }
 

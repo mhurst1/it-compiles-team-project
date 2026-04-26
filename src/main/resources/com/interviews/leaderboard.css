@@ -76,6 +76,16 @@
     -fx-pref-width: 220px;
 }
 
+.lb-rank-select {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1;
+    -fx-font-size: 12px;
+    -fx-pref-width: 180px;
+}
+
 /* Podium cards */
 .lb-card {
     -fx-background-color: white;

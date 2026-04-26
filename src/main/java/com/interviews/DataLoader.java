@@ -153,9 +153,16 @@ public class DataLoader {
             }
         }
 
-        return new User(id, firstName, lastName, username, password,
+        User user = new User(id, firstName, lastName, username, password,
                 email, new ArrayList<>(), new ArrayList<>(),
                 achievements, parseStatus(getString(obj, "status")), gradYear, idUSC);
+        user.restoreContributorApplication(
+                getBoolean(obj, "contributor-application-pending"),
+                getString(obj, "contributor-application-experience"),
+                getString(obj, "contributor-application-motivation")
+        );
+
+        return user;
     }
 
     /**
@@ -189,7 +196,12 @@ public class DataLoader {
                 String secTitle = getString(sec, "section-title");
                 ArrayList<String> secContent = toStringList((JSONArray) sec.get("section-content"));
                 String secText = getString(sec, "section-text");
-                sections.add(new Section(secTitle, secContent, secText));
+                String fileName = getString(sec, "fileName");
+                if (fileName != null && !fileName.isBlank()) {
+                    sections.add(new Section(secTitle, secContent, secText, fileName, contentType.TEXT));
+                } else {
+                    sections.add(new Section(secTitle, secContent, secText));
+                }
             }
         }
 
@@ -300,6 +312,21 @@ public class DataLoader {
             return (String) val;
         }
         return "";
+    }
+
+    /**
+     * Returns the boolean value for a key, or false if the key is missing.
+     *
+     * @param obj the JSONObject to read from
+     * @param key the key whose value should be retrieved
+     * @return the boolean value, or false if not found
+     */
+    private static boolean getBoolean(JSONObject obj, String key) {
+        Object val = obj.get(key);
+        if (val instanceof Boolean) {
+            return (Boolean) val;
+        }
+        return false;
     }
 
     /**

@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
@@ -31,11 +32,21 @@
                 <Button text="Questions" onAction="#goToQuestions" styleClass="nav-btn, nav-btn-active"/>
                 <Button text="Community" onAction="#goToCommunity" styleClass="nav-btn"/>
 
+                <Button fx:id="contributorApplicationButton"
+                    managed="false"
+                    mnemonicParsing="false"
+                    onAction="#goToContributorApplication"
+                    styleClass="nav-btn"
+                    text="Contributor Application"
+                    visible="false" />
+
                 <Button fx:id="adminDashboardButton"
+                    managed="false"
                     mnemonicParsing="false"
                     onAction="#goToAdminDashboard"
                     styleClass="nav-btn"
-                    text="Admin Dashboard" />
+                    text="Admin Dashboard"
+                    visible="false" />
 
 
                 <Region HBox.hgrow="ALWAYS"/>
@@ -118,6 +129,7 @@
                 <VBox fx:id="statCardRank" spacing="4" styleClass="stat-card">
                     <Label fx:id="statRankLabel" styleClass="stat-label" text="Rank" />
                     <Label fx:id="statRankValue" styleClass="stat-value, stat-rank" text="#N/A" />
+                    <ComboBox fx:id="rankModeComboBox" maxWidth="Infinity" styleClass="rank-mode-select" />
                 </VBox>
 
                 <VBox fx:id="statCardUpvotes" spacing="4" styleClass="stat-card">

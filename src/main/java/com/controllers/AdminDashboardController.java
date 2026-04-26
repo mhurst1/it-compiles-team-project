@@ -2,6 +2,7 @@ package com.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -9,16 +10,21 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.interviews.App;
-import com.interviews.DataLoader;
 import com.interviews.Difficulty;
 import com.interviews.Question;
+import com.interviews.QuestionList;
 import com.interviews.Status;
 import com.interviews.User;
+import com.interviews.UserList;
 import com.interviews.UserSolution;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -55,19 +61,27 @@ public class AdminDashboardController {
 
     @FXML
     private void initialize() {
-        users = DataLoader.getUsers();
-        questions = DataLoader.getQuestions();
+        if (!App.isCurrentUserAdmin()) {
+            Platform.runLater(() -> {
+                try {
+                    App.setRoot(App.currentUser == null ? "login" : "userpage");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+            return;
+        }
+
+        App.configureAdminDashboardButton(adminDashboardButton);
+
+        users = UserList.getInstance().getUsers();
+        questions = QuestionList.getInstance().getQuestions();
         metricsByUser = buildUserMetrics(dedupeUsers(users), questions);
 
         configureWelcomeState();
         populateStatCards();
         populateUserManagement();
         populateQuestionManagement();
-
-        if (App.currentUser == null || App.currentUser.getStatus() != Status.ADMIN) {
-            adminDashboardButton.setVisible(false);
-            adminDashboardButton.setManaged(false);
-        }
 
          if (App.currentUser != null && App.currentUser.getFirstName() != null && !App.currentUser.getFirstName().isEmpty()) {
             String firstLetter = App.currentUser.getFirstName().substring(0, 1).toUpperCase();
@@ -115,9 +129,7 @@ public class AdminDashboardController {
 
     @FXML
     private void goToAdminDashboard() throws IOException {
-        if (App.currentUser != null && App.currentUser.getStatus() == Status.ADMIN) {
-            App.setRoot("admindashboard");
-        }
+        App.goToAdminDashboardIfAllowed();
     }
 
     private void configureWelcomeState() {
@@ -170,21 +182,40 @@ public class AdminDashboardController {
         userManagementRows.getChildren().clear();
 
         List<User> sortedUsers = new ArrayList<>(users);
-        sortedUsers.sort(Comparator.comparing(this::resolveUsername, String.CASE_INSENSITIVE_ORDER));
+        sortedUsers.sort((first, second) -> {
+            int pendingCompare = Boolean.compare(
+                    !hasPendingContributorApplication(first),
+                    !hasPendingContributorApplication(second)
+            );
+            if (pendingCompare != 0) {
+                return pendingCompare;
+            }
+            return String.CASE_INSENSITIVE_ORDER.compare(resolveUsername(first), resolveUsername(second));
+        });
 
         for (User user : sortedUsers) {
             UserMetrics metrics = metricsByUser.get(resolveUsername(user));
             HBox row = createPanelRow();
+            Status rowStatus = user != null ? user.getStatus() : Status.USER;
+            boolean hasPendingApplication = hasPendingContributorApplication(user);
             row.getChildren().addAll(
                     textCell(resolveUsername(user), "panel-cell user-name-cell", 150),
-                    badgeCell(roleLabel(user.getStatus()), roleClass(user.getStatus()), 95),
+                    badgeCell(hasPendingApplication ? "PENDING" : roleLabel(rowStatus),
+                            hasPendingApplication ? "badge-neutral" : roleClass(rowStatus), 95),
                     textCell(String.valueOf(metrics != null ? metrics.getSolvedCount() : 0), "panel-cell", 70),
                     accentCell(String.valueOf(metrics != null ? metrics.getVoteTotal() : 0), 70),
-                    actionButton("Edit", "action-btn primary-action",
-                            "Edit user flow for @" + resolveUsername(user) + " is ready to connect.")
+                    hasPendingApplication
+                            ? actionButton("Review", "action-btn primary-action", () -> reviewContributorApplication(user))
+                            : actionButton("Edit", "action-btn primary-action", () -> editUserStatus(user))
             );
             userManagementRows.getChildren().add(row);
         }
+    }
+
+    private boolean hasPendingContributorApplication(User user) {
+        return user != null
+                && user.getStatus() == Status.USER
+                && user.hasContributorApplicationPending();
     }
 
     private void populateQuestionManagement() {
@@ -200,10 +231,8 @@ public class AdminDashboardController {
                     badgeCell(difficultyLabel(snapshot.getDifficulty()), difficultyClass(snapshot.getDifficulty()), 84),
                     accentCell(String.valueOf(snapshot.getVoteTotal()), 55),
                     textCell(snapshot.getAuthor(), "panel-cell by-cell", 96),
-                    actionButton("Edit", "action-btn primary-action",
-                            "Edit question flow for \"" + snapshot.getTitle() + "\" is ready to connect."),
-                    actionButton("Remove", "action-btn danger-action",
-                            "Remove question flow for \"" + snapshot.getTitle() + "\" is ready to connect.")
+                    actionButton("Edit", "action-btn primary-action", () -> editQuestion(snapshot.getQuestion())),
+                    actionButton("Remove", "action-btn danger-action", () -> removeQuestion(snapshot.getQuestion()))
             );
             questionManagementRows.getChildren().add(row);
         }
@@ -226,6 +255,7 @@ public class AdminDashboardController {
             }
 
             snapshots.add(new QuestionSnapshot(
+                    question,
                     safeQuestionTitle(question.getTitle()),
                     question.getDifficulty(),
                     totalVotes,
@@ -343,10 +373,172 @@ public class AdminDashboardController {
     }
 
     private Button actionButton(String text, String styleClasses, String message) {
+        return actionButton(text, styleClasses, () -> showActionMessage(message));
+    }
+
+    private Button actionButton(String text, String styleClasses, Runnable action) {
         Button button = new Button(text);
         button.getStyleClass().addAll(parseStyleClasses(styleClasses));
-        button.setOnAction(event -> showActionMessage(message));
+        button.setOnAction(event -> action.run());
         return button;
+    }
+
+    private void editUserStatus(User user) {
+        if (user == null) {
+            showActionMessage("Could not edit that user.");
+            return;
+        }
+
+        Status currentStatus = user.getStatus() != null ? user.getStatus() : Status.USER;
+        ChoiceDialog<Status> dialog = new ChoiceDialog<>(
+                currentStatus,
+                Arrays.asList(Status.USER, Status.CONTRIBUTOR, Status.ADMIN)
+        );
+        dialog.setTitle("Edit User Status");
+        dialog.setHeaderText("Change status for @" + resolveUsername(user));
+        dialog.setContentText("Status:");
+
+        dialog.showAndWait().ifPresent(newStatus -> {
+            user.setStatus(newStatus);
+            if (newStatus != Status.USER) {
+                user.clearContributorApplication();
+            }
+            UserList.getInstance().save();
+            refreshUserManagementState();
+            App.configureAdminDashboardButton(adminDashboardButton);
+            showActionMessage("Updated @" + resolveUsername(user) + " to " + roleLabel(newStatus) + ".");
+        });
+    }
+
+    private void reviewContributorApplication(User user) {
+        if (!hasPendingContributorApplication(user)) {
+            showActionMessage("That user does not have a pending contributor application.");
+            return;
+        }
+
+        ButtonType approveButton = new ButtonType("Approve");
+        ButtonType rejectButton = new ButtonType("Reject");
+
+        Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
+        dialog.setTitle("Contributor Application");
+        dialog.setHeaderText("Review @" + resolveUsername(user));
+        dialog.setContentText("Current role: " + roleLabel(user.getStatus())
+                + "\n\nExperience:\n" + fallbackText(user.getContributorApplicationExperience())
+                + "\n\nMotivation:\n" + fallbackText(user.getContributorApplicationMotivation()));
+        dialog.getButtonTypes().setAll(approveButton, rejectButton, ButtonType.CANCEL);
+
+        dialog.showAndWait().ifPresent(choice -> {
+            if (choice == approveButton) {
+                approveContributorApplication(user);
+            } else if (choice == rejectButton) {
+                rejectContributorApplication(user);
+            }
+        });
+    }
+
+    private void approveContributorApplication(User user) {
+        user.setStatus(Status.CONTRIBUTOR);
+        user.clearContributorApplication();
+        UserList.getInstance().save();
+        refreshUserManagementState();
+        showActionMessage("Approved @" + resolveUsername(user) + " as a contributor.");
+    }
+
+    private void rejectContributorApplication(User user) {
+        user.clearContributorApplication();
+        UserList.getInstance().save();
+        refreshUserManagementState();
+        showActionMessage("Rejected contributor application for @" + resolveUsername(user) + ".");
+    }
+
+    private void refreshUserManagementState() {
+        metricsByUser = buildUserMetrics(dedupeUsers(users), questions);
+        populateUserManagement();
+    }
+
+    private void editQuestion(Question question) {
+        if (question == null) {
+            showActionMessage("Could not edit that question.");
+            return;
+        }
+
+        App.editingQuestion = question;
+        try {
+            App.setRoot("addquestion");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showActionMessage("Could not open the question editor.");
+        }
+    }
+
+    private void removeQuestion(Question question) {
+        if (question == null) {
+            showActionMessage("Could not remove that question.");
+            return;
+        }
+
+        String removedTitle = safeQuestionTitle(question.getTitle());
+        boolean removed = removeQuestionFromList(question);
+        if (!removed) {
+            showActionMessage("Could not find \"" + removedTitle + "\" to remove.");
+            return;
+        }
+
+        removeQuestionReferences(question);
+
+        if (sameQuestion(App.currentQuestion, question)) {
+            App.currentQuestion = null;
+        }
+        if (sameQuestion(App.editingQuestion, question)) {
+            App.editingQuestion = null;
+        }
+
+        QuestionList.getInstance().saveAll();
+        UserList.getInstance().save();
+
+        users = UserList.getInstance().getUsers();
+        questions = QuestionList.getInstance().getQuestions();
+        metricsByUser = buildUserMetrics(dedupeUsers(users), questions);
+
+        configureWelcomeState();
+        populateStatCards();
+        populateUserManagement();
+        populateQuestionManagement();
+        showActionMessage("Removed \"" + removedTitle + "\".");
+    }
+
+    private boolean removeQuestionFromList(Question question) {
+        for (int i = 0; i < questions.size(); i++) {
+            if (sameQuestion(questions.get(i), question)) {
+                questions.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void removeQuestionReferences(Question question) {
+        for (User user : users) {
+            removeQuestionFromUserList(user.getAnsweredQuestions(), question);
+            removeQuestionFromUserList(user.getStarredQuestions(), question);
+        }
+    }
+
+    private void removeQuestionFromUserList(ArrayList<Question> questionList, Question question) {
+        if (questionList == null) {
+            return;
+        }
+        questionList.removeIf(savedQuestion -> sameQuestion(savedQuestion, question));
+    }
+
+    private boolean sameQuestion(Question first, Question second) {
+        if (first == null || second == null) {
+            return false;
+        }
+        if (first.getId() != null && second.getId() != null) {
+            return first.getId().equals(second.getId());
+        }
+        return first == second;
     }
 
     private List<String> parseStyleClasses(String styleClasses) {
@@ -426,7 +618,16 @@ public class AdminDashboardController {
     }
 
     private void showActionMessage(String message) {
-        actionMessage.setText(message);
+        if (actionMessage != null) {
+            actionMessage.setText(message);
+        }
+    }
+
+    private String fallbackText(String text) {
+        if (text == null || text.isBlank()) {
+            return "No response provided.";
+        }
+        return text;
     }
 
     private static final class UserMetrics {
@@ -466,18 +667,24 @@ public class AdminDashboardController {
     }
 
     private static final class QuestionSnapshot {
+        private final Question question;
         private final String title;
         private final Difficulty difficulty;
         private final int voteTotal;
         private final String author;
         private final int solutionCount;
 
-        private QuestionSnapshot(String title, Difficulty difficulty, int voteTotal, String author, int solutionCount) {
+        private QuestionSnapshot(Question question, String title, Difficulty difficulty, int voteTotal, String author, int solutionCount) {
+            this.question = question;
             this.title = title;
             this.difficulty = difficulty;
             this.voteTotal = voteTotal;
             this.author = author;
             this.solutionCount = solutionCount;
+        }
+
+        private Question getQuestion() {
+            return question;
         }
 
         private String getTitle() {
