@@ -35,6 +35,7 @@ public class DashboardController {
     @FXML private Button filterEasyBtn;
     @FXML private Button filterMediumBtn;
     @FXML private Button filterHardBtn;
+    @FXML private Button filterStarredBtn;
     @FXML private TextField searchField;
 
     // Left sidebar
@@ -56,6 +57,7 @@ public class DashboardController {
     private Difficulty activeFilter = null;
     private Language activeLanguageFilter = null;
     private HBox activeSidebarItem;
+    private boolean showingStarredOnly = false;
 
     private static final String RANK_OVERALL = "Overall";
     private static final String RANK_UPVOTES = "Upvotes";
@@ -353,6 +355,7 @@ public class DashboardController {
     @FXML
     private void filterAll() {
         setActiveFilter(filterAllBtn);
+        showingStarredOnly = false;
         activeFilter = null;
         applyFilters();
     }
@@ -360,6 +363,7 @@ public class DashboardController {
     @FXML
     private void filterEasy() {
         setActiveFilter(filterEasyBtn);
+        showingStarredOnly = false;
         activeFilter = Difficulty.EASY;
         applyFilters();
     }
@@ -367,6 +371,7 @@ public class DashboardController {
     @FXML
     private void filterMedium() {
         setActiveFilter(filterMediumBtn);
+        showingStarredOnly = false;
         activeFilter = Difficulty.MEDIUM;
         applyFilters();
     }
@@ -374,13 +379,16 @@ public class DashboardController {
     @FXML
     private void filterHard() {
         setActiveFilter(filterHardBtn);
+        showingStarredOnly = false;
         activeFilter = Difficulty.HARD;
         applyFilters();
     }
 
     private void applyFilters() {
-        String query = searchField.getText().trim().toLowerCase();
-        ArrayList<Question> result = activeFilter == null ? questions : filterByDifficulty(activeFilter);
+        String query = searchField.getText() == null ? "" : searchField.getText().trim().toLowerCase();
+        ArrayList<Question> result = showingStarredOnly
+                ? getStarredQuestionsForCurrentUser()
+                : activeFilter == null ? questions : filterByDifficulty(activeFilter);
         if (activeLanguageFilter != null) {
             ArrayList<Question> byLang = new ArrayList<>();
             for (Question q : result) {
@@ -391,12 +399,31 @@ public class DashboardController {
         if (!query.isEmpty()) {
             ArrayList<Question> searched = new ArrayList<>();
             for (Question q : result) {
-                if (q.getTitle().toLowerCase().contains(query)) searched.add(q);
+                if (q.getTitle() != null && q.getTitle().toLowerCase().contains(query)) searched.add(q);
             }
             result = searched;
         }
-        contentSubtitle.setText(result.size() + " question" + (result.size() == 1 ? "" : "s") + " found");
+        String label = showingStarredOnly ? "starred question" : "question";
+        contentSubtitle.setText(result.size() + " " + label + (result.size() == 1 ? "" : "s") + " found");
         loadCards(result);
+    }
+
+    private ArrayList<Question> getStarredQuestionsForCurrentUser() {
+        ArrayList<Question> starred = new ArrayList<>();
+        if (App.currentUser == null || App.currentUser.getStarredQuestions() == null) {
+            return starred;
+        }
+
+        for (Question question : questions) {
+            for (Question starredQuestion : App.currentUser.getStarredQuestions()) {
+                if (sameQuestion(starredQuestion, question)) {
+                    starred.add(question);
+                    break;
+                }
+            }
+        }
+
+        return starred;
     }
 
     private ArrayList<Question> filterByDifficulty(Difficulty difficulty) {
@@ -412,7 +439,10 @@ public class DashboardController {
         filterEasyBtn.getStyleClass().remove("filter-btn-active");
         filterMediumBtn.getStyleClass().remove("filter-btn-active");
         filterHardBtn.getStyleClass().remove("filter-btn-active");
-        active.getStyleClass().add("filter-btn-active");
+        filterStarredBtn.getStyleClass().remove("filter-btn-active");
+        if (active != null) {
+            active.getStyleClass().add("filter-btn-active");
+        }
     }
 
     @FXML
@@ -488,7 +518,8 @@ public class DashboardController {
         QuestionCardController cardBuilder = new QuestionCardController();
         ArrayList<Question> sortedQuestions = sortByUpvotes(list);
         for (int i = 0; i < sortedQuestions.size(); i++) {
-            HBox card = cardBuilder.buildCard(sortedQuestions.get(i), i + 1);
+            HBox card = cardBuilder.buildCard(sortedQuestions.get(i), i + 1,
+                    showingStarredOnly ? this::applyFilters : null);
             questionCardList.getChildren().add(card);
         }
     }
@@ -515,24 +546,21 @@ public class DashboardController {
 
     @FXML
     private void filterStarred() {
-        setActiveFilter(null); // optional styling reset
+        showingStarredOnly = true;
+        activeFilter = null;
+        activeLanguageFilter = null;
+        setActiveSidebarItem(sidebarAllQuestions);
+        setActiveFilter(filterStarredBtn);
+        applyFilters();
+    }
 
-        if (App.currentUser == null || App.currentUser.getStarredQuestions() == null) {
-            loadCards(new ArrayList<>());
-            return;
+    private boolean sameQuestion(Question first, Question second) {
+        if (first == null || second == null) {
+            return false;
         }
-
-        ArrayList<Question> starred = new ArrayList<>();
-
-        for (Question q : questions) {
-            for (Question sq : App.currentUser.getStarredQuestions()) {
-                if (sq.getId().equals(q.getId())) {
-                    starred.add(q);
-                    break;
-                }
-            }
+        if (first.getId() != null && second.getId() != null) {
+            return first.getId().equals(second.getId());
         }
-
-        loadCards(starred);
+        return first == second;
     }
 }

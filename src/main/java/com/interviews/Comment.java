@@ -8,6 +8,8 @@ import java.util.ArrayList;
 public class Comment {
     private User user;
     private String comment;
+    private String attachmentName;
+    private String attachmentPath;
     private ArrayList<Comment> replies;
 
     /**
@@ -19,6 +21,24 @@ public class Comment {
     public Comment(User user, String comment){
         this.user = user;
         this.comment = comment;
+        this.attachmentName = "";
+        this.attachmentPath = "";
+        this.replies = new ArrayList<>();
+    }
+
+    /**
+     * Creates a comment with an optional attachment.
+     *
+     * @param user the author of the comment
+     * @param comment the comment text
+     * @param attachmentName the selected attachment file name
+     * @param attachmentPath the selected attachment file path
+     */
+    public Comment(User user, String comment, String attachmentName, String attachmentPath){
+        this.user = user;
+        this.comment = comment;
+        this.attachmentName = attachmentName != null ? attachmentName : "";
+        this.attachmentPath = attachmentPath != null ? attachmentPath : "";
         this.replies = new ArrayList<>();
     }
 
@@ -30,8 +50,24 @@ public class Comment {
      * @param replies the existing replies, or {@code null} to start empty
      */
     public Comment(User user, String comment, ArrayList<Comment> replies){
+        this(user, comment, replies, "", "");
+    }
+
+    /**
+     * Creates a comment with replies and optional attachment metadata.
+     *
+     * @param user the author of the comment
+     * @param comment the comment text
+     * @param replies the existing replies, or {@code null} to start empty
+     * @param attachmentName the selected attachment file name
+     * @param attachmentPath the selected attachment file path
+     */
+    public Comment(User user, String comment, ArrayList<Comment> replies,
+            String attachmentName, String attachmentPath){
         this.user = user;
         this.comment = comment;
+        this.attachmentName = attachmentName != null ? attachmentName : "";
+        this.attachmentPath = attachmentPath != null ? attachmentPath : "";
         if(replies == null){
             this.replies = new ArrayList<>();
         }
@@ -55,6 +91,27 @@ public class Comment {
      */
     public String getComment(){
         return comment;
+    }
+
+    /**
+     * @return the attached file name, or an empty string when no file is attached
+     */
+    public String getAttachmentName(){
+        return attachmentName != null ? attachmentName : "";
+    }
+
+    /**
+     * @return the attached file path, or an empty string when no file is attached
+     */
+    public String getAttachmentPath(){
+        return attachmentPath != null ? attachmentPath : "";
+    }
+
+    /**
+     * @return true when this comment includes attachment metadata
+     */
+    public boolean hasAttachment(){
+        return !getAttachmentName().isBlank() || !getAttachmentPath().isBlank();
     }
 
     /**

@@ -61,6 +61,8 @@ public class ProfileController {
 
     @FXML
     private Button editInfoButton;
+    @FXML
+    private Button backToLeaderboardButton;
 
     private boolean editing = false;
     private boolean readOnlyProfile = false;
@@ -117,6 +119,11 @@ public class ProfileController {
 
     @FXML
     private void goToCommunity() throws IOException {
+        App.setRoot("leaderboard");
+    }
+
+    @FXML
+    private void goBackToLeaderboard() throws IOException {
         App.setRoot("leaderboard");
     }
 
@@ -289,6 +296,10 @@ public class ProfileController {
             editInfoButton.setVisible(!readOnlyProfile);
             editInfoButton.setManaged(!readOnlyProfile);
             editInfoButton.setDisable(readOnlyProfile);
+        }
+        if (backToLeaderboardButton != null) {
+            backToLeaderboardButton.setVisible(readOnlyProfile);
+            backToLeaderboardButton.setManaged(readOnlyProfile);
         }
         if (readOnlyProfile) {
             setEditMode(false);

@@ -76,28 +76,28 @@
                             <Label styleClass="summary-icon" text="Users" />
                             <Label fx:id="totalUsersValue" styleClass="summary-value" text="0" />
                             <Label styleClass="summary-label" text="Total Users" />
-                            <Label fx:id="totalUsersTrend" styleClass="summary-trend" text="0 loaded" />
+                            <Label fx:id="totalUsersTrend" managed="false" styleClass="summary-trend" text="" visible="false" />
                         </VBox>
 
                         <VBox prefWidth="235.0" spacing="4.0" styleClass="summary-card">
                             <Label styleClass="summary-icon" text="Queue" />
                             <Label fx:id="totalQuestionsValue" styleClass="summary-value" text="0" />
                             <Label styleClass="summary-label" text="Questions" />
-                            <Label fx:id="totalQuestionsTrend" styleClass="summary-trend" text="0 answered" />
+                            <Label fx:id="totalQuestionsTrend" managed="false" styleClass="summary-trend" text="" visible="false" />
                         </VBox>
 
                         <VBox prefWidth="235.0" spacing="4.0" styleClass="summary-card">
                             <Label styleClass="summary-icon" text="Votes" />
                             <Label fx:id="totalUpvotesValue" styleClass="summary-value" text="0" />
                             <Label styleClass="summary-label" text="Total Upvotes" />
-                            <Label fx:id="totalUpvotesTrend" styleClass="summary-trend" text="0 tracked" />
+                            <Label fx:id="totalUpvotesTrend" managed="false" styleClass="summary-trend" text="" visible="false" />
                         </VBox>
 
                         <VBox prefWidth="235.0" spacing="4.0" styleClass="summary-card">
                             <Label styleClass="summary-icon" text="Solved" />
                             <Label fx:id="totalSolutionsValue" styleClass="summary-value" text="0" />
                             <Label styleClass="summary-label" text="Solutions Submitted" />
-                            <Label fx:id="totalSolutionsTrend" styleClass="summary-trend" text="0 pending" />
+                            <Label fx:id="totalSolutionsTrend" managed="false" styleClass="summary-trend" text="" visible="false" />
                         </VBox>
                     </FlowPane>
 

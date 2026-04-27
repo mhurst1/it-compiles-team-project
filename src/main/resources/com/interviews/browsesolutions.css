@@ -275,6 +275,12 @@
 }
 .reply-btn:hover { -fx-opacity: 0.88; }
 
+.attachment-label {
+    -fx-text-fill: #7c3aed;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
 .no-solutions-label {
     -fx-text-fill: #9090a8;
     -fx-font-size: 13px;
@@ -302,6 +308,12 @@
 .comment-text {
     -fx-text-fill: #555570;
     -fx-font-size: 12px;
+}
+
+.attachment-link {
+    -fx-text-fill: #7734ED;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
 }
 
 .comment-remove-btn {

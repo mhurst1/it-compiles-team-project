@@ -20,12 +20,16 @@ import javafx.scene.shape.Circle;
 public class QuestionCardController {
 
     public HBox buildCard(Question question, int index) {
+        return buildCard(question, index, null);
+    }
+
+    public HBox buildCard(Question question, int index, Runnable starChangedHandler) {
         
         Circle dot = new Circle(5);
         boolean solved = false;
         if (App.currentUser != null && App.currentUser.getAnsweredQuestions() != null) {
             for (Question q : App.currentUser.getAnsweredQuestions()) {
-                if (q.getId().equals(question.getId())) {
+                if (sameQuestion(q, question)) {
                     solved = true;
                     break;
                 }
@@ -34,18 +38,18 @@ public class QuestionCardController {
         dot.getStyleClass().add(solved ? "dot-solved" : "dot-unsolved");
 
 
-        boolean starred = false;
-        if (App.currentUser != null && App.currentUser.getStarredQuestions() != null) {
-            for (Question q : App.currentUser.getStarredQuestions()) {
-                if (q.getId().equals(question.getId())) {
-                    starred = true;
-                    break;
-                }
-            }
-        }
+        boolean starred = isStarred(question);
 
-        Label star = new Label(starred ? "★" : "☆");
-        star.getStyleClass().add(starred ? "star-filled" : "star-empty");
+        Label star = new Label();
+        updateStarLabel(star, starred);
+        star.setOnMouseClicked(event -> {
+            event.consume();
+            toggleStar(question);
+            updateStarLabel(star, isStarred(question));
+            if (starChangedHandler != null) {
+                starChangedHandler.run();
+            }
+        });
 
         
 
@@ -93,6 +97,55 @@ public class QuestionCardController {
         });
 
         return card;
+    }
+
+    private boolean isStarred(Question question) {
+        if (App.currentUser == null || question == null || App.currentUser.getStarredQuestions() == null) {
+            return false;
+        }
+
+        for (Question starredQuestion : App.currentUser.getStarredQuestions()) {
+            if (sameQuestion(starredQuestion, question)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void toggleStar(Question question) {
+        if (App.currentUser == null || question == null) {
+            return;
+        }
+
+        ArrayList<Question> starredQuestions = App.currentUser.getStarredQuestions();
+        if (starredQuestions == null) {
+            starredQuestions = new ArrayList<>();
+            App.currentUser.setStarredQuestions(starredQuestions);
+        }
+
+        if (isStarred(question)) {
+            starredQuestions.removeIf(starredQuestion -> sameQuestion(starredQuestion, question));
+        } else {
+            starredQuestions.add(question);
+        }
+
+        UserList.getInstance().save();
+    }
+
+    private void updateStarLabel(Label star, boolean starred) {
+        star.setText(starred ? "\u2605" : "\u2606");
+        star.getStyleClass().removeAll("star-filled", "star-empty");
+        star.getStyleClass().add(starred ? "star-filled" : "star-empty");
+    }
+
+    private boolean sameQuestion(Question first, Question second) {
+        if (first == null || second == null) {
+            return false;
+        }
+        if (first.getId() != null && second.getId() != null) {
+            return first.getId().equals(second.getId());
+        }
+        return first == second;
     }
 
     private String difficultyText(Difficulty d) {
