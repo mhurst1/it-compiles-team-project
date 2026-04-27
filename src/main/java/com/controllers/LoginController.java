@@ -65,8 +65,4 @@ public class LoginController {
         App.setRoot("userpage");
     }
 
-    @FXML
-    private void forgotPassword() {
-
-    }
 }

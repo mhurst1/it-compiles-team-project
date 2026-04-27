@@ -88,21 +88,6 @@
     -fx-opacity: 0.9;
 }
 
-/* Forgot Password link */
-#forgotPassBtn {
-    -fx-background-color: transparent;
-    -fx-text-fill: #7734ED;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-padding: 0;
-    -fx-cursor: hand;
-    -fx-border-color: transparent;
-}
-
-#forgotPassBtn:hover {
-    -fx-opacity: 0.75;
-}
-
 /* "or" divider */
 #orDivider {
     -fx-fill: #aaa;

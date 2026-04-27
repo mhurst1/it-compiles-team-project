@@ -212,7 +212,10 @@
                             </HBox>
 
                             <HBox alignment="CENTER">
-                                <Button text="Logout" onAction="#handleLogout" styleClass="logout-btn"/>
+                                <Button fx:id="logoutButton"
+                                        text="Logout"
+                                        onAction="#handleLogout"
+                                        styleClass="logout-btn"/>
                             </HBox>
                         </children>
                     </VBox>

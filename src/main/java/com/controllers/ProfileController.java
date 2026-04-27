@@ -63,6 +63,8 @@ public class ProfileController {
     private Button editInfoButton;
     @FXML
     private Button backToLeaderboardButton;
+    @FXML
+    private Button logoutButton;
 
     private boolean editing = false;
     private boolean readOnlyProfile = false;
@@ -300,6 +302,10 @@ public class ProfileController {
         if (backToLeaderboardButton != null) {
             backToLeaderboardButton.setVisible(readOnlyProfile);
             backToLeaderboardButton.setManaged(readOnlyProfile);
+        }
+        if (logoutButton != null) {
+            logoutButton.setVisible(!readOnlyProfile);
+            logoutButton.setManaged(!readOnlyProfile);
         }
         if (readOnlyProfile) {
             setEditMode(false);

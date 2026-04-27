@@ -142,20 +142,6 @@
     -fx-opacity: 0.75;
 }
 
-/* Forgot Password link */
-#forgotPasswordBtn {
-    -fx-background-color: transparent;
-    -fx-text-fill: #7734ED;
-    -fx-font-size: 12px;
-    -fx-padding: 0;
-    -fx-cursor: hand;
-    -fx-border-color: transparent;
-}
-
-#forgotPasswordBtn:hover {
-    -fx-opacity: 0.75;
-}
-
 /* Or separator label */
 #orLabel {
     -fx-text-fill: #999;

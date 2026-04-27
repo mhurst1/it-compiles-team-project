@@ -257,10 +257,10 @@ public class BrowseSolutions {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Button thumbUp = new Button("▲  " + solution.getTotalVote());
+        Button thumbUp = new Button();
         thumbUp.getStyleClass().add("vote-btn");
 
-        Button thumbDown = new Button("▼");
+        Button thumbDown = new Button();
         thumbDown.getStyleClass().add("vote-btn");
 
         if (voteState.get(solId) == 1) {
@@ -475,8 +475,8 @@ public class BrowseSolutions {
     }
 
     private void refreshVoteLabels(Button thumbUp, Button thumbDown, UserSolution solution) {
-        thumbUp.setText("Up " + solution.getUpVotes());
-        thumbDown.setText("Down " + solution.getDownVotes());
+        thumbUp.setText("\u25B2 " + solution.getUpVotes());
+        thumbDown.setText("\u25BC " + solution.getDownVotes());
     }
 
     private void refreshVoteStyles(Button thumbUp, Button thumbDown, int state) {

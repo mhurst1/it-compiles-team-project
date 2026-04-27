@@ -52,16 +52,10 @@
                </children>
             </VBox>
 
-            <!-- Password row with Forgot Password -->
+            <!-- Password -->
             <VBox spacing="4.0">
                <children>
-                  <HBox>
-                     <children>
-                        <Label fx:id="passwordTitle" text="Password" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Button fx:id="forgotPasswordBtn" onAction="#forgotPassword" text="Forgot Password?" />
-                     </children>
-                  </HBox>
+                  <Label fx:id="passwordTitle" text="Password" />
                   <PasswordField fx:id="txt_password" promptText="Enter your password" />
                </children>
             </VBox>
