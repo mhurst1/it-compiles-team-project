@@ -269,8 +269,10 @@ public class DataLoader {
                 user = usersById.get(userId);
             }
             String text = getString(c, "comment");
+            String attachmentName = getString(c, "attachment-name");
+            String attachmentPath = getString(c, "attachment-path");
             ArrayList<Comment> replies = parseComments((JSONArray) c.get("replies"), usersById);
-            comments.add(new Comment(user, text, replies));
+            comments.add(new Comment(user, text, replies, attachmentName, attachmentPath));
         }
         return comments;
     }

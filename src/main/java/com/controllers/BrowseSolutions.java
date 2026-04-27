@@ -1,6 +1,7 @@
 package com.controllers;
 
 import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -17,6 +18,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
 
 import com.interviews.App;
 import com.interviews.Comment;
@@ -224,7 +226,7 @@ public class BrowseSolutions {
 
     private VBox buildSolutionCard(UserSolution solution) {
         UUID solId = solution.getSoulutionId();
-        voteState.putIfAbsent(solId, 0);
+        voteState.put(solId, getCurrentVoteState(solution));
 
         VBox card = new VBox(0);
         card.getStyleClass().add("solution-card");
@@ -301,6 +303,33 @@ public class BrowseSolutions {
             QuestionList.getInstance().saveAll();
         });
 
+        refreshVoteLabels(thumbUp, thumbDown, solution);
+        thumbUp.setOnAction(e -> {
+            if (App.currentUser == null || App.currentUser.getId() == null) {
+                return;
+            }
+            int current = voteState.get(solId);
+            int next = current == 1 ? 0 : 1;
+            solution.castVote(App.currentUser.getId(), next);
+            voteState.put(solId, next);
+            refreshVoteLabels(thumbUp, thumbDown, solution);
+            refreshVoteStyles(thumbUp, thumbDown, next);
+            QuestionList.getInstance().saveAll();
+        });
+
+        thumbDown.setOnAction(e -> {
+            if (App.currentUser == null || App.currentUser.getId() == null) {
+                return;
+            }
+            int current = voteState.get(solId);
+            int next = current == -1 ? 0 : -1;
+            solution.castVote(App.currentUser.getId(), next);
+            voteState.put(solId, next);
+            refreshVoteLabels(thumbUp, thumbDown, solution);
+            refreshVoteStyles(thumbUp, thumbDown, next);
+            QuestionList.getInstance().saveAll();
+        });
+
         userRow.getChildren().addAll(avatar, usernameLabel, spacer, thumbUp, thumbDown);
 
         boolean isSolutionOwner = App.currentUser != null
@@ -329,6 +358,21 @@ public class BrowseSolutions {
         HBox.setHgrow(replyField, Priority.ALWAYS);
         Button replyBtn = new Button("Post");
         replyBtn.getStyleClass().add("reply-btn");
+        Button attachBtn = new Button("Attach");
+        attachBtn.getStyleClass().add("reply-btn");
+        Label attachmentLabel = new Label("");
+        attachmentLabel.getStyleClass().add("attachment-label");
+        final File[] selectedAttachment = new File[1];
+
+        attachBtn.setOnAction(e -> {
+            FileChooser chooser = new FileChooser();
+            chooser.setTitle("Attach File");
+            File file = chooser.showOpenDialog(solutionsContainer.getScene().getWindow());
+            if (file != null) {
+                selectedAttachment[0] = file;
+                attachmentLabel.setText(file.getName());
+            }
+        });
 
         VBox commentsSection = new VBox(6);
         commentsSection.getStyleClass().add("comments-section");
@@ -336,15 +380,21 @@ public class BrowseSolutions {
 
         replyBtn.setOnAction(e -> {
             String text = replyField.getText().trim();
-            if (text.isEmpty() || App.currentUser == null)
+            File attachment = selectedAttachment[0];
+            if ((text.isEmpty() && attachment == null) || App.currentUser == null)
                 return;
-            solution.getReplies().add(new Comment(App.currentUser, text));
+            Comment comment = attachment == null
+                    ? new Comment(App.currentUser, text)
+                    : new Comment(App.currentUser, text, attachment.getName(), attachment.getAbsolutePath());
+            solution.getReplies().add(comment);
             QuestionList.getInstance().saveAll();
             replyField.clear();
+            selectedAttachment[0] = null;
+            attachmentLabel.setText("");
             buildCommentsList(solution, commentsSection);
         });
 
-        replyRow.getChildren().addAll(replyField, replyBtn);
+        replyRow.getChildren().addAll(replyField, attachBtn, attachmentLabel, replyBtn);
 
         bottom.getChildren().addAll(userRow, replyRow, commentsSection);
         card.getChildren().addAll(codeBox, bottom);
@@ -377,10 +427,24 @@ public class BrowseSolutions {
         HBox.setHgrow(textBox, Priority.ALWAYS);
         Label usernameLabel = new Label(username);
         usernameLabel.getStyleClass().add("comment-username");
-        Label commentText = new Label(comment.getComment());
-        commentText.setWrapText(true);
-        commentText.getStyleClass().add("comment-text");
-        textBox.getChildren().addAll(usernameLabel, commentText);
+        textBox.getChildren().add(usernameLabel);
+
+        if (comment.getComment() != null && !comment.getComment().isBlank()) {
+            Label commentText = new Label(comment.getComment());
+            commentText.setWrapText(true);
+            commentText.getStyleClass().add("comment-text");
+            textBox.getChildren().add(commentText);
+        }
+
+        if (comment.hasAttachment()) {
+            String attachmentName = comment.getAttachmentName().isBlank()
+                    ? comment.getAttachmentPath()
+                    : comment.getAttachmentName();
+            Label attachmentText = new Label("Attachment: " + attachmentName);
+            attachmentText.setWrapText(true);
+            attachmentText.getStyleClass().add("attachment-link");
+            textBox.getChildren().add(attachmentText);
+        }
 
         row.getChildren().addAll(avatar, textBox);
 
@@ -401,6 +465,18 @@ public class BrowseSolutions {
         }
 
         return row;
+    }
+
+    private int getCurrentVoteState(UserSolution solution) {
+        if (App.currentUser == null || App.currentUser.getId() == null || solution == null) {
+            return 0;
+        }
+        return solution.getVoteStateForUser(App.currentUser.getId());
+    }
+
+    private void refreshVoteLabels(Button thumbUp, Button thumbDown, UserSolution solution) {
+        thumbUp.setText("Up " + solution.getUpVotes());
+        thumbDown.setText("Down " + solution.getDownVotes());
     }
 
     private void refreshVoteStyles(Button thumbUp, Button thumbDown, int state) {

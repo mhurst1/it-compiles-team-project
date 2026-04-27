@@ -213,6 +213,8 @@ public class QuestionList {
             JSONObject obj = new JSONObject();
             obj.put("user", c.getUser() != null ? c.getUser().getId().toString() : "");
             obj.put("comment", c.getComment() != null ? c.getComment() : "");
+            obj.put("attachment-name", c.getAttachmentName());
+            obj.put("attachment-path", c.getAttachmentPath());
             obj.put("replies", buildCommentArray(c.getReplies()));
             arr.add(obj);
         }

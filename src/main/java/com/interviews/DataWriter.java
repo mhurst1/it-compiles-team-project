@@ -289,6 +289,8 @@ public class DataWriter {
                 commentText = c.getComment();
             }
             obj.put("comment", commentText);
+            obj.put("attachment-name", c.getAttachmentName());
+            obj.put("attachment-path", c.getAttachmentPath());
 
             obj.put("replies", commentArray(c.getReplies()));
             arr.add(obj);
