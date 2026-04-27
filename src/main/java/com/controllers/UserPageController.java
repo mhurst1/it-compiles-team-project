@@ -364,18 +364,25 @@ public class UserPageController {
         Label langBadge = new Label(q.getLanguage() != null ? q.getLanguage().name() : "Unknown");
         langBadge.getStyleClass().add("badge");
 
-        Button editBtn = new Button("Edit");
-        editBtn.getStyleClass().add("btn-edit-question");
-        editBtn.setOnAction(e -> {
-            App.editingQuestion = q;
-            try {
-                App.setRoot("addquestion");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        });
+        HBox row = new HBox(12, titleBox, langBadge, diffBadge);
 
-        HBox row = new HBox(12, titleBox, langBadge, diffBadge, editBtn);
+        boolean canEdit = App.currentUser != null
+                && q.getUser() != null
+                && App.currentUser.getId() != null
+                && App.currentUser.getId().equals(q.getUser().getId());
+        if (canEdit) {
+            Button editBtn = new Button("Edit");
+            editBtn.getStyleClass().add("btn-edit-question");
+            editBtn.setOnAction(e -> {
+                App.editingQuestion = q;
+                try {
+                    App.setRoot("addquestion");
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            row.getChildren().add(editBtn);
+        }
         row.getStyleClass().add("question-card");
         row.setAlignment(Pos.CENTER_LEFT);
         row.setPadding(new Insets(12, 14, 12, 14));
