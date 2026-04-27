@@ -166,16 +166,11 @@
                                     </children>
                                  </VBox>
 
-                                 <Button fx:id="addAttachmentBtn" text="+ Add Attachment" styleClass="btn-ghost" onAction="#addAttachment" maxWidth="Infinity" />
-
-                                 <Label fx:id="attachmentLabel" text="" styleClass="attachment-label" />
-
                                  <Label fx:id="feedbackLabel" text="" styleClass="feedback-label" />
 
                                  <HBox alignment="CENTER_LEFT" spacing="10.0">
                                     <children>
                                        <Region HBox.hgrow="ALWAYS" />
-                                       <Button fx:id="saveDraftBtn" text="Save Draft" styleClass="btn-outline" onAction="#saveDraft" />
                                        <Button fx:id="submitBtn" text="Submit" styleClass="btn-submit" onAction="#submitQuestion" />
                                     </children>
                                  </HBox>
