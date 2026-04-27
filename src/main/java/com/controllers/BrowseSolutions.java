@@ -1,7 +1,6 @@
 package com.controllers;
 
 import java.io.IOException;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -18,7 +17,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
-import javafx.stage.FileChooser;
 
 import com.interviews.App;
 import com.interviews.Comment;
@@ -358,21 +356,6 @@ public class BrowseSolutions {
         HBox.setHgrow(replyField, Priority.ALWAYS);
         Button replyBtn = new Button("Post");
         replyBtn.getStyleClass().add("reply-btn");
-        Button attachBtn = new Button("Attach");
-        attachBtn.getStyleClass().add("reply-btn");
-        Label attachmentLabel = new Label("");
-        attachmentLabel.getStyleClass().add("attachment-label");
-        final File[] selectedAttachment = new File[1];
-
-        attachBtn.setOnAction(e -> {
-            FileChooser chooser = new FileChooser();
-            chooser.setTitle("Attach File");
-            File file = chooser.showOpenDialog(solutionsContainer.getScene().getWindow());
-            if (file != null) {
-                selectedAttachment[0] = file;
-                attachmentLabel.setText(file.getName());
-            }
-        });
 
         VBox commentsSection = new VBox(6);
         commentsSection.getStyleClass().add("comments-section");
@@ -380,21 +363,16 @@ public class BrowseSolutions {
 
         replyBtn.setOnAction(e -> {
             String text = replyField.getText().trim();
-            File attachment = selectedAttachment[0];
-            if ((text.isEmpty() && attachment == null) || App.currentUser == null)
+            if (text.isEmpty() || App.currentUser == null)
                 return;
-            Comment comment = attachment == null
-                    ? new Comment(App.currentUser, text)
-                    : new Comment(App.currentUser, text, attachment.getName(), attachment.getAbsolutePath());
+            Comment comment = new Comment(App.currentUser, text);
             solution.getReplies().add(comment);
             QuestionList.getInstance().saveAll();
             replyField.clear();
-            selectedAttachment[0] = null;
-            attachmentLabel.setText("");
             buildCommentsList(solution, commentsSection);
         });
 
-        replyRow.getChildren().addAll(replyField, attachBtn, attachmentLabel, replyBtn);
+        replyRow.getChildren().addAll(replyField, replyBtn);
 
         bottom.getChildren().addAll(userRow, replyRow, commentsSection);
         card.getChildren().addAll(codeBox, bottom);

@@ -1,6 +1,5 @@
 package com.controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -8,8 +7,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 
 import com.interviews.App;
 import com.interviews.DataWriter;
@@ -18,7 +15,6 @@ import com.interviews.Language;
 import com.interviews.Question;
 import com.interviews.QuestionList;
 import com.interviews.Section;
-import com.interviews.contentType;
 
 public class AddQuestionController {
 
@@ -42,15 +38,11 @@ public class AddQuestionController {
     @FXML private TableColumn<?, ?> col_status;
     @FXML private TableColumn<?, ?> col_actions;
     @FXML private Label feedbackLabel;
-    @FXML private Label attachmentLabel;
     @FXML private Label welcomeLabel;
     @FXML private Label formTitle;
     @FXML private VBox formCard;
-    @FXML private Button saveDraftBtn;
     @FXML private Button submitBtn;
 
-    private File selectedAttachment;
-    private String existingAttachmentName;
     private Question questionToEdit;
 
     private int visibleHints = 2;
@@ -79,8 +71,6 @@ public class AddQuestionController {
             "UNKNOWN"
         );
         cb_difficulty.getItems().addAll("Easy", "Medium", "Hard");
-        attachmentLabel.setText("No file chosen");
-        attachmentLabel.setStyle("-fx-text-fill: #6b7280;");
 
         if (App.currentUser != null) {
             welcomeLabel.setText(App.currentUser.getFirstName());
@@ -127,11 +117,6 @@ public class AddQuestionController {
                 }
             }
 
-            existingAttachmentName = getQuestionAttachmentName(questionToEdit);
-            if (existingAttachmentName != null && !existingAttachmentName.isBlank()) {
-                attachmentLabel.setText(existingAttachmentName);
-                attachmentLabel.setStyle("-fx-text-fill: #7734ED;");
-            }
         }
     }
 
@@ -164,38 +149,6 @@ public class AddQuestionController {
         visibleHints = 2;
         addHintBtn.setVisible(true);
         addHintBtn.setManaged(true);
-    }
-
-    @FXML
-    private void saveDraft() {
-        if (App.currentUser == null || !App.currentUser.canModifyQuestions()) {
-            feedbackLabel.setText("Access denied: only contributors can add questions.");
-            feedbackLabel.setStyle("-fx-text-fill: #e53e3e;");
-            return;
-        }
-        feedbackLabel.setText("Draft saved.");
-        feedbackLabel.setStyle("-fx-text-fill: #7734ED;");
-    }
-
-
-
-    @FXML
-    private void addAttachment() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select Attachment");
-        fileChooser.getExtensionFilters().addAll(
-            new ExtensionFilter("All Files", "*.*"),
-            new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"),
-            new ExtensionFilter("PDF Files", "*.pdf"),
-            new ExtensionFilter("Text Files", "*.txt", "*.md")
-        );
-        javafx.stage.Window window = (formCard.getScene() != null) ? formCard.getScene().getWindow() : null;
-        File file = fileChooser.showOpenDialog(window);
-        if (file != null) {
-            selectedAttachment = file;
-            attachmentLabel.setText(file.getName());
-            attachmentLabel.setStyle("-fx-text-fill: #7734ED;");
-        }
     }
 
     @FXML
@@ -275,10 +228,6 @@ public class AddQuestionController {
     addHintBtn.setVisible(true);
     addHintBtn.setManaged(true);
 
-    selectedAttachment = null;
-    existingAttachmentName = null;
-    attachmentLabel.setText("No file chosen");
-    attachmentLabel.setStyle("-fx-text-fill: #6b7280;");
 }
 
 
@@ -356,23 +305,6 @@ public class AddQuestionController {
     }
 
     private Section buildDescriptionSection(ArrayList<String> sectionContent, String description) {
-        String attachmentName = selectedAttachment != null ? selectedAttachment.getName() : existingAttachmentName;
-        if (attachmentName != null && !attachmentName.isBlank()) {
-            return new Section("Description", sectionContent, description, attachmentName, contentType.TEXT);
-        }
         return new Section("Description", sectionContent, description);
-    }
-
-    private String getQuestionAttachmentName(Question question) {
-        if (question == null || question.getQuestionContent() == null) {
-            return null;
-        }
-
-        for (Section section : question.getQuestionContent()) {
-            if (section != null && section.getFileName() != null && !section.getFileName().isBlank()) {
-                return section.getFileName();
-            }
-        }
-        return null;
     }
 }

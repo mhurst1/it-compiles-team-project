@@ -294,7 +294,7 @@ public class LeaderboardController {
 
     private void viewProfile(User user) {
         try {
-            App.viewProfile(user);
+            App.viewUserPage(user);
         } catch (IOException e) {
             e.printStackTrace();
         }

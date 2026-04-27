@@ -63,7 +63,7 @@ public class UserPageController {
             navAvatarLetter.setText("U");
         }
 
-        User user = App.currentUser;
+        User user = App.getProfileUser();
         if (user == null) {
             welcomeLabel.setText("Unknown User");
             setEmptyState();
@@ -71,12 +71,18 @@ public class UserPageController {
         }
 
         if (App.currentUser != null) {
-            String name = App.currentUser.getFirstName();
-            welcomeLabel.setText(name);
-            welcomeGreeting.setText("Welcome, " + name + "!");
+            welcomeLabel.setText(App.currentUser.getFirstName());
         } else {
             welcomeLabel.setText("Unknown User");
-            welcomeGreeting.setText("Welcome!");
+        }
+
+        boolean viewingOwn = App.currentUser != null
+                && App.currentUser.getId() != null
+                && App.currentUser.getId().equals(user.getId());
+        if (viewingOwn) {
+            welcomeGreeting.setText("Welcome, " + user.getFirstName() + "!");
+        } else {
+            welcomeGreeting.setText(user.getFirstName() + "'s Profile");
         }
 
         String fullName = safe(user.getFirstName()) + " " + safe(user.getLastName());

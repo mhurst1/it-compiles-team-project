@@ -59,6 +59,16 @@ public class App extends Application {
     }
 
     /**
+     * Opens another user's home page without changing the logged-in user.
+     */
+    public static void viewUserPage(User user) throws IOException {
+        viewingProfileUser = user;
+        Parent root = loadFXML("userpage");
+        viewingProfileUser = null;
+        scene.setRoot(root);
+    }
+
+    /**
      * Opens the signed-in user's own profile.
      *
      * @throws IOException if the profile FXML cannot be loaded
